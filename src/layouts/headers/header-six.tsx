@@ -26,9 +26,9 @@ export default function HeaderSix() {
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">
                 <div className="tp-header-logo">
-                  <Link href="/">
+                  {/* <Link href="/">
                     <Image priority src={logo} alt="logo" />
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
               <div className="col-xl-5 d-none d-xl-block">

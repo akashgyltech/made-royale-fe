@@ -1,6 +1,6 @@
 'use client';
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useScrollSmooth from '@/hooks/use-scroll-smooth';
 import { ScrollSmoother, ScrollTrigger, SplitText, cursorAnimation } from '@/plugins';
 import { useGSAP } from "@gsap/react";
@@ -11,7 +11,6 @@ import HeaderEight from "@/layouts/headers/header-eight";
 import { perspective } from "@/utils/perspective-anim";
 import PerspectivePortfolioSlider from "@/components/portfolio/slider/perspective-port-slider";
 import { revelAnimationOne } from "@/utils/title-animation";
-import ThemeSetting from "@/components/theme-setting";
 
 const HomeEightMain = () => {
   useScrollSmooth();
@@ -62,10 +61,6 @@ const HomeEightMain = () => {
           </main>
         </div>
       </div>
-
-      {/* theme switcher */}
-      <ThemeSetting/>
-      {/* theme switcher */}
     </div>
   );
 };

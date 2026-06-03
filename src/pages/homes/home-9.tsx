@@ -9,7 +9,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText);
 // internal imports
 import HeaderEight from "@/layouts/headers/header-eight";
 import PortfolioSliderHomeNine from "@/components/portfolio/slider/portfolio-slider-home-nine";
-import ThemeSetting from "@/components/theme-setting";
 
 const HomeNineMain = () => {
   const [whiteCls, setWhiteCls] = React.useState(true);
@@ -45,10 +44,6 @@ const HomeNineMain = () => {
           </div>
         </div>
       </div>
-
-      {/* theme switcher */}
-      <ThemeSetting />
-      {/* theme switcher */}
     </div>
   );
 };

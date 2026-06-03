@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 // internal imports
 import HeaderEight from "@/layouts/headers/header-eight";
 import { cursorAnimation } from "@/plugins";
 import PortfolioSliderHomeTwelve from "@/components/portfolio/slider/portfolio-slider-home-twelve";
-import ThemeSetting from "@/components/theme-setting";
 
 const HomeTwelveMain = () => {
   useEffect(() => {
@@ -43,9 +42,6 @@ const HomeTwelveMain = () => {
         {/* portfolio slider end */}
       </main>
 
-      {/* theme switcher */}
-      <ThemeSetting/>
-      {/* theme switcher */}
     </div>
   );
 };

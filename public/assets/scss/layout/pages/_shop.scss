@@ -6,8 +6,8 @@
 
 .tp-shop-slider{
     &-bg{
-        padding-top: 330px;
-        padding-bottom: 230px;
+        padding-top: 150px;
+        padding-bottom: 150px;
         overflow: hidden;
         @media #{$xl}{
             padding-top: 250px;
@@ -46,7 +46,7 @@
         margin-bottom: 10px;
         display: inline-block;
         color: var(--tp-common-white);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
     }
     &-title{
         font-size: 150px;
@@ -55,7 +55,7 @@
         letter-spacing: -6px;
         margin-bottom: 35px;
         color: var(--tp-common-white);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-gallery);
         @media #{$lg}{
             font-size: 130px;
         }

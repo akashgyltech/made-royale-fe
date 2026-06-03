@@ -1,33 +1,19 @@
 'use client';
-import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination,Autoplay, EffectFade } from "swiper/modules";
+import { Navigation, Pagination, EffectFade } from "swiper/modules";
 import { SwiperOptions } from "swiper/types";
 import Link from "next/link";
 
 const hero_data = [
   {
     id: 1,
-    bg: "/assets/img/inner-shop/home/slider-1.jpg",
-    subtitle: "YOU MAY NEED",
-    title: "Shoes <br/> Collection",
-  },
-  {
-    id: 2,
-    bg: "/assets/img/inner-shop/home/slider-2.jpg",
-    subtitle: "NEW ARRIVALS",
-    title: "Shoes <br/> Collection",
-  },
-  {
-    id: 3,
-    bg: "/assets/img/inner-shop/home/slider-3.jpg",
-    subtitle: "NEW ARRIVALS",
-    title: "Shoes <br/> Collection",
+    bg: "/assets/img/home/home-bg-1.webp",
+    subtitle: "Nature Inspired Living",
+    title: "Crafted to Perfection",
   },
 ];
 
 export default function HeroBannerSix() {
-  const progressBar = useRef<HTMLSpanElement | null>(null);
   const slider_setting: SwiperOptions = {
     slidesPerView: 1,
     loop: false,
@@ -62,20 +48,9 @@ export default function HeroBannerSix() {
       <div className="shop-slider-wrapper">
         <Swiper
           {...slider_setting}
-          modules={[Navigation, Pagination,Autoplay,EffectFade]}
+          modules={[Navigation, Pagination,EffectFade]}
           className="swiper-container tp-shop-slider-active"
-          onAutoplayTimeLeft={(s, time, progress) => {
-            progressBar.current && (progressBar.current.style.transform = `scaleX(calc(1 - ${progress}))`);
-          }}
         >
-          <div className="tp-shop-slider-arrow-box">
-            <button className="tp-shop-next">
-              <i className="fa-light fa-angle-left"></i>
-            </button>
-            <button className="tp-shop-prev">
-              <i className="fa-light fa-angle-right"></i>
-            </button>
-          </div>
           {hero_data.map((item) => (
             <SwiperSlide key={item.id} className="swiper-slide">
               <div className="tp-shop-slider-bg tp-shop-slider-ovarlay">
@@ -109,12 +84,6 @@ export default function HeroBannerSix() {
               </div>
             </SwiperSlide>
           ))}
-          <div className="fraction-wrapper d-none d-lg-block">
-            <div id="paginations"></div>
-            <div className="shop-slider-progress-bar">
-              <span ref={progressBar}></span>
-            </div>
-          </div>
         </Swiper>
       </div>
     </div>

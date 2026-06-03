@@ -123,7 +123,7 @@
                         padding: 41px 0;
                         display: inline-block;
                         color: var(--tp-common-black);
-                        font-family: var(--tp-ff-marcellus);
+                        font-family: var(--tp-ff-syne);
                     }
                 }
             }
@@ -186,12 +186,12 @@
             padding: 0px 30px;
             padding-left: 45px;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             font-size: 16px;
             font-weight: 400;
             @include placeholder{
                 color: var(--tp-common-black);
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 font-size: 16px;
                 font-weight: 400;
             }

@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -8,7 +7,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText);
 
 import HeaderTen from "@/layouts/headers/header-ten";
 import PortfolioSliderHomeEleven from "@/components/portfolio/slider/portfolio-slider-home-eleven";
-import ThemeSetting from "@/components/theme-setting";
 // internal imports
 
 const HomeElevenMain = () => {
@@ -29,9 +27,6 @@ const HomeElevenMain = () => {
         </div>
       </div>
 
-      {/* theme switcher */}
-      <ThemeSetting />
-      {/* theme switcher */}
     </div>
   );
 };
