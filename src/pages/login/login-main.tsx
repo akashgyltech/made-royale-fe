@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import Link from "next/link";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
@@ -8,19 +7,17 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderTwelve from "@/layouts/headers/header-twelve";
 import FooterTwo from "@/layouts/footers/footer-two";
 import SocialLogin from "@/components/form/social-login";
 import LoginForm from "@/components/form/login-form";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const LoginMain = () => {
   useScrollSmooth();
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderTwelve />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

@@ -1,25 +1,22 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderTwelve from "@/layouts/headers/header-twelve";
 import ShopArea from "@/components/shop/shop-area";
 import FooterSix from "@/layouts/footers/footer-six";
 import Link from "next/link";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const ShopMain = () => {
   useScrollSmooth();
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderTwelve />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

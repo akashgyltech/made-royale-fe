@@ -8,10 +8,10 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderTwelve from "@/layouts/headers/header-twelve";
 import FooterTwo from "@/layouts/footers/footer-two";
 import { Close, Minus, Plus } from "@/components/svg";
 import Link from "next/link";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const WishlistMain = () => {
   const [quantity, setQuantity] = React.useState(1);
@@ -19,9 +19,7 @@ const WishlistMain = () => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderTwelve />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">
