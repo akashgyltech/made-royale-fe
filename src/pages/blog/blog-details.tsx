@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderEleven from "@/layouts/headers/header-eleven";
 import FooterTwo from "@/layouts/footers/footer-two";
 import BlogDetailsArea from "@/components/blog/details/blog-details-area";
 import BlogDetailsBreadcrumb from "@/components/blog/details/blog-details-breadcrumb";
@@ -16,6 +15,7 @@ import BlogDetailsRelatedPosts from "@/components/blog/details/blog-details-rela
 // animation
 import { charAnimation } from "@/utils/title-animation";
 import { IdProps } from "@/types/custom-d-t";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const BlogDetailsMain = ({ id }: IdProps) => {
   useScrollSmooth();
@@ -29,9 +29,7 @@ const BlogDetailsMain = ({ id }: IdProps) => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderEleven transparent={true} />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

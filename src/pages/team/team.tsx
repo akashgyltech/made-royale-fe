@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderEleven from "@/layouts/headers/header-eleven";
 import TeamArea from "@/components/team/team-area";
 import StudioPanelFour from "@/components/studio-panels/studio-panel-4";
 import FooterTwo from "@/layouts/footers/footer-two";
@@ -30,10 +29,6 @@ const TeamMain = () => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderEleven />
-      {/* header area end */}
-
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>

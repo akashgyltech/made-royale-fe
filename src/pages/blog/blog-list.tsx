@@ -8,13 +8,13 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderEleven from "@/layouts/headers/header-eleven";
 import BlogListBanner from "@/components/blog/blog-list-banner";
 import BlogListArea from "@/components/blog/blog-list-area";
 import BigText from "@/components/big-text";
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation, zoomAnimation } from "@/utils/title-animation";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const BlogListMain = () => {
   useScrollSmooth();
@@ -29,9 +29,7 @@ const BlogListMain = () => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderEleven transparent={true} />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

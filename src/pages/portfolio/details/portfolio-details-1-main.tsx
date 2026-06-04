@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderEleven from "@/layouts/headers/header-eleven";
 import Social from "@/components/social/social";
 import { Dots, Share } from "@/components/svg";
 import { projectDetailsPin } from "@/utils/project-anim";
@@ -24,6 +23,7 @@ import port_d_2 from '@/assets/img/inner-project/portfolio-details/port-details-
 import port_d_3 from '@/assets/img/inner-project/portfolio-details/port-details-3.jpg';
 import port_d_4 from '@/assets/img/inner-project/portfolio-details/port-details-4.jpg';
 import Link from "next/link";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const port_images = [port_d_1, port_d_2, port_d_3, port_d_4];
 
@@ -42,9 +42,8 @@ const PortfolioDetailsOneMain = () => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderEleven cls="tp-inner-header-border"/>
-      {/* header area end */}
+
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

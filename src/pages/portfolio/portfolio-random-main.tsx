@@ -13,7 +13,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderEleven from "@/layouts/headers/header-eleven";
 import ProjectOne from "@/components/project/project-one";
 import { UpArrowThree } from "@/components/svg";
 import LineTextThree from "@/components/line-text/line-text-3";
@@ -21,6 +20,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
 import Link from "next/link";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const PortfolioRandomMain = () => {
   useScrollSmooth();
@@ -59,9 +59,7 @@ const PortfolioRandomMain = () => {
       </div>
       {/* magic cursor end */}
 
-      {/* header area start */}
-      <HeaderEleven />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

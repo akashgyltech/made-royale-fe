@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderEleven from "@/layouts/headers/header-eleven";
 import PortfolioGridFourColArea from "@/components/portfolio/portfolio-grid-4-col-area";
 import BigText from "@/components/big-text";
 import FooterTwo from "@/layouts/footers/footer-two";
@@ -16,6 +15,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 import { hoverBtn } from "@/utils/hover-btn";
 import {charAnimation,fadeAnimation,titleAnimation} from "@/utils/title-animation";
 import { imageRevealAnimation } from "@/utils/image-reveal-anim";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const PortfolioGridColFourMain = () => {
   useScrollSmooth();
@@ -53,9 +53,7 @@ const PortfolioGridColFourMain = () => {
       </div>
       {/* magic cursor end */}
 
-      {/* header area start */}
-      <HeaderEleven />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">
