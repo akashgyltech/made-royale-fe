@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 import Wrapper from "@/layouts/wrapper";
 import { ServiceItems } from "@/components/service/service-five";
 import ServiceSix from "@/components/service/service-six";
-import LineImgSlider from "@/components/line-text/line-img-slider";
 import { Leaf } from "@/components/svg";
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation

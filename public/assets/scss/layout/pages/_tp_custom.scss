@@ -6,3 +6,19 @@
 .tp-text-white{
 	color: var(--tp-common-white);
 }
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    #1e1e1e 0%,
+    #3a3a3a 25%,
+    #6f665f 55%,
+    #9d8f81 80%,
+    #dad0c5 100%
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
