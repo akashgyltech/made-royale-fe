@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -12,7 +11,6 @@ import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation } from "@/utils/title-animation";
 import BlogModern from "@/components/blog/blog-modern-area";
-import BigText from "@/components/big-text";
 import HeaderOne from "@/layouts/headers/header-one";
 
 const BlogModernMain = () => {
@@ -36,9 +34,7 @@ const BlogModernMain = () => {
             <BlogModern />
             {/* blog modern area end */}
 
-            {/* big text area */}
-            <BigText />
-            {/* big text area */}
+
           </main>
 
           {/* footer area */}

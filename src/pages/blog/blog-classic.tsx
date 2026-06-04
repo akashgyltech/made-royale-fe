@@ -1,17 +1,15 @@
 "use client";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import React from "react";
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation } from "@/utils/title-animation";
-import BlogClassicSlider from "@/components/blog/slider/blog-classic-slider";
 import BlogClassicArea from "@/components/blog/blog-classic-area";
 import HeaderOne from "@/layouts/headers/header-one";
 
@@ -32,9 +30,7 @@ const BlogClassicMain = () => {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>
-            {/* blog classic hero start */}
-            <BlogClassicSlider />
-            {/* blog classic hero end */}
+  
 
             {/* blog classic area area */}
             <BlogClassicArea />

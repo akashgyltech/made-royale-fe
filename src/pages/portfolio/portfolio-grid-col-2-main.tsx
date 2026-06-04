@@ -1,6 +1,6 @@
 "use client";
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText, cursorAnimation } from "@/plugins";
@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 // internal imports
 import Wrapper from "@/layouts/wrapper";
 import PortfolioGridColTwoArea from "@/components/portfolio/portfolio-grid-col-2-area";
-import BigText from "@/components/big-text";
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { hoverBtn } from "@/utils/hover-btn";
@@ -83,10 +82,6 @@ const PortfolioGridColTwoMain = () => {
             {/* portfolio area */}
             <PortfolioGridColTwoArea />
             {/* portfolio area */}
-
-            {/* big text */}
-            <BigText />
-            {/* big text */}
           </main>
 
           {/* footer area */}

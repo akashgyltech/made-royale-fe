@@ -71,9 +71,6 @@ const BrandMain = () => {
               <BrandMainArea/>
               {/* brand area */}
 
-              {/* big text */}
-              <BigText/>
-              {/* big text */}
             </main>
 
             {/* footer area */}

@@ -1,6 +1,6 @@
 "use client";
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText, cursorAnimation } from "@/plugins";
@@ -10,7 +10,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 import Wrapper from "@/layouts/wrapper";
 import FooterTwo from "@/layouts/footers/footer-two";
 import ProjectFive from "@/components/project/project-five";
-import BigText from "@/components/big-text";
 // animation
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
 import { imageRevealAnimation } from "@/utils/image-reveal-anim";
@@ -85,9 +84,6 @@ const PortfolioStandardMain = () => {
             <ProjectFive style_2={true} />
             {/* portfolio area */}
 
-            {/* big text */}
-            <BigText/>
-            {/* big text */}
           </main>
 
           {/* footer area */}

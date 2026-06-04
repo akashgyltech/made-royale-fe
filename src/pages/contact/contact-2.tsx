@@ -103,10 +103,6 @@ const ContactTwoMain = () => {
                   </div>
                </div>
                {/* about area end */}
-
-              {/* contact location */}
-              <ContactLocationTwo/>
-              {/* contact location */}
             </main>
 
             {/* footer area */}

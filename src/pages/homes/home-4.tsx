@@ -1,6 +1,6 @@
 "use client";
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -12,7 +12,6 @@ import HeroBannerFour from "@/components/hero-banner/hero-banner-four";
 import GalleryOne from "@/components/gallery/gallery-one";
 import AboutThree from "@/components/about/about-three";
 import BrandThree from "@/components/brand/brand-three";
-import ProjectFour from "@/components/project/project-four";
 import VideoThree from "@/components/video/video-three";
 import ServiceFour from "@/components/service/service-four";
 import ContactOne from "@/components/contact/contact-one";
@@ -64,12 +63,6 @@ const HomeFourMain = () => {
           {/* brand area start */}
           <BrandThree />
           {/* brand area end */}
-
-
-          {/* project area start */}
-          <ProjectFour />
-          {/* project area end */}
-
           {/* video area start */}
           <VideoThree />
           {/* video area end */}

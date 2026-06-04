@@ -37,7 +37,6 @@ const menu_data:IMenuDT[] = [
         title: 'Shop Page',
         submenus: [
           { title: 'Shop Page', link: '/shop' },
-          { title: 'Shop Details One', link: '/shop-details' },
           { title: 'Shop Details Two', link: '/shop-details-2' },
           { title: 'my account', link: '/account' },
           { title: 'Cart', link: '/cart' },
@@ -59,17 +58,7 @@ const menu_data:IMenuDT[] = [
           {
             id:1,
             menu_lists: [
-              { title: 'Standard', link: '/portfolio-standard' },
-              { title: 'random', link: '/portfolio-random' },
-              { title: 'Masonry random', link: '/portfolio-masonry' },
-              { title: 'wrapper', link: '/portfolio-wrapper' },
-            ]
-          },
-          {
-            id:2,
-            menu_lists: [
-              { title: 'horizontal', link: '/portfolio-showcase' },
-              { title: 'parallax showcase', link: '/portfolio-showcase' }
+              { title: 'Standard', link: '/portfolio-standard' }
             ]
           }
         ]
@@ -98,7 +87,6 @@ const menu_data:IMenuDT[] = [
               { title: 'Video', link: '/portfolio-details-video' },
               { title: 'CUSTOM LIGHT', link: '/portfolio-custom-light' },
               { title: 'Gallery', link: '/portfolio-showcase-details' },
-              { title: 'Mockups', link: '/portfolio-details-3' },
             ]
           },
         ]
@@ -112,19 +100,13 @@ const menu_data:IMenuDT[] = [
     dropdown_menus: [
       { title: 'Modern', link: '/blog-modern' },
       { title: 'Classic Sidebar', link: '/blog-classic' },
-      { title: 'Minimal List', link: '/blog-list' },
-      { title: 'Post Single', link: '/blog-details' },
-      { title: 'Post With Sidebar', link: '/blog-details-2' },
+      { title: 'Post Single', link: '/blog-details' }
     ]
   },
   {
     id: 5,
     title: 'Contact',
-    link: '/contact',
-    dropdown_menus:[
-      { title: 'Contact', link: '/contact' },
-      { title: 'Get IN touch', link: '/contact-2' },
-    ]
+    link: '/contact'
   }
 ];
 
@@ -171,7 +153,6 @@ export const mobile_menu_data:{
       { title: 'SERVICES DETAILS', link: '/service-details' },
       { title: 'ERROR PAGE', link: '/error' },
       { title: 'Shop Page', link: '/shop' },
-      { title: 'Shop Details One', link: '/shop-details/1' },
       { title: 'Shop Details Two', link: '/shop-details-2' },
       { title: 'my account', link: '/account' },
       { title: 'Cart', link: '/cart' },
@@ -185,11 +166,6 @@ export const mobile_menu_data:{
     link: '/portfolio-standard',
     dropdown_menus:[
       { title: 'Standard', link: '/portfolio-standard' },
-      { title: 'random', link: '/portfolio-random' },
-      { title: 'Masonry random', link: '/portfolio-masonry' },
-      { title: 'wrapper', link: '/portfolio-wrapper' },
-      { title: 'horizontal', link: '/portfolio-showcase' },
-      { title: 'parallax showcase', link: '/portfolio-showcase' },
       { title: 'two-columns', link: '/portfolio-grid-col-2' },
       { title: 'three-columns', link: '/portfolio-grid-col-3' },
       { title: 'three-columns Wide', link: '/portfolio-grid-col-3-fullwidth' },
@@ -201,8 +177,7 @@ export const mobile_menu_data:{
       { title: 'Image Comparison', link: '/portfolio-details-comparison' },
       { title: 'Video', link: '/portfolio-details-video' },
       { title: 'CUSTOM LIGHT', link: '/portfolio-custom-light' },
-      { title: 'Gallery', link: '/portfolio-showcase-details' },
-      { title: 'Mockups', link: '/portfolio-details-3' },
+      { title: 'Gallery', link: '/portfolio-showcase-details' }
     ]
   },
   {
@@ -212,9 +187,7 @@ export const mobile_menu_data:{
     dropdown_menus:[
       { title: 'Modern', link: '/blog-modern' },
       { title: 'Classic Sidebar', link: '/blog-classic' },
-      { title: 'Minimal List', link: '/blog-list' },
-      { title: 'Post Single', link: '/blog-details/1' },
-      { title: 'Post With Sidebar', link: '/blog-details-2' },
+      { title: 'Post Single', link: '/blog-details/1' }
     ]
   },
   {
@@ -222,8 +195,7 @@ export const mobile_menu_data:{
     title: 'Contact',
     link: '/contact',
     dropdown_menus:[
-      { title: 'Contact', link: '/contact' },
-      { title: 'Get IN touch', link: '/contact-2' },
+      { title: 'Contact', link: '/contact' }
     ]
   }
 ]

@@ -983,15 +983,7 @@
         & .cn-contactform-support-text span {
             color: var(--tp-common-white);
         }
-        & .cn-contact-2-content {
-            background-color: #1E1E1E;
-        }
-        & .cn-contact-2-title {
-            color: var(--tp-common-white);
-        }
-        & .cn-contact-2-info-details a, .cn-contact-2-info-details span {
-            color: rgba(245, 247, 245, 0.5);
-        }
+        
         & .cn-contactform-input input, .cn-contactform-input textarea {
             border-bottom: 1px solid rgba(245, 247, 245, 0.12);
             &:focus{
@@ -1868,9 +1860,6 @@
             &:hover{
                 color: var(--tp-common-white);
             }
-        }
-        & .portfolio-random-bg {
-            background-color: transparent;
         }
         & .tp-project-text-slide .tp-footer-4-big-title {
             color: var(--tp-common-white);

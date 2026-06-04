@@ -1,6 +1,6 @@
 'use client';
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +15,6 @@ import HeroBannerOne from "@/components/hero-banner/hero-banner-one";
 import VideOne from "@/components/video/video-one";
 import BrandOne from "@/components/brand/brand-one";
 import ServiceOne from "@/components/service/service-one";
-import ProjectOne from "@/components/project/project-one";
 import AwardOne from "@/components/award/award-one";
 import TeamOne from "@/components/team/team-one";
 import TestimonialOne from "@/components/testimonial/testimonial-one";
@@ -42,10 +41,10 @@ const HomeMain = () => {
   }, []);
 
   useEffect(() => {
-    if(typeof window !== 'undefined' && document.querySelector('.tp-magic-cursor')) {
+    if (typeof window !== 'undefined' && document.querySelector('.tp-magic-cursor')) {
       cursorAnimation();
     }
-  },[]);
+  }, []);
 
   useGSAP(() => {
     const timer = setTimeout(() => {
@@ -53,11 +52,11 @@ const HomeMain = () => {
       // portfolio image wrap
       gsap.timeline({
         scrollTrigger: {
-           trigger: ".tp-project-full-img-wrap",
-           start: "top 65",
-           end: "bottom 0%",
-           pin: ".tp-project-full-img",
-           pinSpacing: false,
+          trigger: ".tp-project-full-img-wrap",
+          start: "top 65",
+          end: "bottom 0%",
+          pin: ".tp-project-full-img",
+          pinSpacing: false,
         }
       });
       // team marquee
@@ -89,7 +88,7 @@ const HomeMain = () => {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>
-            
+
             {/* hero area start */}
             <HeroBannerOne />
             {/* hero area end */}
@@ -105,10 +104,6 @@ const HomeMain = () => {
             {/* service area */}
             <ServiceOne />
             {/* service area */}
-
-            {/* project area */}
-            <ProjectOne />
-            {/* project area */}
 
             {/* award area */}
             <AwardOne />
@@ -132,13 +127,13 @@ const HomeMain = () => {
       {/* footer shape */}
       <div className="tp-footer-shape-wrap z-index-5 smooth">
         <Link href="/contact">
-            <div className="tp-footer-shape p-relative">
-                <Image className="img-1" src={shape_1} alt="shape"/>
-                <Image className="img-2" src={shape_2} alt="shape"/>
-                <span></span>
-            </div>
-          </Link>
-        </div>
+          <div className="tp-footer-shape p-relative">
+            <Image className="img-1" src={shape_1} alt="shape" />
+            <Image className="img-2" src={shape_2} alt="shape" />
+            <span></span>
+          </div>
+        </Link>
+      </div>
       {/* footer shape */}
     </Wrapper>
   );

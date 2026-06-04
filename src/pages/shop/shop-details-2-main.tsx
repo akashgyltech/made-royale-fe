@@ -26,7 +26,7 @@ const ShopDetailsTwoMain = () => {
             {/* shop details */}
 
             {/* shop details area */}
-            <ShopDetailsBottomArea />
+            <ShopDetailsBottomArea/>
             {/* shop details area */}
           </main>
 

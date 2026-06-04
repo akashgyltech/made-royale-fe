@@ -31,9 +31,8 @@ const service_data = [
 export function ServiceItems() {
   return (
     <div className="row">
-      <div className="col-xxl-3"></div>
       {service_data.map((item) => (
-        <div key={item.id} className="col-xxl-3 col-xl-4 col-lg-4 col-md-6">
+        <div key={item.id} className="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
           <div className="tp-service-5-item tp_fade_bottom space-1">
             <div className="tp-service-4-icon">
               <Image style={{ width: "auto", height: "auto" }} src={item.icon} alt="icon" />

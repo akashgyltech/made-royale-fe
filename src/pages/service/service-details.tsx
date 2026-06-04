@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import { useGSAP } from "@gsap/react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
@@ -10,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 import Wrapper from "@/layouts/wrapper";
 import ServiceDetailsArea from "@/components/service/service-details-area";
 import LineImgSlider from "@/components/line-text/line-img-slider";
-import BigText from "@/components/big-text";
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
@@ -38,13 +36,6 @@ const ServiceDetailsMain = () => {
             <ServiceDetailsArea />
             {/* service details area */}
 
-            {/* line image slider  */}
-            <LineImgSlider />
-            {/* line image slider  */}
-
-            {/* big text */}
-            <BigText />
-            {/* big text */}
           </main>
 
           {/* footer area */}

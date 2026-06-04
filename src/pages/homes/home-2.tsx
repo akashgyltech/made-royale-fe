@@ -1,6 +1,6 @@
 'use client';
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useScrollSmooth from '@/hooks/use-scroll-smooth';
 import { ScrollSmoother, ScrollTrigger, SplitText } from '@/plugins';
 import { useGSAP } from "@gsap/react";
@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderTwo from "@/layouts/headers/header-two";
 import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
 import AboutOne from "@/components/about/about-one";
 import VideoTwo from "@/components/video/video-two";
@@ -26,6 +25,7 @@ import { awardAnimOne } from "@/utils/award-anim";
 import { instagramAnim } from "@/utils/instagram-anim";
 import { hoverBtn } from "@/utils/hover-btn";
 import { aboutAnim } from "@/utils/about-anim";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const HomeTwoMain = () => {
   useScrollSmooth();
@@ -61,9 +61,7 @@ const HomeTwoMain = () => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderTwo />
-      {/* header area end */}
+     <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

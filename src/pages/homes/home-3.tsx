@@ -8,13 +8,10 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderThree from "@/layouts/headers/header-three";
 import HeroBannerThree from "@/components/hero-banner/hero-banner-three";
 import AboutTwo from "@/components/about/about-two";
 import ServiceThree from "@/components/service/service-three";
 import LineTextTwo from "@/components/line-text/line-text-2";
-import ProjectThree from "@/components/project/project-three";
-import BrandTwo from "@/components/brand/brand-two";
 import TeamTwo from "@/components/team/team-two";
 import FooterThree from "@/layouts/footers/footer-three";
 // animation
@@ -22,6 +19,7 @@ import { bounceAnimation, charAnimation, fadeAnimation, revelAnimationTwo } from
 import { serviceMarqueAnim } from "@/utils/scroll-marque";
 import { panelTwoAnimation } from "@/utils/panel-animation";
 import { hoverBtn } from "@/utils/hover-btn";
+import HeaderOne from "@/layouts/headers/header-one";
 
 const HomeThreeMain = () => {
   useScrollSmooth();
@@ -41,15 +39,13 @@ const HomeThreeMain = () => {
       revelAnimationTwo();
       hoverBtn();
       bounceAnimation();
-    },100);
+    }, 100);
     return () => clearTimeout(timer);
   });
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderThree />
-      {/* header area end */}
+      <HeaderOne />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">
@@ -76,14 +72,6 @@ const HomeThreeMain = () => {
             {/* marquee text */}
             <LineTextTwo />
             {/* marquee text */}
-
-            {/* portfolio area */}
-            <ProjectThree />
-            {/* portfolio area */}
-
-            {/* brand area */}
-            <BrandTwo />
-            {/* brand area */}
 
             {/* team area */}
             <TeamTwo />
