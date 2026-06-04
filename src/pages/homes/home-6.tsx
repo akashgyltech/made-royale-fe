@@ -19,6 +19,8 @@ import banner_img from "@/assets/img/inner-shop/banner/banner-3.jpg";
 import InstagramTwo from "@/components/instagram/instagram-two";
 import BrandFour from "@/components/brand/brand-four";
 import FooterSix from "@/layouts/footers/footer-six";
+import AboutTwo from "../../components/about/about-two";
+import AboutOne from "@/components/about/about-one";
 // animation
 
 const HomeSixMain = () => {
@@ -51,13 +53,10 @@ const HomeSixMain = () => {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>
-            {/* hero area start */}
             <HeroBannerSix />
-            {/* hero area end */}
 
-            {/* category area start */}
             <ShopCategory />
-            {/* category area end */}
+
 
             {/* shop banner start */}
             <ShopBanner />

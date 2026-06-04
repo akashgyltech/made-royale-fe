@@ -1,10 +1,8 @@
 'use client';
 import React, { useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import HeaderMenus from './header-menus';
 import { Menu, Search, Wishlist, Zero } from '@/components/svg';
-import logo from '@/assets/img/logo/logo-white.png';
 import CartOffcanvas from '@/components/offcanvas/cart-offcanvas';
 import MobileOffcanvas from '@/components/offcanvas/mobile-offcanvas';
 import useStickyHeader from '@/hooks/use-sticky-header';
