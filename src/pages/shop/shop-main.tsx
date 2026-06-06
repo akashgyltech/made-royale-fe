@@ -9,14 +9,14 @@ import Wrapper from "@/layouts/wrapper";
 import ShopArea from "@/components/shop/shop-area";
 import FooterSix from "@/layouts/footers/footer-six";
 import Link from "next/link";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const ShopMain = () => {
   useScrollSmooth();
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

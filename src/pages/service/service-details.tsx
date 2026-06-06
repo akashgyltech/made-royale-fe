@@ -11,7 +11,7 @@ import ServiceDetailsArea from "@/components/service/service-details-area";
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const ServiceDetailsMain = () => {
   useScrollSmooth();
@@ -26,7 +26,7 @@ const ServiceDetailsMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

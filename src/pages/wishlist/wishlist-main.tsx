@@ -11,7 +11,8 @@ import Wrapper from "@/layouts/wrapper";
 import FooterTwo from "@/layouts/footers/footer-two";
 import { Close, Minus, Plus } from "@/components/svg";
 import Link from "next/link";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
+
 
 const WishlistMain = () => {
   const [quantity, setQuantity] = React.useState(1);
@@ -19,7 +20,7 @@ const WishlistMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

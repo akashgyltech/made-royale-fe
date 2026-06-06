@@ -46,8 +46,11 @@ const HomeSixMain = () => {
 
   return (
     <Wrapper>
+         <div id="magic-cursor">
+        <div id="ball"></div>
+      </div>
       {/* header area start */}
-      <HeaderSix />
+      <HeaderSix transparent />
       {/* header area end */}
 
       <div id="smooth-wrapper">

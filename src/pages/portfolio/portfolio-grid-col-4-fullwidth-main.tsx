@@ -18,7 +18,7 @@ import {
   titleAnimation,
 } from "@/utils/title-animation";
 import { imageRevealAnimation } from "@/utils/image-reveal-anim";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const PortfolioGridColFourFullwidthMain = () => {
   useScrollSmooth();
@@ -55,7 +55,7 @@ const PortfolioGridColFourFullwidthMain = () => {
         <div id="ball"></div>
       </div>
       {/* magic cursor end */}
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

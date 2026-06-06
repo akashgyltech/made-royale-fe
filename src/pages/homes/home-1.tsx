@@ -10,7 +10,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderOne from "@/layouts/headers/header-one";
 import HeroBannerOne from "@/components/hero-banner/hero-banner-one";
 import VideOne from "@/components/video/video-one";
 import BrandOne from "@/components/brand/brand-one";
@@ -18,7 +17,7 @@ import ServiceOne from "@/components/service/service-one";
 import AwardOne from "@/components/award/award-one";
 import TeamOne from "@/components/team/team-one";
 import TestimonialOne from "@/components/testimonial/testimonial-one";
-import FooterOne from "@/layouts/footers/footer-one";
+
 
 // images
 import shape_1 from '@/assets/img/home-01/footer/footer-circle-shape-1.png';
@@ -30,6 +29,8 @@ import { teamMarqueAnim } from "@/utils/scroll-marque";
 import { hoverBtn } from "@/utils/hover-btn";
 import { footerTwoAnimation } from "@/utils/footer-anim";
 import { bounceAnimation, charAnimation, fadeAnimation } from "@/utils/title-animation";
+import FooterSix from "@/layouts/footers/footer-six";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const HomeMain = () => {
   useScrollSmooth();
@@ -80,10 +81,7 @@ const HomeMain = () => {
       </div>
       {/* magic cursor end */}
 
-
-      {/* header area start */}
-      <HeaderOne />
-      {/* header area end */}
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">
@@ -117,10 +115,7 @@ const HomeMain = () => {
             <TestimonialOne />
             {/* testimonial area */}
           </main>
-
-          {/* footer area */}
-          <FooterOne />
-          {/* footer area */}
+          <FooterSix />
         </div>
       </div>
 

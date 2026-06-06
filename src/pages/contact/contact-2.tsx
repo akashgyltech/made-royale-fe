@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -12,8 +11,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation } from "@/utils/title-animation";
 import ContactForm from "@/components/form/contact-form";
-import ContactLocationTwo from "@/components/contact/contact-location-2";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const ContactTwoMain = () => {
   useScrollSmooth();
@@ -27,7 +25,7 @@ const ContactTwoMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

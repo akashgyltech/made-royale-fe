@@ -13,7 +13,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 import Social from "@/components/social/social";
 import { Dots } from "@/components/svg";
 import Link from "next/link";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 // animation
 
 const PortfolioDetailsComparisonMain = () => {
@@ -22,7 +22,7 @@ const PortfolioDetailsComparisonMain = () => {
 
    return (
       <Wrapper>
-         <HeaderOne />
+         <HeaderSix />
          <div id="smooth-wrapper">
             <div id="smooth-content">
                <main>

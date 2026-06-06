@@ -19,7 +19,7 @@ import { bounceAnimation, charAnimation, fadeAnimation, revelAnimationTwo } from
 import { serviceMarqueAnim } from "@/utils/scroll-marque";
 import { panelTwoAnimation } from "@/utils/panel-animation";
 import { hoverBtn } from "@/utils/hover-btn";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const HomeThreeMain = () => {
   useScrollSmooth();
@@ -45,7 +45,7 @@ const HomeThreeMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

@@ -15,7 +15,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { projectDetailsVideoPin } from "@/utils/project-anim";
 import Link from "next/link";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 
 const PortfolioDetailsVideoMain = () => {
@@ -31,7 +31,7 @@ const PortfolioDetailsVideoMain = () => {
 
    return (
       <Wrapper>
-         <HeaderOne />
+         <HeaderSix />
          <div id="smooth-wrapper">
             <div id="smooth-content">
                <main>

@@ -10,14 +10,14 @@ import Wrapper from "@/layouts/wrapper";
 import FooterTwo from "@/layouts/footers/footer-two";
 import SocialLogin from "@/components/form/social-login";
 import LoginForm from "@/components/form/login-form";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const LoginMain = () => {
   useScrollSmooth();
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

@@ -11,7 +11,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation } from "@/utils/title-animation";
 import BlogClassicArea from "@/components/blog/blog-classic-area";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const BlogClassicMain = () => {
   useScrollSmooth();
@@ -25,7 +25,7 @@ const BlogClassicMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

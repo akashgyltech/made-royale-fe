@@ -5,102 +5,74 @@ const menu_data:IMenuDT[] = [
   {
     id: 1,
     title: 'Home',
-    link: '/',
-    home_menus: [
-      { title: 'MAIN HOME', link: '/', img: '/assets/img/menu/white-version/home-1.jpg' },
-      { title: 'Fashion STUDIO', link: '/home-2', img: '/assets/img/menu/white-version/home-2.jpg' },
-      { title: 'CREATIVE AGENCY', link: '/home-3', img: '/assets/img/menu/white-version/home-3.jpg' },
-      { title: 'Digital Agency', link: '/home-4', img: '/assets/img/menu/white-version/home-4.jpg' },
-      { title: 'DESIGN STUDIO', link: '/home-5', img: '/assets/img/menu/white-version/home-5.jpg' },
-      { title: 'Minimal Shop', link: '/home-6', img: '/assets/img/menu/white-version/home-6.jpg' }
-    ]
+    link: '/'
   },
   {
     id: 2,
-    title: 'Pages',
+    title: 'Shop',
     link: '#',
     pages_mega_menu: {
       first: {
-        title: 'LIST TYPES',
+        title: 'Shop by Category',
         submenus: [
-          { title: 'ABOUT US', link: '/about-us' },
-          { title: 'FAQ Page', link: '/faq' },
-          { title: 'OUR CLIENTS', link: '/brand' },
-          { title: 'Register', link: '/register' },
-          { title: 'OUR SERVICES', link: '/service' },
-          { title: 'LogIn', link: '/login' },
-          { title: 'SERVICES DETAILS', link: '/service-details' },
-          { title: 'ERROR PAGE', link: '/error' },
+          { title: 'Sofas', link: '/about-us' },
+          { title: 'Beds', link: '/faq' },
+          { title: 'Dining', link: '/brand' },
+          { title: 'TV Units', link: '/register' },
+          { title: 'Coffee Tables', link: '/service' },
+          { title: 'Cabinets', link: '/login' },
+          { title: 'Wardrobes', link: '/service-details' },
+          { title: 'Study Tables', link: '/error' },
+          { title: 'Chairs', link: '/error' },
+          { title: 'Book shelves', link: '/error' },
+          { title: 'Kitchen Cabinets', link: '/error' },
+          { title: 'Shoe Rack', link: '/error' }
         ]
       },
       second: {
-        title: 'Shop Page',
+        title: 'Shop by Room',
         submenus: [
-          { title: 'Shop Page', link: '/shop' },
-          { title: 'Shop Details Two', link: '/shop-details-2' },
-          { title: 'my account', link: '/account' },
-          { title: 'Cart', link: '/cart' },
-          { title: 'Checkout', link: '/checkout' },
-          { title: 'Wishlist', link: '/wishlist' },
+          { title: 'Living', link: '/shop' },
+          { title: 'Bedroom', link: '/shop-details-2' },
+          { title: 'Outdoor', link: '/account' },
+          { title: 'Kitchen', link: '/cart' },
+          { title: 'Dining', link: '/checkout' },
+          { title: 'Study', link: '/wishlist' },
         ]
       },
 
     }
   },
-  {
+   {
     id: 3,
-    title: 'Portfolio',
-    link: '/portfolio-standard',
-    portfolio_mega_menus: {
+    title: 'Luxe',
+    link: '#',
+    pages_mega_menu: {
       first: {
-        title: 'PORTFOLIO LIST',
+        title: 'Maharaja Collection',
         submenus: [
-          {
-            id:1,
-            menu_lists: [
-              { title: 'Standard', link: '/portfolio-standard' }
-            ]
-          }
+          { title: 'Sofas', link: '/about-us' },
+          { title: 'Beds', link: '/faq' },
+          { title: 'Dining', link: '/brand' },
+          { title: 'Wardrobes', link: '/service-details' },
+          { title: 'Study Tables', link: '/error' },
+          { title: 'Chairs', link: '/error' },
+          { title: 'Book shelves', link: '/error' }
         ]
       },
       second: {
+        title: 'Vintage Collection',
         submenus: [
-          {
-            id:1,
-            title: 'List Layouts',
-            menu_lists: [
-              { title: 'two-columns', link: '/portfolio-grid-col-2' },
-              { title: 'three-columns', link: '/portfolio-grid-col-3' },
-              { title: 'three-columns Wide', link: '/portfolio-grid-col-3-fullwidth' },
-              { title: 'four-columns', link: '/portfolio-grid-col-4' },
-              { title: 'four-columns Wide', link: '/portfolio-grid-col-4-fullwidth' },
-            ]
-          },
-          {
-            id:2,
-            title: 'PORTFOLIO SINGLES',
-            menu_lists: [
-              { title: 'Creative', link: '/portfolio-showcase-details-2' },
-              { title: 'images Small', link: '/portfolio-details-1' },
-              { title: 'Sliding', link: '/portfolio-details-2' },
-              { title: 'Image Comparison', link: '/portfolio-details-comparison' },
-              { title: 'Video', link: '/portfolio-details-video' },
-              { title: 'CUSTOM LIGHT', link: '/portfolio-custom-light' },
-              { title: 'Gallery', link: '/portfolio-showcase-details' },
-            ]
-          },
+          { title: 'Chairs', link: '/shop' },
+          { title: 'Sofas', link: '/shop-details-2' },
+          { title: 'Beds', link: '/account' },
+          { title: 'Outdoors', link: '/cart' },
+          { title: 'Dining', link: '/checkout' },
+          { title: 'Study', link: '/wishlist' },
         ]
-      }
+      },
+
     }
-  },
-  {
-    id: 4,
-    title: 'Blog',
-    link: '/blog-modern',
-    dropdown_menus: [
-      { title: 'Modern', link: '/blog-modern' },
-      { title: 'Post Single', link: '/blog-details' }
-    ]
   },
   {
     id: 5,
@@ -113,7 +85,7 @@ const menu_data:IMenuDT[] = [
 
 export default menu_data;
 
-// mobile menus 
+
 export const mobile_menu_data:{
   id: number;
   title: string;

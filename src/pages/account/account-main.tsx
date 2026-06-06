@@ -8,15 +8,14 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 import Wrapper from "@/layouts/wrapper";
 import MyAccountArea from "@/components/account/my-account-area";
 import FooterTwo from "@/layouts/footers/footer-two";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const AccountMain = () => {
   useScrollSmooth();
 
   return (
     <Wrapper>
-      <HeaderOne />
-
+      <HeaderSix />
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>

@@ -25,7 +25,7 @@ import { awardAnimOne } from "@/utils/award-anim";
 import { instagramAnim } from "@/utils/instagram-anim";
 import { hoverBtn } from "@/utils/hover-btn";
 import { aboutAnim } from "@/utils/about-anim";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const HomeTwoMain = () => {
   useScrollSmooth();
@@ -61,7 +61,7 @@ const HomeTwoMain = () => {
 
   return (
     <Wrapper>
-     <HeaderOne />
+     <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

@@ -12,7 +12,7 @@ import PortfolioDetailsShowcaseArea from "@/components/portfolio/details/portfol
 import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { charAnimation, fadeAnimation, titleAnimation } from "@/utils/title-animation";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 
 const PortfolioDetailsShowcaseMain = () => {
@@ -30,7 +30,7 @@ const PortfolioDetailsShowcaseMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

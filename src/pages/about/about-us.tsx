@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import { useGSAP } from "@gsap/react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
@@ -19,7 +18,7 @@ import AwardOne from "@/components/award/award-one";
 import { charAnimation, fadeAnimation, titleAnimation } from "@/utils/title-animation";
 import { hoverBtn } from "@/utils/hover-btn";
 import { teamMarqueAnim } from "@/utils/scroll-marque";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const AboutUsMain = () => {
   useScrollSmooth();
@@ -37,9 +36,7 @@ const AboutUsMain = () => {
 
   return (
     <Wrapper>
-      {/* header area start */}
-      <HeaderOne />
-      {/* header area end */}
+      <HeaderSix transparent/>
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

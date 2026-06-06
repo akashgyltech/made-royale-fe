@@ -120,10 +120,11 @@
                         font-size: 18px;
                         font-weight: 400;
                         line-height: 1;
-                        padding: 41px 0;
+                        padding: 25px 0;
                         display: inline-block;
                         color: var(--tp-common-black);
                         font-family: var(--tp-ff-syne);
+                        transition: color 0.3s ease;
                     }
                 }
             }
@@ -213,6 +214,9 @@
         & .tp-inner-header-2-menu > nav > ul > li > a {
             color: var(--tp-common-white);
         }
+        & .tp-inner-header-2-login span {
+            color: var(--tp-common-white);
+        }
         & .tp-inner-header-2-wishlist span {
             color: var(--tp-common-white);
         }
@@ -254,6 +258,36 @@
 .tp-inner-header-2-bg{
     & .tp-inner-header-2-cart span {
         color: var(--tp-common-black);
+    }
+}
+
+// Always fixed so the header never jumps when toggling between transparent / sticky states.
+// Smooth-transition the background and icon colours rather than swapping position modes.
+.tp-inner-header-2-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+
+    // Keep icon spans transitioning in sync with the background
+    & .tp-inner-header-2-login span,
+    & .tp-inner-header-2-bar span,
+    & .tp-inner-header-2-cart span,
+    & .tp-inner-header-2-search span,
+    & .tp-shop-mob-search span {
+        transition: color 0.3s ease;
+    }
+
+    // Black icons when the header is on a white background
+    &.tp-inner-header-2-bg {
+        & .tp-inner-header-2-login span,
+        & .tp-inner-header-2-bar span,
+        & .tp-shop-mob-search span {
+            color: var(--tp-common-black);
+        }
     }
 }
 .tp-inner-header-area{

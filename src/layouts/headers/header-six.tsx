@@ -2,24 +2,33 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import HeaderMenus from './header-menus';
-import { Menu, Search, Wishlist, Zero } from '@/components/svg';
+import { Menu, Search, User, Wishlist, Zero } from '@/components/svg';
 import CartOffcanvas from '@/components/offcanvas/cart-offcanvas';
 import MobileOffcanvas from '@/components/offcanvas/mobile-offcanvas';
 import useStickyHeader from '@/hooks/use-sticky-header';
 
-export default function HeaderSix() {
-   const {headerFullWidth} = useStickyHeader(20);
+type Props = {
+  transparent?: boolean;
+};
+
+export default function HeaderSix({ transparent = false }: Props) {
+  const { isSticky, headerRef, headerFullWidth } = useStickyHeader(20);
   const [openCartMini, setOpenCartMini] = React.useState(false);
   const [openOffCanvas, setOpenOffcanvas] = React.useState(false);
+
   useEffect(() => {
     headerFullWidth();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
+  // The element is always position:fixed (via SCSS on .tp-inner-header-2-area).
+  // We only swap the visual state class so the background/icons cross-fade smoothly.
+  const innerClass =
+    transparent && !isSticky ? 'tp-inner-header-white' : 'tp-inner-header-2-bg';
+
   return (
     <>
-      <header className="tp-header-height z-index-5">
-        <div className="tp-inner-header-2-area tp-shop-mob-space tp-transparent tp-inner-header-white">
+      <header className="tp-header-height" ref={headerRef}>
+        <div className={`tp-inner-header-2-area tp-shop-mob-space ${innerClass}`}>
           <div className="container container-1800">
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">
@@ -32,9 +41,7 @@ export default function HeaderSix() {
               <div className="col-xl-5 d-none d-xl-block">
                 <div className="tp-inner-header-2-menu header-main-menu">
                   <nav className="tp-main-menu-content">
-                    {/* header menus */}
                     <HeaderMenus />
-                    {/* header menus */}
                   </nav>
                 </div>
               </div>
@@ -43,28 +50,39 @@ export default function HeaderSix() {
                   <div className="tp-inner-header-2-search p-relative d-none d-lg-block">
                     <input type="text" placeholder="Search" />
                     <span>
-                      <Search/>
+                      <Search />
                     </span>
                   </div>
                   <button className="tp-shop-mob-search d-lg-none">
                     <span>
-                    <Search/>
+                      <Search />
                     </span>
                   </button>
+                  <Link className="tp-inner-header-2-login p-relative" href="/login">
+                    <span>
+                      <User />
+                    </span>
+                  </Link>
                   <Link className="tp-inner-header-2-wishlist p-relative" href="/wishlist">
                     <i>o</i>
                     <span>
-                      <Wishlist/>
+                      <Wishlist />
                     </span>
                   </Link>
-                  <button onClick={()=> setOpenOffcanvas(true)} className="tp-inner-header-2-bar tp-offcanvas-open-btn">
+                  <button
+                    onClick={() => setOpenOffcanvas(true)}
+                    className="tp-inner-header-2-bar tp-offcanvas-open-btn"
+                  >
                     <span>
-                      <Menu/>
+                      <Menu />
                     </span>
                   </button>
-                  <button onClick={() => setOpenCartMini(true)} className="tp-inner-header-2-cart cartmini-open-btn">
+                  <button
+                    onClick={() => setOpenCartMini(true)}
+                    className="tp-inner-header-2-cart cartmini-open-btn"
+                  >
                     <span>
-                      <Zero/>
+                      <Zero />
                     </span>
                   </button>
                 </div>
@@ -72,16 +90,11 @@ export default function HeaderSix() {
             </div>
           </div>
         </div>
-
       </header>
 
-      {/* cart mini */}
       <CartOffcanvas openCartMini={openCartMini} setOpenCartMini={setOpenCartMini} />
-      {/* cart mini */}
 
-      {/* off canvas */}
       <MobileOffcanvas openOffcanvas={openOffCanvas} setOpenOffcanvas={setOpenOffcanvas} />
-      {/* off canvas */}
     </>
-  )
+  );
 }

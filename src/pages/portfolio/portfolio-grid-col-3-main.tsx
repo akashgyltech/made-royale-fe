@@ -12,7 +12,7 @@ import FooterTwo from "@/layouts/footers/footer-two";
 // animation
 import { hoverBtn } from "@/utils/hover-btn";
 import { charAnimation, fadeAnimation, titleAnimation, zoomAnimation } from "@/utils/title-animation";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const PortfolioGridColThreeMain = () => {
   useScrollSmooth();
@@ -50,7 +50,7 @@ const PortfolioGridColThreeMain = () => {
       </div>
       {/* magic cursor end */}
 
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

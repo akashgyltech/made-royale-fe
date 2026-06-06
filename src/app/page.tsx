@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import HomeOnePage from "./(homes)/home-1/page";
+import HomePageSix from "./(homes)/home-6/page";
 
 export const metadata: Metadata = {
   title: "Liko - Home Page",
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <HomeOnePage />
+      <HomePageSix />
     </>
   );
 }

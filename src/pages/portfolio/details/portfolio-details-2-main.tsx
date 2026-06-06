@@ -23,7 +23,7 @@ import port_d_1 from '@/assets/img/inner-project/portfolio-details-2/slide-1.jpg
 import port_d_2 from '@/assets/img/inner-project/portfolio-details-2/slide-2.jpg';
 import port_d_3 from '@/assets/img/inner-project/portfolio-details-2/slide-3.jpg';
 import Link from "next/link";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const slider_images = [port_d_1, port_d_2, port_d_3]; 
 
@@ -56,7 +56,7 @@ const PortfolioDetailsTwoMain = () => {
 
   return (
     <Wrapper>
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">

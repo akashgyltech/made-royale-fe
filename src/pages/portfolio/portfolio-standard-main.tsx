@@ -14,7 +14,7 @@ import ProjectFive from "@/components/project/project-five";
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
 import { imageRevealAnimation } from "@/utils/image-reveal-anim";
 import { hoverBtn } from "@/utils/hover-btn";
-import HeaderOne from "@/layouts/headers/header-one";
+import HeaderSix from "@/layouts/headers/header-six";
 
 const PortfolioStandardMain = () => {
   useScrollSmooth();
@@ -51,7 +51,7 @@ const PortfolioStandardMain = () => {
       </div>
       {/* magic cursor end */}
 
-      <HeaderOne />
+      <HeaderSix />
 
       <div id="smooth-wrapper">
         <div id="smooth-content">
