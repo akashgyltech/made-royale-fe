@@ -1,7 +1,5 @@
 "use client";
-import React from "react";
 import { gsap } from "gsap";
-import Image from "next/image";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -12,15 +10,12 @@ import Wrapper from "@/layouts/wrapper";
 import HeaderSix from "@/layouts/headers/header-six";
 import HeroBannerSix from "@/components/hero-banner/hero-banner-six";
 import ShopCategory from "@/components/category/shop-category";
-import ShopBanner from "@/components/shop/shop-banner";
 import ShopProducts from "@/components/shop/shop-products";
 // images
-import banner_img from "@/assets/img/inner-shop/banner/banner-3.jpg";
-import InstagramTwo from "@/components/instagram/instagram-two";
 import BrandFour from "@/components/brand/brand-four";
 import FooterSix from "@/layouts/footers/footer-six";
-import AboutTwo from "../../components/about/about-two";
-import AboutOne from "@/components/about/about-one";
+import AboutTwo from "@/components/about/about-two";
+import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
 // animation
 
 const HomeSixMain = () => {
@@ -46,12 +41,8 @@ const HomeSixMain = () => {
 
   return (
     <Wrapper>
-         <div id="magic-cursor">
-        <div id="ball"></div>
-      </div>
-      {/* header area start */}
+    
       <HeaderSix transparent />
-      {/* header area end */}
 
       <div id="smooth-wrapper">
         <div id="smooth-content">
@@ -60,34 +51,9 @@ const HomeSixMain = () => {
 
             <ShopCategory />
 
-
-            {/* shop banner start */}
-            <ShopBanner />
-            {/* shop banner end */}
-
-            {/* shop product start */}
+            <HeroBannerTwo />
+            
             <ShopProducts />
-            {/* shop product end */}
-
-            {/* shop banner 2 start */}
-            <div className="tp-shop-banner-area pb-120">
-              <div className="container-fluid">
-                <div className="tp-shop-banner-anim">
-                  <Image
-                    style={{ width: "100%", height: "auto" }}
-                    data-speed=".8"
-                    className="w-100"
-                    src={banner_img}
-                    alt="banner-img"
-                  />
-                </div>
-              </div>
-            </div>
-            {/* shop banner 2 end */}
-
-            {/* instagram area start */}
-            <InstagramTwo />
-            {/* instagram area end */}
 
             {/* brand area start */}
             <BrandFour />

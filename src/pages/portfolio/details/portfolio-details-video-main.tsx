@@ -1,7 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
-import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
@@ -108,10 +106,7 @@ const PortfolioDetailsVideoMain = () => {
                   </div>
                   {/* portfolio details area */}
                </main>
-
-               {/* footer area */}
-               <FooterTwo topCls="z-index-9" />
-               {/* footer area */}
+               <FooterSix />
             </div>
          </div>
       </Wrapper>

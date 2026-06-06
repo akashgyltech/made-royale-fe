@@ -15,8 +15,6 @@ import ServiceTwo from "@/components/service/service-two";
 import ProjectTwo from "@/components/project/project-two";
 import AwardTwo from "@/components/award/award-two";
 import LineText from "@/components/line-text/line-text";
-import InstagramArea from "@/components/instagram/instagram-area";
-import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { bounceAnimation, heroBgAnimation, heroTitleAnim } from "@/utils/title-animation";
 import { videoAnimTwo } from "@/utils/video-anim";
@@ -26,6 +24,7 @@ import { instagramAnim } from "@/utils/instagram-anim";
 import { hoverBtn } from "@/utils/hover-btn";
 import { aboutAnim } from "@/utils/about-anim";
 import HeaderSix from "@/layouts/headers/header-six";
+import FooterSix from "@/layouts/footers/footer-six";
 
 const HomeTwoMain = () => {
   useScrollSmooth();
@@ -93,15 +92,9 @@ const HomeTwoMain = () => {
             {/* line text area */}
             <LineText />
             {/* line text area */}
-
-            {/* instagram area */}
-            <InstagramArea />
-            {/* instagram area */}
           </main>
+          <FooterSix />
 
-          {/* footer area */}
-          <FooterTwo />
-          {/* footer area */}
         </div>
       </div>
     </Wrapper>

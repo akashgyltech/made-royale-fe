@@ -1,6 +1,5 @@
 "use client";
 import { gsap } from "gsap";
-import React from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -63,10 +62,7 @@ const ContactMain = () => {
               <ContactLocation/>
               {/* contact location */}
             </main>
-
-            {/* footer area */}
-            <FooterTwo topCls="" whiteFooter={true} />
-            {/* footer area */}
+            <FooterSix />
           </div>
         </div>
       </div>

@@ -58,7 +58,7 @@ const category_data = [
 
 export default function ShopCategory() {
   return (
-    <div className="tp-shop-category-area pt-50 pb-90">
+    <div className="tp-shop-category-area pt-50 pb-50">
       <div className="container container-1200">
         <div className="row">
           <div className="row justify-content-center">

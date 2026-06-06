@@ -15,12 +15,12 @@ import BrandThree from "@/components/brand/brand-three";
 import VideoThree from "@/components/video/video-three";
 import ServiceFour from "@/components/service/service-four";
 import ContactOne from "@/components/contact/contact-one";
-import FooterFour from "@/layouts/footers/footer-four";
 import { textInvert } from "@/utils/text-invert";
 import { fadeAnimation, revelAnimationOne } from "@/utils/title-animation";
 import { projectThreeAnimation } from "@/utils/project-anim";
 import { ctaAnimation } from "@/utils/cta-anim";
 import HeaderSix from "@/layouts/headers/header-six";
+import FooterSix from "@/layouts/footers/footer-six";
 
 const HomeFourMain = () => {
   useScrollSmooth();
@@ -76,10 +76,7 @@ const HomeFourMain = () => {
           {/* contact area end */}
 
         </main>
-
-        {/* footer area */}
-        <FooterFour />
-        {/* footer area */}
+        <FooterSix />
       </div>
     </Wrapper>
   );

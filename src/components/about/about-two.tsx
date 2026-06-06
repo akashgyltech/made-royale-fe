@@ -1,8 +1,7 @@
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import shape from '@/assets/img/home-04/about/about-shape-2.png'
-import shape_2 from '@/assets/img/home-04/about/about-shape-1.png'
+import shape from '@/assets/img/home-04/about/about-shape-2.png';
+import shape_2 from '@/assets/img/home-04/about/about-shape-1.png';
 
 export default function AboutTwo() {
   return (

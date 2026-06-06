@@ -1,6 +1,6 @@
 "use client";
 import { gsap } from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText, cursorAnimation } from "@/plugins";
 import { useGSAP } from "@gsap/react";
@@ -8,7 +8,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeaderFive from "@/layouts/headers/header-five";
 import HeroBannerFive from "@/components/hero-banner/hero-banner-five";
 import AboutFour from "@/components/about/about-four";
 import ProjectFive from "@/components/project/project-five";
@@ -16,13 +15,14 @@ import CounterOne from "@/components/counter/counter-one";
 import MissionOne from "@/components/mission/mission-one";
 import ServiceFive from "@/components/service/service-five";
 import BlogOne from "@/components/blog/blog-one";
-import FooterFive from "@/layouts/footers/footer-five";
 // animation
-import { charAnimation,fadeAnimation, revelAnimationTwo } from "@/utils/title-animation";
+import { charAnimation, fadeAnimation, revelAnimationTwo } from "@/utils/title-animation";
 import { imageRevealAnimation } from "@/utils/image-reveal-anim";
 import { hoverBtn } from "@/utils/hover-btn";
 import { heroScrollTextAnim } from "@/utils/scroll-marque";
 import { footerTwoAnimation } from "@/utils/footer-anim";
+import HeaderSix from "@/layouts/headers/header-six";
+import FooterSix from "@/layouts/footers/footer-six";
 
 const HomeFiveMain = () => {
   useScrollSmooth();
@@ -64,11 +64,7 @@ const HomeFiveMain = () => {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>
-
-            {/* header area start */}
-            <HeaderFive />
-            {/* header area end */}
-
+            <HeaderSix />
             {/* hero area start */}
             <HeroBannerFive />
             {/* hero area end */}
@@ -98,10 +94,7 @@ const HomeFiveMain = () => {
             {/* blog area end */}
 
           </main>
-
-          {/* footer area */}
-          <FooterFive />
-          {/* footer area */}
+          <FooterSix />
         </div>
       </div>
     </Wrapper>

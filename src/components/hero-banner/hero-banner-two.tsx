@@ -1,5 +1,4 @@
 'use client';
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Leaf } from "../svg";
@@ -7,7 +6,7 @@ import hero_bg from "@/assets/img/home-02/hero/hero-bg-1.jpg";
 
 const HeroBannerTwo = () => {
   return (
-    <div className="tp-hero-2-area tp-hero-2-pt">
+    <div className="tp-hero-2-area">
       <div className="container container-1870">
         <div className="row">
           <div className="col-xl-12">

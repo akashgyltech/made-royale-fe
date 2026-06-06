@@ -13,13 +13,13 @@ import AboutTwo from "@/components/about/about-two";
 import ServiceThree from "@/components/service/service-three";
 import LineTextTwo from "@/components/line-text/line-text-2";
 import TeamTwo from "@/components/team/team-two";
-import FooterThree from "@/layouts/footers/footer-three";
 // animation
 import { bounceAnimation, charAnimation, fadeAnimation, revelAnimationTwo } from "@/utils/title-animation";
 import { serviceMarqueAnim } from "@/utils/scroll-marque";
 import { panelTwoAnimation } from "@/utils/panel-animation";
 import { hoverBtn } from "@/utils/hover-btn";
 import HeaderSix from "@/layouts/headers/header-six";
+import FooterSix from "@/layouts/footers/footer-six";
 
 const HomeThreeMain = () => {
   useScrollSmooth();
@@ -77,10 +77,7 @@ const HomeThreeMain = () => {
             <TeamTwo />
             {/* team area */}
           </main>
-
-          {/* footer area */}
-          <FooterThree />
-          {/* footer area */}
+          <FooterSix />
         </div>
       </div>
     </Wrapper>
