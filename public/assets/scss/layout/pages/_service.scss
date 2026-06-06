@@ -156,7 +156,7 @@
         font-weight: 400;
         line-height: 1;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         @media #{$lg}{
             font-size: 28px;
         }
@@ -237,7 +237,7 @@
         line-height: 1.1;
         letter-spacing: -0.8px;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         @media #{$md}{
             font-size: 30px;
         }
@@ -269,7 +269,7 @@
         font-weight: 400;
         line-height: 1;
         color: var(--tp-common-white);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         margin-bottom: 15px;
         @media #{$xxxl,$xxl}{
             font-size: 27px;

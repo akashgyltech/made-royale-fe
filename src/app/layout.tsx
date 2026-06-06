@@ -56,16 +56,7 @@ const syne = Syne({
   subsets: ["latin"],
   variable: "--tp-ff-syne",
 });
-// const big_shoulders = Big_Shoulders_Display({
-//   weight: ["400", "500", "600", "700", "800"],
-//   subsets: ["latin"],
-//   variable: "--tp-ff-shoulders",
-// });
-const marcellus = Marcellus({
-  weight: ["400"],
-  subsets: ["latin"],
-  variable: "--tp-ff-marcellus",
-});
+
 
 export const metadata: Metadata = {
   title: "Liko - Creative agency & portfolio Next js Template",
@@ -84,7 +75,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         className={`${gellery.variable} ${aladin.variable}
          ${syne_body.variable} ${syne_heading.variable} ${syne_p.variable}
-          ${syne.variable} ${marcellus.variable}`}
+          ${syne.variable}`}
       >
         <ThemeProvider defaultTheme="light">
           <VideoProvider>

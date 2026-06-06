@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 import BlogDetailsArea from "@/components/blog/details/blog-details-area";
 import BlogDetailsBreadcrumb from "@/components/blog/details/blog-details-breadcrumb";
 import BlogDetailsRelatedPosts from "@/components/blog/details/blog-details-related-posts";
@@ -47,7 +47,7 @@ const BlogDetailsMain = ({ id }: IdProps) => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

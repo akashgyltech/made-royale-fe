@@ -12,7 +12,7 @@ import Wrapper from "@/layouts/wrapper";
 import Social from "@/components/social/social";
 import { Dots, Share } from "@/components/svg";
 import { projectDetailsPin } from "@/utils/project-anim";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import {charAnimation,titleAnimation} from "@/utils/title-animation";
 
@@ -126,7 +126,7 @@ const PortfolioDetailsOneMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

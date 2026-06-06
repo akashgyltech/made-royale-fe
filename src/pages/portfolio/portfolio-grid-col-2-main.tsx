@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 // internal imports
 import Wrapper from "@/layouts/wrapper";
 import PortfolioGridColTwoArea from "@/components/portfolio/portfolio-grid-col-2-area";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { hoverBtn } from "@/utils/hover-btn";
 import { charAnimation, fadeAnimation, titleAnimation, zoomAnimation } from "@/utils/title-animation";
@@ -85,7 +85,7 @@ const PortfolioGridColTwoMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

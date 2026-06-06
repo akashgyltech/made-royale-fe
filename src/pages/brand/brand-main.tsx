@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 // internal imports
 import Wrapper from "@/layouts/wrapper";
 import BrandMainArea from "@/components/brand/brand-main-area";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
 import { hoverBtn } from "@/utils/hover-btn";
@@ -72,7 +72,7 @@ const BrandMain = () => {
             </main>
 
             {/* footer area */}
-            <FooterTwo topCls="" />
+            <FooterSix />
             {/* footer area */}
           </div>
         </div>

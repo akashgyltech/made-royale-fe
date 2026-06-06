@@ -17,14 +17,14 @@
         font-weight: 500;
         font-size: 30px;
         margin-bottom: 4px;
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
     }
     &-top{
         & p{
             font-weight: 400;
             font-size: 16px;
             color: #49535B;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             & a{
                 color: var(--tp-common-black);
                 position: relative;
@@ -75,7 +75,7 @@
                 border: 1px solid #E0E2E3;
                 font-size: 16px;
                 color: #041226;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 & img{
                     @include transform(translateY(-2px));
 
@@ -101,7 +101,7 @@
             position: relative;
             display: inline-block;
             background-color: var(--tp-common-white);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             & a{
                 &:hover{
                     color: var(--tp-common-black);
@@ -137,10 +137,10 @@
             border: 1px solid #E0E2E3;
             font-size: 14px;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             @include placeholder{
                 color: #95999D;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
         }
         &-title{
@@ -149,7 +149,7 @@
                 padding: 0 5px;
                 line-height: 1;
                 color: var(--tp-common-black);
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
         }
         &-eye{
@@ -198,7 +198,7 @@
             padding-left: 26px;
             z-index: 1;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             &::after{
                 position: absolute;
                 content: '';
@@ -243,7 +243,7 @@
             font-weight: 400;
             font-size: 15px;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             position: relative;
             display: inline-block;
 
@@ -275,7 +275,7 @@
         text-align: center;
         display: inline-block;
         color: var(--tp-common-white);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         background-color: var(--tp-common-black);
         border: 2px solid var(--tp-common-black);
 

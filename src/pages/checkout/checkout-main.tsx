@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 import CheckoutArea from "@/components/checkout/checkout-area";
 import HeaderSix from "@/layouts/headers/header-six";
 
@@ -27,7 +27,7 @@ const CheckoutMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

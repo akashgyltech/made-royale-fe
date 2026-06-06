@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 // internal imports
 import Wrapper from "@/layouts/wrapper";
 import ServiceDetailsArea from "@/components/service/service-details-area";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
 import HeaderSix from "@/layouts/headers/header-six";
@@ -38,7 +38,7 @@ const ServiceDetailsMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

@@ -18,7 +18,7 @@
             display: inline-block;
             border: 1px dashed #AAB0B2;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             padding: 8px 26px;
             width: 100%;
             
@@ -58,7 +58,7 @@
         & label{
             font-weight: 500;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             & span{
                 color: red;
             }
@@ -69,10 +69,10 @@
             background: #FFFFFF;
             border: 1px solid #D5D8DB;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             height: 50px;
             @include placeholder{
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
             &:focus{
                 border-color: var(--tp-common-black);
@@ -149,7 +149,7 @@
             position: relative;
             padding-left: 26px;
             z-index: 1;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             &::after{
                 position: absolute;
                 content: '';
@@ -222,7 +222,7 @@
             font-weight: 600;
             margin-right: 37px;
             margin-bottom: 30px;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &-payment{
@@ -261,7 +261,7 @@
                 padding-left: 27px;
                 font-weight: 500;
                 color: var(--tp-common-black);
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
 
                 &:hover{
                     cursor: pointer;
@@ -335,7 +335,7 @@
                 line-height: 1.57;
                 color: #55585B;
                 margin-bottom: 0;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
         }
     }
@@ -358,7 +358,7 @@
         & label{
             font-weight: 500;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
 
             & span{
                 color: red;
@@ -369,10 +369,10 @@
             background: #FFFFFF;
             border: 1px solid #D5D8DB;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             height: 50px;
             @include placeholder{
-                font-family: var(--tp-ff-marcellus);  
+                font-family: var(--tp-ff-syne);  
             }
         }
     }
@@ -399,7 +399,7 @@
             position: relative;
             padding-left: 26px;
             z-index: 1;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             &::after{
                 position: absolute;
                 content: '';

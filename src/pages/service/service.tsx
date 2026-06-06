@@ -10,7 +10,7 @@ import Wrapper from "@/layouts/wrapper";
 import { ServiceItems } from "@/components/service/service-five";
 import ServiceSix from "@/components/service/service-six";
 import { Leaf } from "@/components/svg";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { charAnimation, fadeAnimation } from "@/utils/title-animation";
 import { servicePanel } from "@/utils/panel-animation";
@@ -68,7 +68,7 @@ const ServiceMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

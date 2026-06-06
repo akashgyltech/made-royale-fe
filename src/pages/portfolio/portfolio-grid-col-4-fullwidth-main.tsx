@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 // internal imports
 import Wrapper from "@/layouts/wrapper";
 import PortfolioGridFourColArea from "@/components/portfolio/portfolio-grid-4-col-area";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { hoverBtn } from "@/utils/hover-btn";
 import {
@@ -90,7 +90,7 @@ const PortfolioGridColFourFullwidthMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

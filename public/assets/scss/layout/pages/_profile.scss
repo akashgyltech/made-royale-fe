@@ -27,7 +27,7 @@
                     text-align: left;
                     border: 0;
                     color: #5D5D63;
-                    font-family: var(--tp-ff-marcellus);
+                    font-family: var(--tp-ff-syne);
                     &::after{
                         position: absolute;
                         top: 14px;
@@ -69,7 +69,7 @@
         &-title{
             font-size: 20px;
             margin-bottom: 25px;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &__input{
@@ -120,7 +120,7 @@
             outline: 0;
             border: 1px solid #EAEAEF;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             &:focus{
                 border-color: var(--tp-theme-primary);
             }
@@ -149,7 +149,7 @@
 
             & .current{
                 color: var(--tp-common-black);
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
 
             &::after{
@@ -173,7 +173,7 @@
                 padding: 13px 8px;
                 transform-origin: center center;
                 @include transform(scale(.9) translateY(0px));
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 & .option{
                     &:hover{
                         color: var(--tp-common-black);
@@ -202,7 +202,7 @@
                 color: var(--tp-common-black);
                 border-color: #E0E2E3;
                 box-shadow: none;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
             & td{
                 color: var(--tp-common-black);
@@ -221,7 +221,7 @@
                     & th{
                         color: var(--tp-common-black);
                         vertical-align: middle;
-                        font-family: var(--tp-ff-marcellus);
+                        font-family: var(--tp-ff-syne);
                     }
 
 
@@ -289,7 +289,7 @@
         &-title{
             font-size: 22px;
             margin-bottom: 20px;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
 
         }
         &-icon{
@@ -319,7 +319,7 @@
             & p{
                 font-size: 14px;
                 margin-bottom: 10px;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 & span{
                     font-weight: 600;
                     margin-right: 7px;
@@ -333,10 +333,10 @@
             font-size: 24px;
             margin-bottom: 10px;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
         & p{
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
         &-item{
             .form-check-input{
@@ -349,7 +349,7 @@
                 font-size: 16px;
                 margin-left: 10px;
                 color: var(--tp-common-black);
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 @include rtl{
                     margin-left: 0;
                     margin-right: 10px;
@@ -433,13 +433,13 @@
         &-title{
             font-size: 24px;
             margin-bottom: 0;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
         &-content{
             & p{
                 font-size: 14px;
                 margin-bottom: 0;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 & span{
                     color: var(--tp-common-black);
                     font-weight: 500;
@@ -490,14 +490,14 @@
                     font-weight: 600;
                     border: 2px solid #fff;
                     color: var(--tp-common-white);
-                    font-family: var(--tp-ff-marcellus);
+                    font-family: var(--tp-ff-syne);
                     background-color: var(--tp-common-black);
                 }
             }
             &-title{
                 font-size: 18px;
                 margin-bottom: 0;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
         }
     }
@@ -509,7 +509,7 @@
     padding: 6px 18px;
     text-align: center;
     color: var(--tp-common-black);
-    font-family: var(--tp-ff-marcellus);
+    font-family: var(--tp-ff-syne);
     border: 1px solid rgba($color: $black, $alpha: .12);
     &:hover{
         color: var(--tp-common-white);
@@ -549,7 +549,7 @@
                 margin-bottom: 10px;
                 display: inline-block;
                 color: var(--tp-common-black);
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
             }
         }
         &-eye{

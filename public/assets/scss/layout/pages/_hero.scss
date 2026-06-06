@@ -282,7 +282,7 @@
         line-height: 1;
         letter-spacing: -5.6px;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         margin-bottom: 35px;
         @media #{$lg}{
             font-size: 115px;
@@ -301,7 +301,7 @@
         display: block;
         text-transform: uppercase;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         margin-bottom: 20px;
     }
     &-circle-shape{
@@ -415,7 +415,7 @@
             line-height: 28px;
             margin-bottom: 0;
             color: rgba(255, 255, 255, 0.80);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &-achievement{
@@ -446,7 +446,7 @@
             font-weight: 400;
             line-height: 1;
             color: var(--tp-common-white);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             margin-bottom: 10px;
             display: inline-block;
             & i{
@@ -458,7 +458,7 @@
             font-weight: 400;
             line-height: 24px;
             color: var(--tp-common-white);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &-star{

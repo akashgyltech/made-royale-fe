@@ -829,7 +829,7 @@
     display: inline-block;
     text-transform: uppercase;
     color: var(--tp-common-white);
-    font-family: var(--tp-ff-marcellus);
+    font-family: var(--tp-ff-syne);
     border: 1px solid rgba(255, 255, 255, 0.20);
     &:hover{
         background-color: var(--tp-common-white);
@@ -859,7 +859,7 @@
         text-align: center;
         text-transform: uppercase;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         background-color: var(--tp-common-white-solid);
         &:hover{
             background-color: var(--tp-common-black);
@@ -896,7 +896,7 @@
     text-align: center;
     text-transform: uppercase;
     color: var(--tp-common-black);
-    font-family: var(--tp-ff-marcellus);
+    font-family: var(--tp-ff-syne);
     background-color: #fff; 
 }
 
@@ -911,7 +911,7 @@
     text-align: center;
     text-transform: capitalize;
     color: var(--tp-common-white);
-    font-family: var(--tp-ff-marcellus);
+    font-family: var(--tp-ff-syne);
     background-color: var(--tp-common-black); 
     flex: 0 0 auto;
     border: 2px solid transparent;
@@ -950,7 +950,7 @@
     display: inline-block;
     text-align: center;
     color: var(--tp-common-white);
-    font-family: var(--tp-ff-marcellus);
+    font-family: var(--tp-ff-syne);
     background-color: var(--tp-common-black); 
     flex: 0 0 auto;
     & span{

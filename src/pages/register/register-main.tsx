@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 import RegisterForm from "@/components/form/register-form";
 import SocialLogin from "@/components/form/social-login";
 import HeaderSix from "@/layouts/headers/header-six";
@@ -57,7 +57,7 @@ const RegisterMain = () => {
           </main>
 
           {/* footer area */}
-          <FooterTwo topCls="" />
+          <FooterSix />
           {/* footer area */}
         </div>
       </div>

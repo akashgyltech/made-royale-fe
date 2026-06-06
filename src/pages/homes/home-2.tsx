@@ -16,7 +16,7 @@ import ProjectTwo from "@/components/project/project-two";
 import AwardTwo from "@/components/award/award-two";
 import LineText from "@/components/line-text/line-text";
 import InstagramArea from "@/components/instagram/instagram-area";
-import FooterTwo from "@/layouts/footers/footer-two";
+import FooterSix from "@/layouts/footers/footer-six";
 // animation
 import { bounceAnimation, heroBgAnimation, heroTitleAnim } from "@/utils/title-animation";
 import { videoAnimTwo } from "@/utils/video-anim";

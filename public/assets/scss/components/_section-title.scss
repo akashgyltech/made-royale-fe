@@ -48,7 +48,7 @@
         line-height: 1;
         letter-spacing: -1.8px;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         @media #{$lg}{
             font-size: 80px;
         }
@@ -92,7 +92,7 @@
         line-height: 1;
         letter-spacing: -4px;
         color: var(--tp-common-white);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         @media #{$xxl}{
             font-size: 150px;
         }
@@ -127,7 +127,7 @@
             font-size: 34px;
         }
         &.font-style-2{
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &-title-220{
@@ -195,7 +195,7 @@
         line-height: 14px;
         text-transform: uppercase;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         margin-bottom: 25px;
         display: inline-block;
         margin-left: 70px;

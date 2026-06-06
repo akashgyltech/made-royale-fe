@@ -116,7 +116,7 @@
                     & span{
                         font-size: 15px;
                         color: var(--tp-common-black);
-                        font-family: var(--tp-ff-marcellus);
+                        font-family: var(--tp-ff-syne);
                     }
                     &#{$list}{
                         &-header{
@@ -126,14 +126,14 @@
                                 font-size: 16px;
                                 font-weight: 500;
                                 margin-bottom: 0;
-                                font-family: var(--tp-ff-marcellus);
+                                font-family: var(--tp-ff-syne);
                             }
                         }
                         &-desc{
                             & p{
                                 font-size: 15px;
                                 margin-bottom: 0;
-                                font-family: var(--tp-ff-marcellus);
+                                font-family: var(--tp-ff-syne);
 
                                 & span{
                                     font-size: 15px;

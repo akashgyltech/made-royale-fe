@@ -78,7 +78,7 @@
         &  span {
             font-size: 16px;
             line-height: 1;
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &-title {
@@ -86,11 +86,11 @@
         font-weight: 500;
         line-height: 1;
         margin-bottom: 15px;
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
     }
     &-reviews{
         & span{
-            font-family: var(--tp-ff-marcellus); 
+            font-family: var(--tp-ff-syne); 
         }
     }
     &-stock{
@@ -101,7 +101,7 @@
             line-height: 1;
             padding: 4px 12px;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
             background-color: rgba($color: #0989FF, $alpha: .06);
         }
     }
@@ -135,11 +135,11 @@
     &-wrapper > p {
         font-size: 15px;
         line-height: 1.7;
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         & span {
             font-weight: 500;
             color: var(--tp-common-black);
-            font-family: var(--tp-ff-marcellus);
+            font-family: var(--tp-ff-syne);
         }
     }
     &-price {
@@ -147,7 +147,7 @@
         font-size: 24px;
         letter-spacing: -0.02em;
         color: var(--tp-common-black);
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
         &.old-price {
             font-weight: 400;
             font-size: 16px;
@@ -159,7 +159,7 @@
         font-size: 16px;
         font-weight: 400;
         margin-bottom: 13px;
-        font-family: var(--tp-ff-marcellus);
+        font-family: var(--tp-ff-syne);
     }
     &-action{
         &-wrapper{
@@ -172,7 +172,7 @@
             &-btn{
                 font-size: 16px;
                 margin-bottom: 10px;
-                font-family: var(--tp-ff-marcellus);
+                font-family: var(--tp-ff-syne);
                 &:not(:last-child){
                     margin-right: 10px;
                 }
