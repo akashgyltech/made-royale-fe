@@ -71,7 +71,6 @@ const HomeSixMain = () => {
 
             <PortfolioSliderHomeTen />
             
-
             <BrandFour />
 
           </main>

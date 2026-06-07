@@ -1392,12 +1392,11 @@
         }
 
         &-title {
-            font-size: 120px;
-            font-weight: 700;
+            font-size: 100px;
+            font-weight: 500;
             line-height: 1;
-            letter-spacing: -2.4px;
             color: var(--tp-common-white);
-            font-family: var(--tp-ff-shoulders);
+            font-family: var(--tp-ff-gallery);
             opacity: 0;
 
             @media #{$lg} {
@@ -1621,10 +1620,10 @@
 
             &-tittle {
                 font-size: 30px;
-                font-weight: 700;
+                font-weight: 500;
                 line-height: 1;
                 color: var(--tp-common-white);
-                font-family: var(--tp-ff-shoulders);
+                font-family: var(--tp-ff-gallery);
                 margin-bottom: 0;
             }
         }

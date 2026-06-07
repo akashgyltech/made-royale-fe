@@ -110,14 +110,13 @@ export default function ShopCategory() {
       `}</style>
       <div className="container container-1200">
         <div className="row">
-          <div className="row justify-content-center">
-            <div className="col-xxl-8 col-xl-10">
-              <div className="tp-about-2-title-box tp-btn-trigger tp-btn-bounce text-start text-xl-center">
-                <h2 className="tp-about-2-section-title gradient-text">
-                  Explore Luxury Furniture by Categories
-                </h2>
-              </div>
+               <div className="tp-royal-shop-header mb-55">
+            <div className="tp-royal-shop-header-line" />
+            <div className="tp-royal-shop-header-content">
+              <span className="tp-royal-shop-subtitle">Curated Catgories</span>
+              <h2 className="tp-royal-shop-title">Explore Luxury Furniture by Categories</h2>
             </div>
+            <div className="tp-royal-shop-header-line" />
           </div>
           <div className="py-lg-3" />
           {category_data.map((item) => (

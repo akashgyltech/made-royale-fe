@@ -3,11 +3,10 @@ import Image from "next/image";
 import Slider from "react-slick";
 import Link from "next/link";
 import "slick-carousel/slick/slick.css";
-import { DownArrow } from "../../svg";
 
 // images
-import port_sm_1 from "@/assets/img/home-11/port-sm-1.jpg";
-import port_sm_2 from "@/assets/img/home-11/port-sm-2.jpg";
+import port_sm_1 from "@/assets/img/home-11/living-room-port-sm-1.webp";
+import port_sm_2 from "@/assets/img/home-11/berdoom-port-sm-2.webp";
 import port_sm_3 from "@/assets/img/home-11/port-sm-3.jpg";
 import port_sm_4 from "@/assets/img/home-11/port-sm-4.jpg";
 import port_sm_5 from "@/assets/img/home-11/port-sm-5.jpg";
@@ -17,38 +16,43 @@ import { SlickNextArrow, SlickPrevArrow } from "../../slick-arrow";
 const slider_data = [
   {
     id: 1,
-    bg: "/assets/img/home-11/port-1.jpg",
-    subtitle: "Digital Design",
-    year: "2024",
-    title: "Fashion <br> Sentence",
+    bg: "/assets/img/home-11/living-room-port-1.webp",
+    subtitle: "Signature Collection",
+    year: "Living Room",
+    title: "Grand <br> Living",
+    shopLink: "/shop?room=living-room",
   },
   {
     id: 2,
-    bg: "/assets/img/home-11/port-2.jpg",
-    subtitle: "Digital Design",
-    year: "2022",
-    title: "Chania <br> Tourism",
+    bg: "/assets/img/home-11/bedroom-port-2.webp",
+    subtitle: "Bespoke Interiors",
+    year: "Bedroom",
+    title: "Serene <br> Retreat",
+    shopLink: "/shop?room=bedroom",
   },
   {
     id: 3,
     bg: "/assets/img/home-11/port-3.jpg",
-    subtitle: "Digital Design",
-    year: "2021",
-    title: "Kiteboard <br> action",
+    subtitle: "Artisan Craft",
+    year: "Kitchen",
+    title: "Culinary <br> Elegance",
+    shopLink: "/shop?room=kitchen",
   },
   {
     id: 4,
     bg: "/assets/img/home-11/port-4.jpg",
-    subtitle: "Digital Design",
-    year: "2021",
-    title: "Headphones <br> Cheap",
+    subtitle: "Fine Dining",
+    year: "Dining Room",
+    title: "Table <br> Royale",
+    shopLink: "/shop?room=dining-room",
   },
   {
     id: 5,
     bg: "/assets/img/home-11/port-5.jpg",
-    subtitle: "Digital Design",
-    year: "2021",
-    title: "Zon <br> Robinson",
+    subtitle: "Executive Series",
+    year: "Study Room",
+    title: "Scholar's <br> Sanctum",
+    shopLink: "/shop?room=study-room",
   },
 ];
 
@@ -57,37 +61,42 @@ const slider_thumbs = [
   {
     id: 1,
     img: port_sm_1,
-    subtitle: "Digital Design",
-    year: "2024",
-    title: "Fashion Sentence",
+    subtitle: "Signature Collection",
+    year: "Living Room",
+    title: "Grand Living",
+    shopLink: "/shop?room=living-room",
   },
   {
     id: 2,
     img: port_sm_2,
-    subtitle: "Digital Design",
-    year: "2022",
-    title: "Chania Tourism",
+    subtitle: "Bespoke Interiors",
+    year: "Bedroom",
+    title: "Serene Retreat",
+    shopLink: "/shop?room=bedroom",
   },
   {
     id: 3,
     img: port_sm_3,
-    subtitle: "Digital Design",
-    year: "2021",
-    title: "Kiteboard action",
+    subtitle: "Artisan Craft",
+    year: "Kitchen",
+    title: "Culinary Elegance",
+    shopLink: "/shop?room=kitchen",
   },
   {
     id: 4,
     img: port_sm_4,
-    subtitle: "Digital Design",
-    year: "2021",
-    title: "Headphones Cheap",
+    subtitle: "Fine Dining",
+    year: "Dining Room",
+    title: "Table Royale",
+    shopLink: "/shop?room=dining-room",
   },
   {
     id: 5,
     img: port_sm_5,
-    subtitle: "Digital Design",
-    year: "2021",
-    title: "Zon Robinson",
+    subtitle: "Executive Series",
+    year: "Study Room",
+    title: "Scholar's Sanctum",
+    shopLink: "/shop?room=study-room",
   },
 ];
 
@@ -106,7 +115,7 @@ const slider_setting_two = {
   slidesToShow: 4,
   slidesToScroll: 1,
   dots: false,
-  arrows: true, 
+  arrows: true,
   focusOnSelect: true,
   centerPadding: "0",
   speed: 600,
@@ -178,21 +187,45 @@ export default function PortfolioSliderHomeTen() {
                 className="tp-portfolio-11-slider-bg pt-170 pb-150 d-flex align-items-end"
                 style={{ backgroundImage: `url(${item.bg})` }}
               >
-                <div className="tp-portfolio-11-slider-content">
-                  <div className="tp-portfolio-11-slider-link">
-                    <Link href="/portfolio-details-video">
-                      <DownArrow />
-                    </Link>
-                  </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    zIndex: 0,
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 100%)",
+                    pointerEvents: "none",
+                  }}
+                />
+                <div className="tp-portfolio-11-slider-content" style={{ position: "relative", zIndex: 1 }}>
                   <span className="tp-portfolio-11-slider-subtitle">
                     {item.year} <br /> {item.subtitle}
                   </span>
                   <h3 className="tp-portfolio-11-slider-title">
                     <Link
-                      href="/portfolio-details-video"
+                      href={item.shopLink}
                       dangerouslySetInnerHTML={{ __html: item.title }}
                     ></Link>
                   </h3>
+                  <Link
+                    href={item.shopLink}
+                    className="tp-portfolio-11-slider-btn"
+                    style={{
+                      display: "inline-block",
+                      marginTop: "20px",
+                      padding: "12px 32px",
+                      backgroundColor: "#ffffff",
+                      color: "#000000",
+                      borderRadius: "50px",
+                      fontWeight: 600,
+                      fontSize: "14px",
+                      letterSpacing: "1.5px",
+                      textTransform: "uppercase",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Shop {item.year}
+                  </Link>
                 </div>
               </div>
             </div>
@@ -240,7 +273,7 @@ export default function PortfolioSliderHomeTen() {
                         {item.subtitle}
                       </span>
                       <h4 className="tp-portfolio-11-slider-nav-tittle">
-                        <Link href="/portfolio-details-video">{item.title}</Link>
+                        <Link href={item.shopLink}>{item.title}</Link>
                       </h4>
                     </div>
                   </div>
