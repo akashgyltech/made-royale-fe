@@ -4,6 +4,182 @@
 /*  7.12 shop css start
 /*----------------------------------------*/
 
+/* ── Royal Shop Products Section ── */
+.tp-royal-shop-area {
+    background-color: #fafaf8;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(180, 150, 90, 0.4), transparent);
+    }
+}
+
+.tp-royal-shop-header {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+
+    .tp-royal-shop-header-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(180, 150, 90, 0.5));
+        &:last-child {
+            background: linear-gradient(90deg, rgba(180, 150, 90, 0.5), transparent);
+        }
+    }
+
+    .tp-royal-shop-header-content {
+        flex: 0 0 auto;
+        text-align: center;
+    }
+
+    .tp-royal-shop-subtitle {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #b4965a;
+        font-family: var(--tp-ff-syne);
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .tp-royal-shop-title {
+        font-size: 42px;
+        font-weight: 400;
+        line-height: 1;
+        margin-bottom: 0;
+        color: var(--tp-common-black);
+        font-family: var(--tp-ff-syne);
+        letter-spacing: -1px;
+
+        @media #{$md} { font-size: 34px; }
+        @media #{$xs} { font-size: 28px; }
+    }
+}
+
+.tp-royal-shop-slider-wrap {
+    padding: 0 70px;
+
+    @media #{$md,$xs} {
+        padding: 0 50px;
+    }
+}
+
+.tp-royal-shop-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid rgba(180, 150, 90, 0.35);
+    color: #b4965a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+
+    &:hover {
+        background-color: #b4965a;
+        color: #fff;
+        border-color: #b4965a;
+        box-shadow: 0 6px 20px rgba(180, 150, 90, 0.35);
+    }
+
+    &.tp-royal-shop-prev { left: 8px; }
+    &.tp-royal-shop-next { right: 8px; }
+}
+
+.tp-royal-shop-card {
+    border: 1px solid rgba(180, 150, 90, 0.18);
+    border-radius: 24px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        border-color: rgba(180, 150, 90, 0.45);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .tp-shop-right-item {
+        margin-bottom: 0;
+    }
+}
+
+/* View All button */
+.tp-royal-view-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 48px;
+    height: 56px;
+    line-height: 56px;
+    border: 1px solid rgba(180, 150, 90, 0.55);
+    background-color: transparent;
+    color: var(--tp-common-black);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: var(--tp-ff-syne);
+    font-weight: 500;
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.35s ease;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: #b4965a;
+        transform: translateX(-101%);
+        transition: transform 0.35s ease;
+        z-index: 0;
+    }
+
+    &:hover {
+        color: #fff;
+        border-color: #b4965a;
+
+        &::before {
+            transform: translateX(0);
+        }
+
+        .tp-royal-view-all-btn-icon svg {
+            transform: translateX(4px);
+        }
+    }
+
+    .tp-royal-view-all-btn-text,
+    .tp-royal-view-all-btn-icon {
+        position: relative;
+        z-index: 1;
+    }
+
+    .tp-royal-view-all-btn-icon {
+        display: flex;
+        align-items: center;
+
+        svg {
+            transition: transform 0.3s ease;
+        }
+    }
+}
+/* ── End Royal Shop Products Section ── */
+
 .tp-shop-slider{
     &-bg{
         padding-top: 150px;

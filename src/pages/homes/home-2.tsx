@@ -8,13 +8,11 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 // internal imports
 import Wrapper from "@/layouts/wrapper";
-import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
 import AboutOne from "@/components/about/about-one";
 import VideoTwo from "@/components/video/video-two";
 import ServiceTwo from "@/components/service/service-two";
 import ProjectTwo from "@/components/project/project-two";
 import AwardTwo from "@/components/award/award-two";
-import LineText from "@/components/line-text/line-text";
 // animation
 import { bounceAnimation, heroBgAnimation, heroTitleAnim } from "@/utils/title-animation";
 import { videoAnimTwo } from "@/utils/video-anim";
@@ -65,9 +63,6 @@ const HomeTwoMain = () => {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>
-            {/* hero area start */}
-            <HeroBannerTwo />
-            {/* hero area end */}
 
             {/* about area start */}
             <AboutOne />
@@ -89,9 +84,6 @@ const HomeTwoMain = () => {
             <AwardTwo />
             {/* award area */}
 
-            {/* line text area */}
-            <LineText />
-            {/* line text area */}
           </main>
           <FooterSix />
 

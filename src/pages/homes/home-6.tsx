@@ -14,12 +14,23 @@ import ShopProducts from "@/components/shop/shop-products";
 // images
 import BrandFour from "@/components/brand/brand-four";
 import FooterSix from "@/layouts/footers/footer-six";
-import AboutTwo from "@/components/about/about-two";
 import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
+import ProjectTwo from "@/components/project/project-two";
+import { useEffect } from "react";
+import { bounceAnimation } from "@/utils/title-animation";
+import { aboutAnim } from "@/utils/about-anim";
+import { panelOneAnimation } from "@/utils/panel-animation";
+import PortfolioSliderHomeTen from "@/components/portfolio/slider/portfolio-slider-home-ten";
 // animation
 
 const HomeSixMain = () => {
   useScrollSmooth();
+   useEffect(() => {
+      document.body.classList.add("tp-smooth-scroll");
+      return () => {
+        document.body.classList.remove("tp-smooth-scroll");
+      }
+    }, []);
 
   useGSAP(() => {
     const timer = setTimeout(() => {
@@ -35,6 +46,9 @@ const HomeSixMain = () => {
           });
         }
       });
+      // bounceAnimation();
+      // aboutAnim();
+      panelOneAnimation();
     }, 100);
     return () => clearTimeout(timer);
   });
@@ -51,13 +65,15 @@ const HomeSixMain = () => {
 
             <ShopCategory />
 
-            <HeroBannerTwo />
+            <HeroBannerTwo imageSrc={"/assets/img/inner-shop/home/hero-bg-14.webp"} imageAlt={"Hero-banner-12"} buttonLink={"/"} buttonText={"Explore Now"} subtitle={"Experience the perfect blend of elegance, comfort, and craftsmanship. Our carefully curated furniture collections are designed to transform your home into a space that reflects your style while providing lasting quality and everyday comfort."} title={"Luxury Meets Comfort"}/>
             
             <ShopProducts />
 
-            {/* brand area start */}
+            <PortfolioSliderHomeTen />
+            
+
             <BrandFour />
-            {/* brand area end */}
+
           </main>
 
           {/* footer area */}

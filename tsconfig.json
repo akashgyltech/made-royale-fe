@@ -34,11 +34,12 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
+    "**/*.js",
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/utils/scroll-magic.js",
     ".next/dev/types/**/*.ts"
-  ],
+, "src/components/hero-banner/hero-banner-two.js"  ],
   "exclude": [
     "node_modules"
   ]

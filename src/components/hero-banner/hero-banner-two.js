@@ -2,9 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Leaf } from "../svg";
-import hero_bg from "@/assets/img/home-02/hero/hero-bg-1.jpg";
 
-const HeroBannerTwo = () => {
+const HeroBannerTwo = ({imageSrc,imageAlt,title,subtitle,buttonText,buttonLink}) => {
   return (
     <div className="tp-hero-2-area">
       <div className="container container-1870">
@@ -12,31 +11,23 @@ const HeroBannerTwo = () => {
           <div className="col-xl-12">
             <div className="tp-hero-2-wrapper-main">
               <div className="tp-hero-2-wrapper d-flex align-items-center p-relative">
-                <div className="tp-hero-2-bg tp-gsap-bg tp-hero-bg-single">
-                  <Image style={{ width: "100%", height: "auto" }} src={hero_bg} alt="hero-bg" />
+                <div className="tp-hero-2-bg tp-gsap-bg tp-hero-bg-single" style={{ overflow: 'hidden' }}>
+                  <img width={"100%"} height={"auto"} src={imageSrc} alt={imageAlt} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 1 }} />
                 </div>
                 <div className="tp-hero-2-content-wrap p-relative">
                   <div className="tp-hero-2-title-box">
                     <h2 className="tp-hero-2-title text-1 z-index-5">
-                      Fashion
+                      {title}
                     </h2>
-                    <h2 className="tp-hero-2-title text-2">
-                      <span>& Branding</span>
-                    </h2>
-                  </div>
-                  <div className="tp-hero-2-content">
                     <p>
-                      Bringing Your Fashion {"Brand's"} Unique Identity to Life
-                      Through Strategic Marketing and Advertising.
+                      {subtitle}
                     </p>
                     <Link
                       className="tp-btn-white"
-                      href="/portfolio-grid-col-3-fullwidth"
+                      href={buttonLink}
                     >
-                      View More
-                      <span>
-                        <Leaf />
-                      </span>
+                      {buttonText}
                     </Link>
                   </div>
                 </div>

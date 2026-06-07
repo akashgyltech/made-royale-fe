@@ -50,7 +50,7 @@ const project_data = [
 
 export default function ProjectTwo() {
   return (
-    <section className="tp-project-2-area tpproject">
+    <section className="tp-project-2-area tpproject pt-50 pb-50">
       <div className="panels p-relative fix">
         <div className="panels-container d-flex">
           {project_data.map((item) => (
