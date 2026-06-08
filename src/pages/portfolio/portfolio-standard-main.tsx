@@ -62,7 +62,7 @@ const PortfolioStandardMain = () => {
                 <div className="row">
                   <div className="col-xl-12">
                     <div className="tm-hero-content">
-                      <span className="tm-hero-subtitle">Liko Studio</span>
+                      <span className="tm-hero-subtitle">Shizenta Studio</span>
                       <h4 className="tm-hero-title tp-char-animation">
                         Our latest & great projects
                       </h4>

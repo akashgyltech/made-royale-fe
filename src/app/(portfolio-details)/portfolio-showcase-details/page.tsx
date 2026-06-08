@@ -4,7 +4,7 @@ import PortfolioDetailsShowcaseMain from "@/pages/portfolio/details/portfolio-sh
 
 
 export const metadata: Metadata = {
-  title: "Liko - Portfolio Details Showcase page",
+  title: "Shizenta - Portfolio Details Showcase page",
 };
 
 const PortfolioDetailsShowcasePage = () => {

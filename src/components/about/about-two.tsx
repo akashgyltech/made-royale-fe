@@ -18,7 +18,7 @@ export default function AboutTwo() {
           <div className="col-xl-10 col-md-10">
             <div className="tp-about-4-title-box tp_fade_bottom">
               <h4 className="tp-about-4-title">
-                Find out more about the team behind the best and fastest Liko
+                Find out more about the team behind the best and fastest Shizenta
                 minimal portfolio HTML Template
               </h4>
             </div>

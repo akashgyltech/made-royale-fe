@@ -4,7 +4,7 @@ import PortfolioDetailsCustomLightMain from "@/pages/portfolio/details/portfolio
 
 
 export const metadata: Metadata = {
-  title: "Liko - Portfolio Details Custom Light page",
+  title: "Shizenta - Portfolio Details Custom Light page",
 };
 
 const PortfolioDetailsCustomLightPage = () => {

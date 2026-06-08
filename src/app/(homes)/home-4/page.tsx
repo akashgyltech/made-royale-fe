@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import HomeFourMain from '@/pages/homes/home-4';
 
 export const metadata: Metadata = {
-  title: "Liko - Home Four Page",
+  title: "Shizenta - Home Four Page",
 };
 
 const HomePageFour = () => {

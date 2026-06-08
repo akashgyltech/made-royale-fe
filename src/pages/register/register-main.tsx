@@ -29,7 +29,7 @@ const RegisterMain = () => {
                   <div className="col-xl-6 col-lg-8">
                     <div className="tp-login-wrapper">
                       <div className="tp-login-top text-center mb-30">
-                        <h3 className="tp-login-title">Sign Up Liko.</h3>
+                        <h3 className="tp-login-title">Sign Up Shizenta.</h3>
                         <p>
                           Don’t have an account?{" "}
                           <span>

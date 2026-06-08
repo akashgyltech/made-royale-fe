@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import CheckoutMain from "@/pages/checkout/checkout-main";
 
 export const metadata: Metadata = {
-  title: "Liko - Checkout page",
+  title: "Shizenta - Checkout page",
 };
 
 const CheckoutPage = () => {

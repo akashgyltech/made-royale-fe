@@ -15,9 +15,9 @@ export default function FooterSix() {
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-60">
                 <div className="tp-footer-6-widget footer-col-6-1">
                   <div className="tp-footer-6-logo">
-                    <Link href="/">
+                    {/* <Link href="/">
                       <Image src={logo} alt="logo" />
-                    </Link>
+                    </Link> */}
                   </div>
                   <div className="tp-footer-6-talk">
                     <span>Got Questions? Call us</span>
@@ -33,7 +33,7 @@ export default function FooterSix() {
                         </span>
                       </div>
                       <div className="tp-footer-6-contact-content">
-                        <Link href="mailto:liko@gmail.com">liko@gmail.com</Link>
+                        <Link href="mailto:maderoyals.social@gmail.com">maderoyals.social@gmail.com</Link>
                       </div>
                     </div>
                     <div className="tp-footer-6-contact-item d-flex align-items-start">
@@ -44,9 +44,9 @@ export default function FooterSix() {
                       </div>
                       <div className="tp-footer-6-contact-content">
                         <Link href="https://www.google.com/maps" target="_blank">
-                          79 Sleepy Hollow St.
+                          Girnar Valley, Ayodhya Bypass Road
                           <br />
-                          Jamaica, New York 1432
+                          Bhopal, Madhya Pradesh
                         </Link>
                       </div>
                     </div>

@@ -37,7 +37,7 @@ const award_data = [
     id: 4,
     img: a_4,
     subtitle: "x1",
-    title: "The New Liko Tools Website is Live.",
+    title: "The New Shizenta Tools Website is Live.",
     date: "Sep 10, 2021",
   },
   {

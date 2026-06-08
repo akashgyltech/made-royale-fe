@@ -4,7 +4,7 @@ import PortfolioDetailsComparisonMain from "@/pages/portfolio/details/portfolio-
 
 
 export const metadata: Metadata = {
-  title: "Liko - Portfolio Details Comparison page",
+  title: "Shizenta - Portfolio Details Comparison page",
 };
 
 const PortfolioDetailsComparisonPage = () => {

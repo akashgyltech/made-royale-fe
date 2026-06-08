@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import RegisterMain from "@/pages/register/register-main";
 
 export const metadata: Metadata = {
-  title: "Liko - Register page",
+  title: "Shizenta - Register page",
 };
 
 const RegisterPage = () => {

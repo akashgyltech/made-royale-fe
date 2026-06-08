@@ -53,7 +53,7 @@ export default function AboutUsHero() {
               data-stagger="0.08"
             >
               <p>
-                Liko develops, designs & delivers websites & creative campaigns
+                Shizenta develops, designs & delivers websites & creative campaigns
                 that drive results,
               </p>
                <Link className="tp-btn-white-sm border-style" href="#">Our Story</Link>
