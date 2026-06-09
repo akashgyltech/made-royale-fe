@@ -145,7 +145,6 @@ export const mobile_menu_data:{
       { title: 'Creative', link: '/portfolio-showcase-details-2' },
       { title: 'images Small', link: '/portfolio-details-1' },
       { title: 'Sliding', link: '/portfolio-details-2' },
-      { title: 'Image Comparison', link: '/portfolio-details-comparison' },
       { title: 'Video', link: '/portfolio-details-video' },
       { title: 'CUSTOM LIGHT', link: '/portfolio-custom-light' },
       { title: 'Gallery', link: '/portfolio-showcase-details' }

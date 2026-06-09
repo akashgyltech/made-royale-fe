@@ -13,6 +13,7 @@ import FooterSix from "@/layouts/footers/footer-six";
 import { hoverBtn } from "@/utils/hover-btn";
 import { charAnimation, fadeAnimation, titleAnimation, zoomAnimation } from "@/utils/title-animation";
 import HeaderSix from "@/layouts/headers/header-six";
+import Wrapper from "@/layouts/wrapper";
 
 const PortfolioGridColThreeMain = () => {
   useScrollSmooth();
