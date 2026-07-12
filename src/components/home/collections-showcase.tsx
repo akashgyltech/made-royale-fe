@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import { products } from "@/data/catalog";
 import SectionHeader from "@/components/ui/section-header";
