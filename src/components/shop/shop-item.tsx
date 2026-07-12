@@ -1,73 +1,53 @@
+"use client";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { IProductDT } from "@/types/product-d-t";
 import { CartTwo, QuickViewEye, WishlistTwo } from "../svg";
+import { Product, formatINR } from "@/data/catalog";
+import { useCart } from "@/provider/CartProvider";
+import { useWishlist } from "@/provider/WishlistProvider";
+import { useQuickView } from "@/provider/QuickViewProvider";
+import SmartImage from "@/components/ui/smart-image";
+import Stars from "@/components/ui/stars";
 
-// prop type
-type IProps = {
-  product: IProductDT;
-  handleProductModal(product: IProductDT): void;
-};
-export default function ShopItem({ product,handleProductModal }: IProps) {
+export default function ShopItem({ product }: { product: Product }) {
+  const { addToCart } = useCart();
+  const { has, toggle } = useWishlist();
+  const { open } = useQuickView();
+  const wished = has(product.id);
+  const discount = product.comparePrice > product.price ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100) : 0;
+
   return (
-    <div className="tp-shop-right-item mb-30 p-relative">
-      <div className="tp-shop-right-thumb fix">
-        <Image
-          className="w-100"
-          src={product.img}
-          alt="product-img"
-        />
-      </div>
-      <div className="tp-product-action tp-product-action-blackStyle">
-        <div className="tp-product-action-item d-flex flex-column">
-          <button
-            type="button"
-            className="tp-product-action-btn tp-product-add-cart-btn"
-          >
-            <CartTwo />
-            <span className="tp-product-tooltip tp-product-tooltip-right">
-              Add to Cart
-            </span>
-          </button>
-          <button
-            type="button"
-            className="tp-product-action-btn tp-product-quick-view-btn"
-            onClick={() => handleProductModal(product)}
-          >
-            <QuickViewEye />
-            <span className="tp-product-tooltip tp-product-tooltip-right">
-              Quick View
-            </span>
-          </button>
-          <button
-            type="button"
-            className="tp-product-action-btn tp-product-add-to-wishlist-btn"
-          >
-            <WishlistTwo />
-            <span className="tp-product-tooltip tp-product-tooltip-right">
-              Add To Wishlist
-            </span>
-          </button>
-        </div>
-      </div>
-      <div className="tp-shop-right-content d-flex align-items-end justify-content-between">
-        <div className="tp-shop-right-title-box">
-          <span>{product.category}</span>
-          <h4 className="tp-shop-right-title">
-            <Link href={`/shop-details/${product.id}`}>{product.title}</Link>
-          </h4>
-        </div>
-        <div className="tp-shop-right-price">
-          <span>${product.price}</span>
-        </div>
-      </div>
-      <div className="tp-product-btn-box">
-        <Link href={`/shop-details/${product.id}`}
-          className="tp-btn-shop-category black-bg w-100"
-        >
-          Shop Now
+    <div className="mr-card">
+      <div className="mr-card-media">
+        <Link href={`/shop-details/${product.slug}`} className="mr-card-media-link" aria-label={product.name}>
+          <SmartImage src={product.image} alt={product.name} label={product.collection} glyph={product.categoryName} ratio="1 / 1" />
         </Link>
+        {product.badge && <span className="mr-card-badge">{product.badge}</span>}
+        {discount > 0 && <span className="mr-card-off">{discount}% OFF</span>}
+        <div className="mr-card-actions">
+          <button type="button" className="mr-card-act" onClick={() => addToCart(product.id, 1, product.colors[0]?.name)} aria-label="Add to cart">
+            <CartTwo /><span className="mr-card-tip">Add to Cart</span>
+          </button>
+          <button type="button" className="mr-card-act" onClick={() => open(product)} aria-label="Quick view">
+            <QuickViewEye /><span className="mr-card-tip">Quick View</span>
+          </button>
+          <button type="button" className={`mr-card-act ${wished ? "is-active" : ""}`} onClick={() => toggle(product.id)} aria-label="Wishlist">
+            <WishlistTwo /><span className="mr-card-tip">{wished ? "Saved" : "Wishlist"}</span>
+          </button>
+        </div>
+      </div>
+      <div className="mr-card-body">
+        <span className="mr-card-cat">{product.categoryName}</span>
+        <h4 className="mr-card-title"><Link href={`/shop-details/${product.slug}`}>{product.name}</Link></h4>
+        <div className="mr-card-rating">
+          <Stars rating={product.rating} size={13} />
+          <span>({product.reviewCount})</span>
+        </div>
+        <div className="mr-card-price">
+          <span className="mr-card-now">{formatINR(product.price)}</span>
+          {discount > 0 && <del>{formatINR(product.comparePrice)}</del>}
+        </div>
+        <Link href={`/shop-details/${product.slug}`} className="mr-card-shop">Shop Now</Link>
       </div>
     </div>
   );

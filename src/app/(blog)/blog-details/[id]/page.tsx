@@ -1,24 +1,19 @@
-import { blog_data } from '@/data/blog-data';
-import BlogDetailsMain from '@/pages/blog/blog-details';
-import { PageParamsProps } from '@/types/custom-d-t';
 import React from 'react';
+import type { Metadata } from 'next';
+import BlogArticleMain from '@/pages/blog/blog-article-main';
+import { blogs, getBlog } from '@/data/catalog';
 
-export async function generateMetadata(props: PageParamsProps) {
-    const resolvedParams = await props.params;
-    const { id } = resolvedParams;
-    const blog = blog_data.find((blog) => blog.id == Number(id));
-    return {
-        title: blog?.title ? blog.title : "Blog Details",
-    };
+export function generateStaticParams() {
+  return blogs.map((b) => ({ id: b.slug }));
 }
 
-export default async function BlogDetailsPage(props: PageParamsProps) {
-    const resolvedParams = await props.params;
-    const { id } = resolvedParams;
-
-    return (
-        <BlogDetailsMain id={id} />
-    );
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const blog = getBlog(id);
+  return { title: blog ? `${blog.title} — Made Royale` : 'Journal — Made Royale' };
 }
 
-
+export default async function BlogDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <BlogArticleMain slug={id} />;
+}

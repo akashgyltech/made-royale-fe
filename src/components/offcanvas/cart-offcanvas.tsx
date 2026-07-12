@@ -1,106 +1,75 @@
-import Image from "next/image";
+"use client";
 import Link from "next/link";
 import React from "react";
+import { useCart } from "@/provider/CartProvider";
+import { formatINR } from "@/data/catalog";
+import SmartImage from "@/components/ui/smart-image";
 
-// prop type
-type IProps = {
-  openCartMini: boolean;
-  setOpenCartMini: React.Dispatch<React.SetStateAction<boolean>>;
-};
+// Reads open state from the CartProvider so "add to cart" opens it automatically.
+type IProps = { openCartMini?: boolean; setOpenCartMini?: React.Dispatch<React.SetStateAction<boolean>> };
 
-export default function CartOffcanvas({openCartMini,setOpenCartMini}:IProps) {
+export default function CartOffcanvas(_props: IProps) {
+  const { resolved, subtotal, count, isDrawerOpen, closeDrawer, updateQty, removeLine } = useCart();
+  const FREE = 50000;
+  const progress = Math.min(100, Math.round((subtotal / FREE) * 100));
+
   return (
     <>
-      <div
-        className={`cartmini__area ${openCartMini ? "cartmini-opened" : ""}`}
-      >
-        <div className="cartmini__wrapper d-flex justify-content-between flex-column">
-          <div className="cartmini__top-wrapper">
-            <div className="cartmini__top p-relative">
-              <div className="cartmini__top-title">
-                <h4>Shopping cart</h4>
-              </div>
-              <div className="cartmini__close">
-                <button
-                  onClick={() => setOpenCartMini(false)}
-                  type="button"
-                  className="cartmini__close-btn cartmini-close-btn"
-                >
-                  <i className="fal fa-times"></i>
-                </button>
-              </div>
+      <div className={`mr-drawer ${isDrawerOpen ? "is-open" : ""}`} role="dialog" aria-label="Shopping cart">
+        <div className="mr-drawer-head">
+          <h4>Shopping Cart {count > 0 && <span>({count})</span>}</h4>
+          <button className="mr-drawer-close" onClick={closeDrawer} aria-label="Close">✕</button>
+        </div>
+
+        {count > 0 && (
+          <div className="mr-drawer-ship">
+            <p>{subtotal >= FREE ? "🎉 You’ve unlocked complimentary white-glove delivery" : `Add ${formatINR(FREE - subtotal)} more for free delivery`}</p>
+            <div className="mr-drawer-progress"><span style={{ width: `${progress}%` }} /></div>
+          </div>
+        )}
+
+        <div className="mr-drawer-body">
+          {count === 0 ? (
+            <div className="mr-drawer-empty">
+              <div className="mr-shop-empty-glyph">🛍️</div>
+              <p>Your cart is waiting to be adorned.</p>
+              <Link href="/shop" className="mr-btn-solid" onClick={closeDrawer}>Explore Collection</Link>
             </div>
-            <div className="cartmini__shipping">
-              <p> Free Shipping for all orders over <span>$50</span> </p>
-              <div className="progress">
-                <div
-                  className="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  style={{width:"70%" }}
-                  data-width="70%"
-                  aria-valuenow={70}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                ></div>
-              </div>
-            </div>
-            <div className="cartmini__widget">
-              {/* card item start */}
-              <div className="cartmini__widget-item">
-                <div className="cartmini__thumb">
-                  <Link href="/shop-details/1">
-                    <Image
-                      src="/assets/img/inner-blog/blog-sidebar/rc-post/rc-1.jpg"
-                      alt="cart-img"
-                      width={70}
-                      height={70}
-                    />
-                  </Link>
-                </div>
-                <div className="cartmini__content">
-                  <h5 className="cartmini__title">
-                    <Link href="/shop-details/1">Level Bolt Smart Lock</Link>
-                  </h5>
-                  <div className="cartmini__price-wrapper">
-                    <span className="cartmini__price">$46.00</span>
-                    <span className="cartmini__quantity">x2</span>
+          ) : (
+            resolved.map((line) => (
+              <div className="mr-drawer-item" key={line.key}>
+                <Link href={`/shop-details/${line.product.slug}`} className="mr-drawer-item-thumb" onClick={closeDrawer}>
+                  <SmartImage src={line.product.image} alt={line.product.name} ratio="1 / 1" />
+                </Link>
+                <div className="mr-drawer-item-info">
+                  <Link href={`/shop-details/${line.product.slug}`} onClick={closeDrawer} className="mr-drawer-item-name">{line.product.name}</Link>
+                  {line.color && <span className="mr-drawer-item-color">{line.color}</span>}
+                  <div className="mr-drawer-item-bottom">
+                    <div className="mr-qty mr-qty-xs">
+                      <button onClick={() => updateQty(line.key, line.qty - 1)} aria-label="Decrease">−</button>
+                      <input value={line.qty} readOnly />
+                      <button onClick={() => updateQty(line.key, line.qty + 1)} aria-label="Increase">+</button>
+                    </div>
+                    <span className="mr-drawer-item-price">{formatINR(line.lineTotal)}</span>
                   </div>
                 </div>
-                <Link href="#" className="cartmini__del">
-                  <i className="fa-regular fa-xmark"></i>
-                </Link>
+                <button className="mr-drawer-item-remove" onClick={() => removeLine(line.key)} aria-label="Remove">✕</button>
               </div>
-
-              {/* card item end */}
-            </div>
-          </div>
-          <div className="cartmini__checkout">
-            <div className="cartmini__checkout-title mb-30">
-              <h4>Subtotal:</h4>
-              <span>$113.00</span>
-            </div>
-            <div className="cartmini__checkout-btn">
-              <Link
-                href="/cart"
-                className="tp-btn-black-2 text-center mb-10 w-100"
-              >
-                view cart
-              </Link>
-              <Link
-                href="/checkout"
-                className="tp-btn-black-2 text-center w-100"
-              >
-                checkout
-              </Link>
-            </div>
-          </div>
+            ))
+          )}
         </div>
+
+        {count > 0 && (
+          <div className="mr-drawer-foot">
+            <div className="mr-drawer-subtotal"><span>Subtotal</span><strong>{formatINR(subtotal)}</strong></div>
+            <div className="mr-drawer-actions">
+              <Link href="/cart" className="mr-btn-outline" onClick={closeDrawer}>View Cart</Link>
+              <Link href="/checkout" className="mr-btn-gold" onClick={closeDrawer}>Checkout</Link>
+            </div>
+          </div>
+        )}
       </div>
-      {/* overlay */}
-      <div
-        onClick={() => setOpenCartMini(false)}
-        className={`body-overlay ${openCartMini ? "opened" : ""}`}
-      ></div>
+      <div className={`mr-drawer-backdrop ${isDrawerOpen ? "is-open" : ""}`} onClick={closeDrawer} />
     </>
   );
 }

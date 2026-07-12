@@ -1,192 +1,92 @@
 "use client";
-import React, { useEffect } from "react";
-import Image, { StaticImageData } from "next/image";
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Modal from "react-bootstrap/Modal";
-import { IProductDT } from "@/types/product-d-t";
-import { AskQuestion, Compare, Minus, Plus, WishlistTwo } from "../svg";
+import { Minus, Plus, WishlistTwo } from "../svg";
+import { Product, formatINR } from "@/data/catalog";
+import { useCart } from "@/provider/CartProvider";
+import { useWishlist } from "@/provider/WishlistProvider";
+import SmartImage from "@/components/ui/smart-image";
+import Stars from "@/components/ui/stars";
 
-// prop type
-type IProps = {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setProductItem: React.Dispatch<React.SetStateAction<IProductDT | null>>;
-  productItem: IProductDT;
-};
+type IProps = { show: boolean; onClose: () => void; product: Product | null; };
 
-export default function ProductModal({showModal,setShowModal,productItem,setProductItem}: IProps) {
-  const {relatedImages,title,category,price,id,img} = productItem || {};
-  const [activeImg, setActiveImg] = React.useState<StaticImageData | null>(img);
-  const [quantity, setQuantity] = React.useState(1);
-  useEffect(() => {
- 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[activeImg,img])
-  const handleClose = () => {
-    setShowModal(false);
-    setProductItem(null);
-  };
+export default function ProductModal({ show, onClose, product }: IProps) {
+  const router = useRouter();
+  const { addToCart } = useCart();
+  const { has, toggle } = useWishlist();
+  const [active, setActive] = React.useState(0);
+  const [color, setColor] = React.useState<string | undefined>(undefined);
+  const [qty, setQty] = React.useState(1);
+
+  React.useEffect(() => {
+    if (product) { setActive(0); setColor(product.colors[0]?.name); setQty(1); }
+  }, [product]);
+
+  if (!product) return null;
+  const gallery = product.gallery && product.gallery.length ? product.gallery : [product.image || ''];
+  const wished = has(product.id);
+  const discount = product.comparePrice > product.price ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100) : 0;
+
+  const buyNow = () => { addToCart(product.id, qty, color); onClose(); router.push("/checkout"); };
+
   return (
-    <Modal show={showModal} onHide={handleClose} centered={true} className="tp-product-modal">
-
-      <button
-        onClick={handleClose}
-        type="button"
-        className="tp-product-modal-close-btn"
-      >
-        <i className="fa-regular fa-xmark"></i>
-      </button>
-            
+    <Modal show={show} onHide={onClose} centered className="tp-product-modal mr-qv">
+      <button onClick={onClose} type="button" className="tp-product-modal-close-btn"><i className="fa-regular fa-xmark"></i></button>
       <Modal.Body>
-        {productItem && (
-          <div className="tp-product-modal-content d-lg-flex align-items-start">
-            <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
-              <nav>
-                <div className="nav nav-tabs flex-sm-column ">
-                  {relatedImages.map((imgSrc, i) => (
-                    <button
-                      key={i}
-                      className={`nav-link ${activeImg === imgSrc ? "active" : ""}`}
-                      type="button"
-                      onClick={() => setActiveImg(imgSrc)}
-                    >
-                      <Image
-                        src={imgSrc}
-                        alt="nav-img"
-                        width={90}
-                        height={100}
-                        style={{ objectFit: "cover" }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </nav>
-
-              <div className="m-img">
-                <div className="tp-product-details-nav-main-thumb">
-                  {activeImg && (
-                    <Image
-                      src={activeImg}
-                      alt="main-thumb"
-                      width={396}
-                      height={465}
-                      style={{ width: "100%" }}
-                    />
-                  )}
-                </div>
-              </div>
+        <div className="tp-product-modal-content d-lg-flex align-items-start">
+          <div className="mr-qv-gallery d-sm-flex">
+            <div className="mr-qv-thumbs">
+              {gallery.map((g, i) => (
+                <button key={i} className={`mr-qv-thumb ${active === i ? "active" : ""}`} type="button" onClick={() => setActive(i)} aria-label={`View ${i + 1}`}>
+                  <SmartImage src={g} alt={`${product.name} ${i + 1}`} ratio="1 / 1" />
+                </button>
+              ))}
             </div>
-            <div className="tp-product-details-wrapper">
-              <div className="tp-product-details-category">
-                <span>{category}</span>
-              </div>
-              <h3 className="tp-product-details-title">
-                {title}
-              </h3>
-
-              {/* inventory details */}
-              <div className="tp-product-details-inventory d-flex align-items-center mb-10">
-                <div className="tp-product-details-stock mb-10">
-                  <span>In Stock</span>
-                </div>
-                <div className="tp-product-details-rating-wrapper d-flex align-items-center mb-10">
-                  <div className="tp-product-details-rating">
-                    <span>
-                      <i className="fa-solid fa-star"></i>
-                    </span>
-                    <span>
-                      <i className="fa-solid fa-star"></i>
-                    </span>
-                    <span>
-                      <i className="fa-solid fa-star"></i>
-                    </span>
-                    <span>
-                      <i className="fa-solid fa-star"></i>
-                    </span>
-                    <span>
-                      <i className="fa-solid fa-star"></i>
-                    </span>
-                  </div>
-                  <div className="tp-product-details-reviews">
-                    <span>(36 Reviews)</span>
-                  </div>
-                </div>
-              </div>
-              <p>
-                A Screen Everyone Will Love: Whether your family is streaming or
-                video chatting with friends tablet A8... <span>See more</span>
-              </p>
-
-              {/* price */}
-              <div className="tp-product-details-price-wrapper mb-20">
-                <span className="tp-product-details-price old-price">
-                  $320.00
-                </span>
-                <span className="tp-product-details-price new-price">
-                  $236.00
-                </span>
-              </div>
-
-              {/* actions */}
-              <div className="tp-product-details-action-wrapper">
-                <h3 className="tp-product-details-action-title">Quantity</h3>
-                <div className="tp-product-details-action-item-wrapper d-flex align-items-center">
-                  <div className="tp-product-details-quantity">
-                    <div className="tp-product-quantity mb-15 mr-15">
-                    <span
-                      className="tp-cart-minus"
-                      onClick={() => {
-                        if (quantity > 1) setQuantity(quantity - 1);
-                      }}
-                    >
-                      <Minus />
-                    </span>
-                    <input
-                      className="tp-cart-input"
-                      type="text"
-                      defaultValue={quantity}
-                    />
-                    <span
-                      className="tp-cart-plus"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      <Plus />
-                    </span>
-                    </div>
-                  </div>
-                  <div className="tp-product-details-add-to-cart mb-15 w-100">
-                    <button className="tp-cart-update-btn w-100">
-                      Add To Cart
-                    </button>
-                  </div>
-                </div>
-                <button className="tp-cart-checkout-btn w-100">Buy Now</button>
-              </div>
-              <div className="tp-product-details-action-sm">
-                <button
-                  type="button"
-                  className="tp-product-details-action-sm-btn"
-                >
-                  <Compare />
-                  Compare
-                </button>
-                <button
-                  type="button"
-                  className="tp-product-details-action-sm-btn"
-                >
-                  <WishlistTwo />
-                  Add Wishlist
-                </button>
-                <button
-                  type="button"
-                  className="tp-product-details-action-sm-btn"
-                >
-                  <AskQuestion />
-                  Ask a question
-                </button>
-              </div>
+            <div className="mr-qv-main">
+              <SmartImage src={gallery[active]} alt={product.name} label={product.collection} glyph={product.categoryName} ratio="1 / 1" rounded={6} />
             </div>
           </div>
-        )}
+
+          <div className="tp-product-details-wrapper mr-qv-info">
+            <div className="tp-product-details-category"><span>{product.categoryName}</span></div>
+            <h3 className="tp-product-details-title">{product.name}</h3>
+            <div className="d-flex align-items-center mb-10" style={{ gap: 12 }}>
+              <Stars rating={product.rating} size={15} />
+              <span className="mr-qv-reviews">({product.reviewCount} Reviews)</span>
+            </div>
+            <p className="mr-qv-desc">{product.shortDescription}</p>
+            <div className="mr-qv-price mb-20">
+              <span className="mr-qv-now">{formatINR(product.price)}</span>
+              {discount > 0 && <span className="mr-qv-mrp">{formatINR(product.comparePrice)}</span>}
+              {discount > 0 && <span className="mr-qv-off">{discount}% off</span>}
+            </div>
+            {product.colors.length > 0 && (
+              <div className="mb-20">
+                <h4 className="mr-qv-optlabel">Finish: <span>{color}</span></h4>
+                <div className="mr-swatches">
+                  {product.colors.map((c) => (
+                    <button key={c.name} className={`mr-swatch ${color === c.name ? "is-active" : ""}`} style={{ background: c.hex }} onClick={() => setColor(c.name)} aria-label={c.name} title={c.name} />
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="mr-qv-actions">
+              <div className="mr-qty">
+                <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease"><Minus /></button>
+                <input value={qty} readOnly />
+                <button onClick={() => setQty((q) => q + 1)} aria-label="Increase"><Plus /></button>
+              </div>
+              <button className="mr-btn-solid mr-qv-cart" onClick={() => addToCart(product.id, qty, color)}>Add To Cart</button>
+            </div>
+            <button className="mr-btn-gold w-100 mb-15" onClick={buyNow}>Buy Now</button>
+            <div className="mr-qv-links">
+              <button type="button" onClick={() => toggle(product.id)}><WishlistTwo /> {wished ? "In Wishlist" : "Add to Wishlist"}</button>
+              <Link href={`/shop-details/${product.slug}`} onClick={onClose}>View Full Details →</Link>
+            </div>
+          </div>
+        </div>
       </Modal.Body>
     </Modal>
   );

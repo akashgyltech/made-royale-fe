@@ -1,29 +1,39 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import HeaderMenus from './header-menus';
 import { Menu, Search, User, Wishlist, Zero } from '@/components/svg';
 import CartOffcanvas from '@/components/offcanvas/cart-offcanvas';
 import MobileOffcanvas from '@/components/offcanvas/mobile-offcanvas';
 import useStickyHeader from '@/hooks/use-sticky-header';
+import { useAuth } from '@/provider/AuthProvider';
+import { useCart } from '@/provider/CartProvider';
+import { useWishlist } from '@/provider/WishlistProvider';
 
-type Props = {
-  transparent?: boolean;
-};
+type Props = { transparent?: boolean };
 
 export default function HeaderSix({ transparent = false }: Props) {
   const { isSticky, headerRef, headerFullWidth } = useStickyHeader(20);
-  const [openCartMini, setOpenCartMini] = React.useState(false);
-  const [openOffCanvas, setOpenOffcanvas] = React.useState(false);
+  const [openOffCanvas, setOpenOffcanvas] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [term, setTerm] = useState('');
+  const router = useRouter();
+  const profileRef = useRef<HTMLDivElement>(null);
+  const { user, isLoggedIn, openAuthModal, logout } = useAuth();
+  const { count: cartCount, openDrawer } = useCart();
+  const { count: wishCount } = useWishlist();
 
+  useEffect(() => { headerFullWidth(); }, []);
   useEffect(() => {
-    headerFullWidth();
+    const onClick = (e: MouseEvent) => { if (profileRef.current && !profileRef.current.contains(e.target as Node)) setProfileOpen(false); };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
-  // The element is always position:fixed (via SCSS on .tp-inner-header-2-area).
-  // We only swap the visual state class so the background/icons cross-fade smoothly.
-  const innerClass =
-    transparent && !isSticky ? 'tp-inner-header-white' : 'tp-inner-header-2-bg';
+  const innerClass = transparent && !isSticky ? 'tp-inner-header-white' : 'tp-inner-header-2-bg';
+  const submitSearch = () => { const q = term.trim(); router.push(q ? `/shop?q=${encodeURIComponent(q)}` : '/shop'); };
+  const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'MR';
 
   return (
     <>
@@ -32,58 +42,53 @@ export default function HeaderSix({ transparent = false }: Props) {
           <div className="container container-1800">
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">
-                <div className="tp-header-logo">
-                  {/* <Link href="/">
-                    <Image priority src={logo} alt="logo" />
-                  </Link> */}
-                </div>
+                <Link href="/" className="mr-logo">Made <span>Royale</span></Link>
               </div>
               <div className="col-xl-5 d-none d-xl-block">
                 <div className="tp-inner-header-2-menu header-main-menu">
-                  <nav className="tp-main-menu-content">
-                    <HeaderMenus />
-                  </nav>
+                  <nav className="tp-main-menu-content"><HeaderMenus /></nav>
                 </div>
               </div>
               <div className="col-xl-5 col-lg-8 col-md-8 col-8">
                 <div className="tp-inner-header-2-right d-flex align-items-center justify-content-end">
                   <div className="tp-inner-header-2-search p-relative d-none d-lg-block">
-                    <input type="text" placeholder="Search" />
-                    <span>
-                      <Search />
-                    </span>
+                    <input type="text" placeholder="Search luxury furniture" value={term} onChange={(e) => setTerm(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(); }} />
+                    <span onClick={submitSearch} style={{ cursor: 'pointer' }}><Search /></span>
                   </div>
-                  <button className="tp-shop-mob-search d-lg-none">
-                    <span>
-                      <Search />
-                    </span>
-                  </button>
-                  <Link className="tp-inner-header-2-login p-relative" href="/login">
-                    <span>
-                      <User />
-                    </span>
+                  <button className="tp-shop-mob-search d-lg-none" onClick={submitSearch} aria-label="Search"><span><Search /></span></button>
+
+                  {isLoggedIn ? (
+                    <div className="mr-profile-wrap" ref={profileRef}>
+                      <button className="mr-profile-trigger" onClick={() => setProfileOpen((p) => !p)} aria-label="Profile">
+                        <span className="mr-avatar-initials">{initials}</span>
+                        <svg className={`mr-chevron ${profileOpen ? 'open' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                      </button>
+                      {profileOpen && (
+                        <div className="mr-profile-dropdown">
+                          <div className="mr-profile-dropdown-header">
+                            <div className="mr-dropdown-avatar"><span>{initials}</span></div>
+                            <div><div className="mr-dropdown-name">{user?.name}</div><div className="mr-dropdown-email">{user?.email}</div></div>
+                          </div>
+                          <div className="mr-dropdown-divider" />
+                          <Link href="/account" className="mr-dropdown-item" onClick={() => setProfileOpen(false)}>My Account</Link>
+                          <Link href="/account?tab=orders" className="mr-dropdown-item" onClick={() => setProfileOpen(false)}>My Orders</Link>
+                          <Link href="/wishlist" className="mr-dropdown-item" onClick={() => setProfileOpen(false)}>Wishlist</Link>
+                          <Link href="/track-order" className="mr-dropdown-item" onClick={() => setProfileOpen(false)}>Track Order</Link>
+                          <div className="mr-dropdown-divider" />
+                          <button className="mr-dropdown-item mr-dropdown-logout" onClick={() => { logout(); setProfileOpen(false); }}>Sign Out</button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button className="tp-inner-header-2-login p-relative mr-icon-btn" onClick={() => openAuthModal('login')} aria-label="Sign in"><span><User /></span></button>
+                  )}
+
+                  <Link className="tp-inner-header-2-wishlist p-relative mr-icon-btn" href="/wishlist" aria-label="Wishlist">
+                    <span><Wishlist /></span>{wishCount > 0 && <span className="mr-icon-badge">{wishCount}</span>}
                   </Link>
-                  <Link className="tp-inner-header-2-wishlist p-relative" href="/wishlist">
-                    <i>o</i>
-                    <span>
-                      <Wishlist />
-                    </span>
-                  </Link>
-                  <button
-                    onClick={() => setOpenOffcanvas(true)}
-                    className="tp-inner-header-2-bar tp-offcanvas-open-btn"
-                  >
-                    <span>
-                      <Menu />
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setOpenCartMini(true)}
-                    className="tp-inner-header-2-cart cartmini-open-btn"
-                  >
-                    <span>
-                      <Zero />
-                    </span>
+                  <button onClick={() => setOpenOffcanvas(true)} className="tp-inner-header-2-bar tp-offcanvas-open-btn" aria-label="Menu"><span><Menu /></span></button>
+                  <button onClick={openDrawer} className="tp-inner-header-2-cart cartmini-open-btn mr-icon-btn" aria-label="Cart">
+                    <span><Zero /></span>{cartCount > 0 && <span className="mr-icon-badge">{cartCount}</span>}
                   </button>
                 </div>
               </div>
@@ -92,8 +97,7 @@ export default function HeaderSix({ transparent = false }: Props) {
         </div>
       </header>
 
-      <CartOffcanvas openCartMini={openCartMini} setOpenCartMini={setOpenCartMini} />
-
+      <CartOffcanvas />
       <MobileOffcanvas openOffcanvas={openOffCanvas} setOpenOffcanvas={setOpenOffcanvas} />
     </>
   );

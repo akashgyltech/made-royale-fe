@@ -1,14 +1,16 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Metadata } from "next";
 import ShopMain from "@/pages/shop/shop-main";
 
 export const metadata: Metadata = {
-  title: "Liko - Shop page",
+  title: "Made Royale — Shop Luxury Furniture",
 };
 
 const ShopPage = () => {
   return (
-    <ShopMain/>
+    <Suspense fallback={null}>
+      <ShopMain />
+    </Suspense>
   );
 };
 

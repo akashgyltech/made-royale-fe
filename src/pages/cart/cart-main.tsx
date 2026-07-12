@@ -1,204 +1,97 @@
 "use client";
-import { gsap } from "gsap";
-import React from "react";
-import Image from "next/image";
-import useScrollSmooth from "@/hooks/use-scroll-smooth";
-import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
-
-// internal imports
+import React, { useState } from "react";
+import Link from "next/link";
 import Wrapper from "@/layouts/wrapper";
 import FooterSix from "@/layouts/footers/footer-six";
-import { Close, Minus, Plus } from "@/components/svg";
-import Link from "next/link";
 import HeaderSix from "@/layouts/headers/header-six";
+import LuxBreadcrumb from "@/components/ui/lux-breadcrumb";
+import SmartImage from "@/components/ui/smart-image";
+import { formatINR, validateCoupon } from "@/data/catalog";
+import { useCart } from "@/provider/CartProvider";
 
 const CartMain = () => {
-  const [quantity, setQuantity] = React.useState(1);
-  useScrollSmooth();
+  const { resolved, subtotal, savings, updateQty, removeLine, count } = useCart();
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null);
+  const [couponMsg, setCouponMsg] = useState("");
+
+  function applyCoupon() {
+    const res = validateCoupon(couponInput, subtotal);
+    setCouponMsg(res.message);
+    if (res.valid && res.coupon) { setCoupon({ code: res.coupon.code, discount: res.discount }); try { localStorage.setItem("mr_coupon", res.coupon.code); } catch {} }
+    else { setCoupon(null); try { localStorage.removeItem("mr_coupon"); } catch {} }
+  }
+
+  const discount = coupon?.discount ?? 0;
+  const total = Math.max(0, subtotal - discount);
 
   return (
     <Wrapper>
       <HeaderSix />
-
-      <div id="smooth-wrapper">
-        <div id="smooth-content">
-          <main>
-            {/* cart area */}
-            <section className="tp-cart-area pt-200 pb-120">
-              <div className="container container-1300">
-                <div className="row">
-                  <div className="col-xl-9 col-lg-8">
-                    <div className="tp-cart-list mb-25">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th colSpan={2} className="tp-cart-header-product">
-                              Product
-                            </th>
-                            <th className="tp-cart-header-price">Price</th>
-                            <th className="tp-cart-header-quantity">
-                              Quantity
-                            </th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="tp-cart-img">
-                              <Link href={`/shop-details/1`}>
-                                <Image
-                                  src="/assets/img/inner-shop/shop-details/tab-img/nav-1.png"
-                                  alt="cart-img"
-                                  width={78}
-                                  height={100}
-                                />
-                              </Link>
-                            </td>
-                            <td className="tp-cart-title">
-                              <Link href={`/shop-details/1`}>
-                                Legendary Whitetails Women.
-                              </Link>
-                            </td>
-                            <td className="tp-cart-price">
-                              <span>$76.00</span>
-                            </td>
-                            
-                            <td className="tp-cart-quantity">
-                              <div className="tp-product-quantity mt-10 mb-10">
-                                <span
-                                  className="tp-cart-minus"
-                                  onClick={() => {
-                                    if (quantity > 1) setQuantity(quantity - 1);
-                                  }}
-                                >
-                                  <Minus />
-                                </span>
-                                <input
-                                  className="tp-cart-input"
-                                  type="text"
-                                  value={quantity}
-                                  readOnly
-                                />
-                                <span
-                                  className="tp-cart-plus"
-                                  onClick={() => setQuantity(quantity + 1)}
-                                >
-                                  <Plus />
-                                </span>
-                              </div>
-                            </td>
-
-                            <td className="tp-cart-action">
-                              <button className="tp-cart-action-btn">
-                                <Close />{" "}
-                                <span>Remove</span>
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="tp-cart-bottom">
-                      <div className="row align-items-end">
-                        <div className="col-xl-6 col-md-8">
-                          <div className="tp-cart-coupon">
-                            <form action="#">
-                              <div className="tp-cart-coupon-input-box">
-                                <label>Coupon Code:</label>
-                                <div className="tp-cart-coupon-input d-flex align-items-center">
-                                  <input
-                                    type="text"
-                                    placeholder="Enter Coupon Code"
-                                  />
-                                  <button type="submit">Apply</button>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                        <div className="col-xl-6 col-md-4">
-                          <div className="tp-cart-update text-md-end">
-                            <button
-                              type="button"
-                              className="tp-cart-update-btn"
-                            >
-                              Update Cart
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xl-3 col-lg-4 col-md-6">
-                    <div className="tp-cart-checkout-wrapper ml-30">
-                      <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
-                        <span className="tp-cart-checkout-top-title">
-                          Subtotal
-                        </span>
-                        <span className="tp-cart-checkout-top-price">$742</span>
-                      </div>
-                      <div className="tp-cart-checkout-shipping">
-                        <h4 className="tp-cart-checkout-shipping-title">
-                          Shipping
-                        </h4>
-
-                        <div className="tp-cart-checkout-shipping-option-wrapper">
-                          <div className="tp-cart-checkout-shipping-option">
-                            <input
-                              id="flat_rate"
-                              type="radio"
-                              name="shipping"
-                            />
-                            <label htmlFor="flat_rate">
-                              Flat rate: <span>$20.00</span>
-                            </label>
-                          </div>
-                          <div className="tp-cart-checkout-shipping-option">
-                            <input
-                              id="local_pickup"
-                              type="radio"
-                              name="shipping"
-                            />
-                            <label htmlFor="local_pickup">
-                              Local pickup: <span> $25.00</span>
-                            </label>
-                          </div>
-                          <div className="tp-cart-checkout-shipping-option">
-                            <input
-                              id="free_shipping"
-                              type="radio"
-                              name="shipping"
-                            />
-                            <label htmlFor="free_shipping">Free shipping</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
-                        <span>Total</span>
-                        <span>$724</span>
-                      </div>
-                      <div className="tp-cart-checkout-proceed">
-                        <Link
-                          href="/checkout"
-                          className="tp-cart-checkout-btn w-100"
-                        >
-                          Proceed to Checkout
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <main>
+        <LuxBreadcrumb subtitle="Your Selection" title="Shopping Cart" crumbs={[{ label: "Home", href: "/" }, { label: "Cart" }]} />
+        <section className="mr-cart">
+          <div className="container container-1300">
+            {count === 0 ? (
+              <div className="mr-shop-empty">
+                <div className="mr-shop-empty-glyph">🛍️</div>
+                <h3>Your cart is empty</h3>
+                <p>Discover pieces worthy of your home.</p>
+                <Link href="/shop" className="mr-btn-solid">Explore the Collection</Link>
               </div>
-            </section>
-            {/* cart area */}
-          </main>
+            ) : (
+              <div className="mr-cart-layout">
+                <div className="mr-cart-items">
+                  {resolved.map((line) => (
+                    <div className="mr-cart-item" key={line.key}>
+                      <Link href={`/shop-details/${line.product.slug}`} className="mr-cart-item-thumb"><SmartImage src={line.product.image} alt={line.product.name} ratio="1 / 1" /></Link>
+                      <div className="mr-cart-item-info">
+                        <span className="mr-cart-item-cat">{line.product.categoryName}</span>
+                        <h4><Link href={`/shop-details/${line.product.slug}`}>{line.product.name}</Link></h4>
+                        {line.color && <span className="mr-cart-item-color">Finish: {line.color}</span>}
+                        <span className="mr-cart-item-sku">SKU: {line.product.sku}</span>
+                        <button className="mr-cart-item-remove" onClick={() => removeLine(line.key)}>Remove</button>
+                      </div>
+                      <div className="mr-cart-item-qty">
+                        <div className="mr-qty mr-qty-sm">
+                          <button onClick={() => updateQty(line.key, line.qty - 1)} aria-label="Decrease">−</button>
+                          <input value={line.qty} readOnly />
+                          <button onClick={() => updateQty(line.key, line.qty + 1)} aria-label="Increase">+</button>
+                        </div>
+                      </div>
+                      <div className="mr-cart-item-price">
+                        <span className="mr-cart-item-now">{formatINR(line.lineTotal)}</span>
+                        {line.product.comparePrice > line.product.price && <span className="mr-cart-item-mrp">{formatINR(line.product.comparePrice * line.qty)}</span>}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="mr-cart-continue"><Link href="/shop">← Continue Shopping</Link></div>
+                </div>
 
-          {/* footer area */}
-          <FooterSix />
-          {/* footer area */}
-        </div>
-      </div>
+                <aside className="mr-cart-summary">
+                  <h3 className="mr-cart-summary-title">Order Summary</h3>
+                  <div className="mr-cart-coupon">
+                    <input value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="Coupon code (try ROYALE10)" />
+                    <button onClick={applyCoupon}>Apply</button>
+                  </div>
+                  {couponMsg && <p className={`mr-cart-coupon-msg ${coupon ? "ok" : "err"}`}>{couponMsg}</p>}
+                  <div className="mr-cart-summary-rows">
+                    <div className="mr-cart-summary-row"><span>Subtotal ({count} {count === 1 ? "item" : "items"})</span><span>{formatINR(subtotal)}</span></div>
+                    {savings > 0 && <div className="mr-cart-summary-row mr-save"><span>Instant savings</span><span>− {formatINR(savings)}</span></div>}
+                    {discount > 0 && <div className="mr-cart-summary-row mr-save"><span>Coupon ({coupon?.code})</span><span>− {formatINR(discount)}</span></div>}
+                    <div className="mr-cart-summary-row"><span>Delivery & Installation</span><span className="mr-free">Free</span></div>
+                  </div>
+                  <div className="mr-cart-summary-total"><span>Total</span><span>{formatINR(total)}</span></div>
+                  <p className="mr-cart-summary-tax">Inclusive of all taxes</p>
+                  <Link href="/checkout" className="mr-btn-gold mr-cart-checkout-btn">Proceed to Checkout</Link>
+                  <div className="mr-cart-trust"><span>🔒 Secure checkout</span><span>🛡️ Assured warranty</span><span>🚚 White-glove delivery</span></div>
+                </aside>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+      <FooterSix />
     </Wrapper>
   );
 };

@@ -1,134 +1,44 @@
 "use client";
-import { gsap } from "gsap";
-import React from "react";
-import Image from "next/image";
-import useScrollSmooth from "@/hooks/use-scroll-smooth";
-import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
-
-// internal imports
+import Link from "next/link";
 import Wrapper from "@/layouts/wrapper";
 import FooterSix from "@/layouts/footers/footer-six";
-import { Close, Minus, Plus } from "@/components/svg";
-import Link from "next/link";
 import HeaderSix from "@/layouts/headers/header-six";
-
+import LuxBreadcrumb from "@/components/ui/lux-breadcrumb";
+import ShopItem from "@/components/shop/shop-item";
+import { getProductById } from "@/data/catalog";
+import { useWishlist } from "@/provider/WishlistProvider";
 
 const WishlistMain = () => {
-  const [quantity, setQuantity] = React.useState(1);
-  useScrollSmooth();
+  const { ids, clear } = useWishlist();
+  const products = ids.map((id) => getProductById(id)).filter((p) => !!p);
 
   return (
     <Wrapper>
       <HeaderSix />
-
-      <div id="smooth-wrapper">
-        <div id="smooth-content">
-          <main>
-            {/* wishlist area */}
-            <div className="tp-wishlist-area pt-200 pb-120">
-              <div className="container">
-                <div className="row">
-                  <div className="col-xl-12">
-                    <div className="tp-cart-list mb-45 mr-30">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th colSpan={2} className="tp-cart-header-product">
-                              Product
-                            </th>
-                            <th className="tp-cart-header-price">Price</th>
-                            <th className="tp-cart-header-quantity">
-                              Quantity
-                            </th>
-                            <th>Action</th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="tp-cart-img">
-                              <Link href={`/shop-details/1`}>
-                                <Image
-                                  src="/assets/img/inner-shop/shop-details/tab-img/nav-1.png"
-                                  alt="cart-img"
-                                  width={78}
-                                  height={100}
-                                />
-                              </Link>
-                            </td>
-                            <td className="tp-cart-title">
-                              <Link href={`/shop-details/1`}>
-                                Legendary Whitetails Women.
-                              </Link>
-                            </td>
-                            <td className="tp-cart-price">
-                              <span>$76.00</span>
-                            </td>
-                            <td className="tp-cart-quantity">
-                              <div className="tp-product-quantity mt-10 mb-10">
-                                <span
-                                  className="tp-cart-minus"
-                                  onClick={() => {
-                                    if (quantity > 1) setQuantity(quantity - 1);
-                                  }}
-                                >
-                                  <Minus />
-                                </span>
-                                <input
-                                  className="tp-cart-input"
-                                  type="text"
-                                  value={quantity}
-                                  readOnly
-                                />
-                                <span
-                                  className="tp-cart-plus"
-                                  onClick={() => setQuantity(quantity + 1)}
-                                >
-                                  <Plus />
-                                </span>
-                              </div>
-                            </td>
-
-                            <td className="tp-cart-add-to-cart">
-                              <button type="submit" className="tp-btn-cart sm">
-                                Add To Cart
-                              </button>
-                            </td>
-
-                            <td className="tp-cart-action">
-                              <button className="tp-cart-action-btn">
-                                <Close />{" "}
-                                <span>Remove</span>
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="tp-cart-bottom">
-                      <div className="row align-items-end">
-                        <div className="col-xl-6">
-                          <div className="tp-cart-update">
-                            <Link href="/cart" className="tp-btn-cart">
-                              Go To Cart
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <main>
+        <LuxBreadcrumb subtitle="Saved for Later" title="My Wishlist" crumbs={[{ label: "Home", href: "/" }, { label: "Wishlist" }]} />
+        <section className="mr-wishlist">
+          <div className="container container-1500">
+            {products.length === 0 ? (
+              <div className="mr-shop-empty">
+                <div className="mr-shop-empty-glyph">♡</div>
+                <h3>Your wishlist is empty</h3>
+                <p>Save the pieces you love and revisit them anytime.</p>
+                <Link href="/shop" className="mr-btn-solid">Explore the Collection</Link>
               </div>
-            </div>
-            {/* wishlist area */}
-          </main>
-
-          {/* footer area */}
-          <FooterSix />
-          {/* footer area */}
-        </div>
-      </div>
+            ) : (
+              <>
+                <div className="mr-wishlist-top">
+                  <span>{products.length} {products.length === 1 ? "piece" : "pieces"} saved</span>
+                  <button className="mr-shop-clear" onClick={clear}>Clear wishlist</button>
+                </div>
+                <div className="mr-grid mr-grid-4">{products.map((p) => <ShopItem key={p!.id} product={p!} />)}</div>
+              </>
+            )}
+          </div>
+        </section>
+      </main>
+      <FooterSix />
     </Wrapper>
   );
 };

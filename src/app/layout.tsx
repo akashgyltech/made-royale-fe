@@ -5,6 +5,12 @@ import {
   Marcellus,
 } from "next/font/google";
 import { VideoProvider } from "@/provider/VideoProvider";
+import { ToastProvider } from "@/provider/ToastProvider";
+import { AuthProvider } from "@/provider/AuthProvider";
+import { WishlistProvider } from "@/provider/WishlistProvider";
+import { CartProvider } from "@/provider/CartProvider";
+import { QuickViewProvider } from "@/provider/QuickViewProvider";
+import AuthModal from "@/components/modal/auth-modal";
 import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
 import "swiper/css/bundle";
@@ -78,9 +84,20 @@ export default function RootLayout({
           ${syne.variable}`}
       >
         <ThemeProvider defaultTheme="light">
-          <VideoProvider>
-            {children}
-          </VideoProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <WishlistProvider>
+                <CartProvider>
+                  <QuickViewProvider>
+                    <VideoProvider>
+                      {children}
+                      <AuthModal />
+                    </VideoProvider>
+                  </QuickViewProvider>
+                </CartProvider>
+              </WishlistProvider>
+            </AuthProvider>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>
