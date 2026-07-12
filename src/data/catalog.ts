@@ -579,7 +579,7 @@ export function boxContentsFor(name: string): string[] {
 }
 
 export const bankOffers = [
-  { icon: '🏦', text: '10% instant discount on HDFC & ICICI Bank Credit Cards' },
-  { icon: '🎁', text: 'Use code ROYALE10 for 10% off (up to ₹15,000)' },
-  { icon: '🧾', text: 'No-Cost EMI from all major banks on orders above ₹15,000' },
-];
+  { icon: 'bank', text: '10% instant discount on HDFC & ICICI Bank Credit Cards' },
+  { icon: 'gift', text: 'Use code ROYALE10 for 10% off (up to ₹15,000)' },
+  { icon: 'receipt', text: 'No-Cost EMI from all major banks on orders above ₹15,000' },
+] as const;

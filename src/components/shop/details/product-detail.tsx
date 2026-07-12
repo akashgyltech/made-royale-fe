@@ -7,6 +7,7 @@ import { useCart } from '@/provider/CartProvider';
 import { useWishlist } from '@/provider/WishlistProvider';
 import { useToast } from '@/provider/ToastProvider';
 import SmartImage from '@/components/ui/smart-image';
+import Icon from '@/components/ui/icon';
 import Stars from '@/components/ui/stars';
 import ShopItem from '@/components/shop/shop-item';
 import SectionHeader from '@/components/ui/section-header';
@@ -76,7 +77,9 @@ export default function ProductDetail({ product }: { product: Product }) {
               ))}
             </div>
             <div className="mr-pdp-madein">
-              <span>🇮🇳 Handcrafted in India</span><span>🪵 {product.material}</span><span>🧾 SKU {product.sku}</span>
+              <span><Icon name="gem" size={15} /> Handcrafted in India</span>
+              <span><Icon name="wood" size={15} /> {product.material}</span>
+              <span><Icon name="tag" size={15} /> SKU {product.sku}</span>
             </div>
           </div>
 
@@ -102,8 +105,8 @@ export default function ProductDetail({ product }: { product: Product }) {
 
             {/* Offers */}
             <div className="mr-pdp-offers">
-              <div className="mr-pdp-offers-head"><span>🏷️</span> Offers &amp; Savings</div>
-              <ul>{bankOffers.map((o, i) => <li key={i}><span>{o.icon}</span>{o.text}</li>)}</ul>
+              <div className="mr-pdp-offers-head"><Icon name="tag" size={16} /> Offers &amp; Savings</div>
+              <ul>{bankOffers.map((o, i) => <li key={i}><Icon name={o.icon} size={16} />{o.text}</li>)}</ul>
             </div>
 
             <p className="mr-pdp-short">{product.shortDescription}</p>
@@ -140,14 +143,16 @@ export default function ProductDetail({ product }: { product: Product }) {
 
             {/* Feature cards */}
             <div className="mr-pdp-features">
-              <div className="mr-pdp-feature"><span>🪵</span><div><strong>Material</strong><small>{product.material}</small></div></div>
-              <div className="mr-pdp-feature"><span>🛡️</span><div><strong>Warranty</strong><small>{product.warranty}</small></div></div>
-              <div className="mr-pdp-feature"><span>🚚</span><div><strong>Delivery</strong><small>{product.assembly}</small></div></div>
-              <div className="mr-pdp-feature"><span>↩️</span><div><strong>Returns</strong><small>7-day easy returns</small></div></div>
+              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="wood" size={20} /></span><div><strong>Material</strong><small>{product.material}</small></div></div>
+              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="shield" size={20} /></span><div><strong>Warranty</strong><small>{product.warranty}</small></div></div>
+              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="truck" size={20} /></span><div><strong>Delivery</strong><small>{product.assembly}</small></div></div>
+              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="returns" size={20} /></span><div><strong>Returns</strong><small>7-day easy returns</small></div></div>
             </div>
 
             <div className="mr-pdp-trust">
-              <span>🔒 Secure Payments</span><span>✅ 100% Genuine</span><span>🏅 Assured Quality</span>
+              <span><Icon name="lock" size={15} /> Secure Payments</span>
+              <span><Icon name="verified" size={15} /> 100% Genuine</span>
+              <span><Icon name="medal" size={15} /> Assured Quality</span>
             </div>
           </div>
         </div>
@@ -167,7 +172,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 <h4 className="mr-pdp-subhead">Why you’ll love it</h4>
                 <ul>{product.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
                 <div className="mr-pdp-craft">
-                  <div className="mr-pdp-craft-icon">❖</div>
+                  <div className="mr-pdp-craft-icon"><Icon name="crown" size={26} /></div>
                   <div><strong>Handcrafted, made to order</strong><p>Each piece is built by master karigars using time-honoured techniques. Because it is made for you, subtle variations in grain and finish are the signature of genuine craftsmanship — never a flaw.</p></div>
                 </div>
               </div>
@@ -186,7 +191,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <div className="mr-pdp-dims">
                 <div className="mr-pdp-dims-col">
                   <h4 className="mr-pdp-subhead">Dimensions</h4>
-                  <div className="mr-pdp-dimbox"><span>📐</span><div><strong>{product.dimensions}</strong><small>Please measure your space & doorways before ordering.</small></div></div>
+                  <div className="mr-pdp-dimbox"><span><Icon name="ruler" size={22} /></span><div><strong>{product.dimensions}</strong><small>Please measure your space & doorways before ordering.</small></div></div>
                   <h4 className="mr-pdp-subhead">What’s in the Box</h4>
                   <ul className="mr-pdp-boxlist">{box.map((b, i) => <li key={i}>{b}</li>)}</ul>
                 </div>
@@ -271,7 +276,7 @@ function PincodeCheck({ toast }: { toast: (m: string, v?: 'success' | 'info' | '
   };
   return (
     <div className="mr-pdp-pincode">
-      <label>🚚 Check delivery & installation</label>
+      <label><Icon name="truck" size={16} /> Check delivery & installation</label>
       <div className="mr-pdp-pincode-row">
         <input value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="Enter pincode" inputMode="numeric" />
         <button onClick={check}>Check</button>
