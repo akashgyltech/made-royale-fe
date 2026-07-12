@@ -17,6 +17,7 @@ import FooterSix from "@/layouts/footers/footer-six";
 import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
 import AssuranceStrip from "@/components/home/assurance-strip";
 import CollectionsShowcase from "@/components/home/collections-showcase";
+import RoomShowcase from "@/components/home/room-showcase";
 import Testimonials from "@/components/home/testimonials";
 import HomeFaq from "@/components/home/home-faq";
 import { useEffect } from "react";
@@ -69,6 +70,8 @@ const HomeSixMain = () => {
             <AssuranceStrip />
 
             <ShopCategory />
+
+            <RoomShowcase />
 
             <HeroBannerTwo imageSrc={"/assets/img/inner-shop/home/hero-bg-14.webp"} imageAlt={"Hero-banner-12"} buttonLink={"/shop"} buttonText={"Explore Now"} subtitle={"Experience the perfect blend of elegance, comfort, and craftsmanship. Our carefully curated furniture collections are designed to transform your home into a space that reflects your style while providing lasting quality and everyday comfort."} title={"Luxury Meets Comfort"}/>
 

@@ -10,7 +10,7 @@ const AccountMain = () => {
     <Wrapper>
       <HeaderSix />
       <main>
-        <LuxBreadcrumb subtitle="Your Royale Circle" title="My Account" crumbs={[{ label: "Home", href: "/" }, { label: "Account" }]} />
+        <LuxBreadcrumb subtitle="Your Shizenta Circle" title="My Account" crumbs={[{ label: "Home", href: "/" }, { label: "Account" }]} />
         <AccountDashboard />
       </main>
       <FooterSix />

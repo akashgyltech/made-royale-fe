@@ -34,7 +34,7 @@ function write(orders: Order[]) { try { localStorage.setItem(KEY, JSON.stringify
 
 export function generateOrderNumber(): string {
   const rand = Math.floor(100000 + Math.random() * 900000);
-  return `MR${new Date().getFullYear().toString().slice(-2)}${rand}`;
+  return `SZ${new Date().getFullYear().toString().slice(-2)}${rand}`;
 }
 export function saveOrder(order: Order): void { write([order, ...read()]); }
 export function getOrders(): Order[] { return read(); }

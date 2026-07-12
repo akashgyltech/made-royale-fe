@@ -34,7 +34,7 @@ export default function AccountDashboard() {
 
   const switchTab = (t: Tab) => { setTab(t); router.replace(`/account?tab=${t}`, { scroll: false }); };
   const wishProducts = wishIds.map((id) => getProductById(id)).filter((p) => !!p);
-  const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'MR';
+  const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'SZ';
 
   return (
     <section className="mr-account">
@@ -65,7 +65,15 @@ export default function AccountDashboard() {
                   <Link href="/track-order" className="mr-account-stat"><strong>◎</strong><span>Track Order</span></Link>
                 </div>
                 <h3 className="mr-account-h3">Recent Order</h3>
-                {orders.length === 0 ? <EmptyState glyph="📦" title="No orders yet" text="Your future heirlooms will appear here." /> : <OrderRow order={orders[0]} />}
+                {orders.length === 0 ? <EmptyState glyph="📦" title="No orders yet" text="Your future heirlooms will appear here." action={<Link href="/shop" className="mr-btn-gold">Start Shopping</Link>} /> : <OrderRow order={orders[0]} />}
+
+                <h3 className="mr-account-h3">Quick Links</h3>
+                <div className="mr-account-quick">
+                  <Link href="/shop" className="mr-account-quick-card"><span>🛍️</span><strong>Continue Shopping</strong><small>Explore new arrivals</small></Link>
+                  <Link href="/track-order" className="mr-account-quick-card"><span>📦</span><strong>Track an Order</strong><small>Real-time updates</small></Link>
+                  <Link href="/bulk-enquiry" className="mr-account-quick-card"><span>🏢</span><strong>Bulk & Trade</strong><small>Volume pricing</small></Link>
+                  <Link href="/contact" className="mr-account-quick-card"><span>💬</span><strong>Help & Support</strong><small>We&rsquo;re here for you</small></Link>
+                </div>
               </div>
             )}
 
@@ -113,7 +121,13 @@ function OrderRow({ order }: { order: Order }) {
         {order.items.length > 3 && <div className="mr-order-row-more">+{order.items.length - 3}</div>}
         <div className="mr-order-row-summary"><span>{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</span><strong>{formatINR(order.total)}</strong></div>
       </div>
-      <div className="mr-order-row-foot"><Link href={`/track-order?order=${order.orderNumber}`} className="mr-btn-outline mr-btn-sm">Track Order</Link><Link href={`/order-confirmation/${order.orderNumber}`} className="mr-btn-text">View Details →</Link></div>
+      <div className="mr-order-row-foot">
+        <div className="mr-order-row-actions">
+          <Link href={`/track-order?order=${order.orderNumber}`} className="mr-btn-outline mr-btn-sm">Track Order</Link>
+          <Link href={`/invoice/${order.orderNumber}`} className="mr-btn-outline mr-btn-sm">Invoice</Link>
+        </div>
+        <Link href={`/order-confirmation/${order.orderNumber}`} className="mr-btn-text">View Details →</Link>
+      </div>
     </div>
   );
 }

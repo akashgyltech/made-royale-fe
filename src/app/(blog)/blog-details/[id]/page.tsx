@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const blog = getBlog(id);
-  return { title: blog ? `${blog.title} — Made Royale` : 'Journal — Made Royale' };
+  return { title: blog ? `${blog.title} — Shizenta` : 'Journal — Shizenta' };
 }
 
 export default async function BlogDetailsPage({ params }: { params: Promise<{ id: string }> }) {

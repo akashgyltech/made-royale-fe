@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// MADE ROYALE — Luxury Furniture Catalog (dummy data)
+// SHIZENTA — Luxury Furniture Catalog (dummy data)
 //
 // Self-contained, client-side catalog powering the whole storefront while the
 // backend & payment gateway are built. Every product/category has an `image`
@@ -21,8 +21,37 @@ export interface Category {
   slug: string;
   tagline: string;
   icon: string;
-  image?: string; // ← drop a real image path here later
+  image?: string; // ← drop a real square image here (used on cards)
+  banner?: string; // ← drop a WIDE hero banner here (used on the /category/[slug] page)
   subcategories: SubCategory[];
+}
+
+export type CollectionName = 'Maharaja' | 'Vintage' | 'Contemporary Royale' | 'Heritage';
+
+export interface Collection {
+  id: string;
+  name: CollectionName;
+  slug: string;
+  tagline: string;
+  intro: string; // ← hero sub-line
+  story: { title: string; body: string };
+  icon: string;
+  image?: string; // ← square/card image
+  banner?: string; // ← WIDE hero banner used on /collection/[slug]
+}
+
+export interface Room {
+  id: string;
+  name: string;
+  slug: string;
+  tagline: string;
+  intro: string; // ← hero sub-line
+  story: { title: string; body: string };
+  icon: string;
+  image?: string; // ← square/card image
+  banner?: string; // ← WIDE hero banner used on /room/[slug]
+  categories: string[]; // category slugs that belong to this room
+  subs?: string[]; // optional extra subcategory slugs to pull in
 }
 
 export interface ProductColor {
@@ -38,7 +67,7 @@ export interface Product {
   categoryName: string;
   subcategorySlug: string;
   subcategoryName: string;
-  collection: 'Maharaja' | 'Vintage' | 'Contemporary Royale' | 'Heritage';
+  collection: CollectionName;
   price: number;
   comparePrice: number;
   image?: string; // ← main product image
@@ -181,6 +210,79 @@ export const categories: Category[] = [
       { id: 's-dec-light', name: 'Lighting', slug: 'lighting' },
       { id: 's-dec-rug', name: 'Rugs & Carpets', slug: 'rugs' },
     ],
+  },
+];
+
+// ── Collections (signature lines) ─────────────────────────────────────────────
+// Each collection has its own landing page at /collection/[slug]. Drop a wide
+// image into `banner` to replace the placeholder on that page.
+const COL_IMG = '/assets/img/home/collection';
+export const collections: Collection[] = [
+  {
+    id: 'col-maharaja', name: 'Maharaja', slug: 'maharaja', icon: '👑',
+    tagline: 'Opulent teak, Makrana marble & hand-cut brass — our most regal line.',
+    intro: 'Our most opulent line — solid teak, genuine Makrana marble and hand-cut brass, crafted to become tomorrow’s heirlooms.',
+    story: { title: 'A love letter to the palaces of India', body: 'The Maharaja Collection draws on the durbars of Rajasthan and the Deccan. Nothing is veneered where it can be solid, and nothing is stamped where it can be carved. Because every piece is made to order, no two are ever identical — which is exactly the point of true luxury.' },
+    image: `${COL_IMG}/maharaja_collection_cta.webp`, banner: `${COL_IMG}/maharaja_collection_cta.webp`,
+  },
+  {
+    id: 'col-vintage', name: 'Vintage', slug: 'vintage', icon: '🕰️',
+    tagline: 'Timeworn character and heritage silhouettes, reborn.',
+    intro: 'Timeworn character and heritage silhouettes, reborn for the modern home with the patina of pieces passed down through generations.',
+    story: { title: 'Character that only time can give', body: 'The Vintage Collection celebrates the beauty of age — softened edges, deepened grains and silhouettes that feel found rather than bought. Each piece is finished by hand to carry warmth and story from the very first day.' },
+    image: `${COL_IMG}/vintage_collection_cta.webp`, banner: `${COL_IMG}/vintage_collection_cta.webp`,
+  },
+  {
+    id: 'col-contemporary', name: 'Contemporary Royale', slug: 'contemporary-royale', icon: '✦',
+    tagline: 'Clean modern lines with an unmistakably royal soul.',
+    intro: 'Clean, architectural lines with an unmistakably royal soul — modern proportions dressed in premium materials and quiet, confident detailing.',
+    story: { title: 'Modern proportions, royal materials', body: 'Contemporary Royale is for those who want the grandeur without the ornament. Low, considered silhouettes meet brass, marble and velvet — a restrained kind of luxury that feels at home in a city apartment or a country villa alike.' },
+    image: `${COL_IMG}/contemporary_roayel_cta.webp`, banner: `${COL_IMG}/contemporary_roayel_cta.webp`,
+  },
+  {
+    id: 'col-heritage', name: 'Heritage', slug: 'heritage', icon: '🪷',
+    tagline: 'Craft traditions of India, preserved in every joint.',
+    intro: 'The craft traditions of India, preserved in every joint — walnut carving, brass inlay and hand-knotting kept alive by generational karigars.',
+    story: { title: 'Preserving a living craft', body: 'The Heritage Collection is our commitment to the karigars whose families have practised their craft for generations. From the walnut carvers of Kashmir to the brass inlay of Lucknow, each piece keeps a centuries-old tradition alive in your home.' },
+    image: `${CAT_IMG}/shop-by-wardrobe.webp`, banner: `${CAT_IMG}/shop-by-wardrobe.webp`,
+  },
+];
+
+// ── Rooms (shop by room) ──────────────────────────────────────────────────────
+// A room simply groups existing categories/subcategories so shoppers can browse
+// by space. Each has its own landing page at /room/[slug].
+export const rooms: Room[] = [
+  {
+    id: 'room-living', name: 'Living Room', slug: 'living-room', icon: '🛋️',
+    tagline: 'Where the home comes together',
+    intro: 'Anchor your living room with statement seating, sculptural tables and warm lighting — everything you need to gather, host and unwind in style.',
+    story: { title: 'A living room built around you', body: 'From deep-buttoned chesterfields to marble-and-brass coffee tables, our living-room pieces are made to be lived in. Solid frames, premium upholstery and considered proportions keep the room both grand and genuinely comfortable.' },
+    image: `${CAT_IMG}/shop-by-sofa.webp`, banner: `${CAT_IMG}/shop-by-sofa.webp`,
+    categories: ['sofas', 'chairs', 'tables', 'storage', 'decor'],
+  },
+  {
+    id: 'room-bedroom', name: 'Bedroom', slug: 'bedroom', icon: '🛏️',
+    tagline: 'Rest like royalty',
+    intro: 'Compose a serene, storage-smart bedroom — solid-wood beds, hand-finished wardrobes and the quiet accents that turn a room into a retreat.',
+    story: { title: 'Your private retreat', body: 'A bedroom should feel calm and considered. Solid Sheesham and teak beds, soft-close wardrobes and thoughtful bedside pieces come together to keep the space serene, uncluttered and unmistakably yours.' },
+    image: `${CAT_IMG}/shop-by-bed.webp`, banner: `${CAT_IMG}/shop-by-bed.webp`,
+    categories: ['beds', 'wardrobes'], subs: ['side-tables', 'accent-chairs'],
+  },
+  {
+    id: 'room-dining', name: 'Dining Room', slug: 'dining-room', icon: '🍽️',
+    tagline: 'Feasts fit for a durbar',
+    intro: 'Gather family around marble-topped and solid-wood dining sets, paired with sideboards that keep the good china close and the room composed.',
+    story: { title: 'Made for gathering', body: 'The best conversations happen over a shared table. Genuine Makrana marble, hand-cut joinery and brass-inlay sideboards create a dining room built for long, lingering meals night after night.' },
+    image: `${CAT_IMG}/shop-by-dining.webp`, banner: `${CAT_IMG}/shop-by-dining.webp`,
+    categories: ['dining'], subs: ['cabinets'],
+  },
+  {
+    id: 'room-study', name: 'Study & Office', slug: 'study-office', icon: '📚',
+    tagline: 'A room to think in',
+    intro: 'Set up a study worthy of a maharaja’s correspondence — leather-topped desks, solid-wood bookshelves and seating that means business.',
+    story: { title: 'Focus, beautifully furnished', body: 'A great study balances function and calm. Hand-tooled leather desks, cable-managed drawers and leaning ladder bookshelves in solid Sheesham give you a workspace that is as handsome as it is productive.' },
+    image: `${CAT_IMG}/shop-by-centertable.webp`, banner: `${CAT_IMG}/shop-by-centertable.webp`,
+    categories: [], subs: ['study-tables', 'bookshelves'],
   },
 ];
 
@@ -465,7 +567,7 @@ const reviewBodies = [
   'Photos do not do it justice — the material quality is genuinely premium. Guests keep asking where we bought it.',
   'Delivery was on time and the assembly was seamless. Feels sturdy and built to last for decades.',
   'The attention to detail in the joinery and finish is remarkable. You can tell it is handcrafted.',
-  'Comfortable, beautiful and clearly made to last. Made Royale has earned a loyal customer.',
+  'Comfortable, beautiful and clearly made to last. Shizenta has earned a loyal customer.',
   'We compared several brands and nothing came close to this level of finish at the price.',
 ];
 
@@ -489,12 +591,12 @@ export function getReviews(productId: string): Review[] {
 
 // ── Blogs ─────────────────────────────────────────────────────────────────────
 export const blogs: Blog[] = [
-  { id: 'b-1', slug: 'art-of-indian-woodcraft', title: 'The Living Art of Indian Woodcraft', excerpt: 'From the walnut carvers of Kashmir to the brass inlay of Lucknow — meet the karigars behind every Made Royale piece.', category: 'Craftsmanship', author: 'Made Royale Studio', date: '12 Jun 2026', readTime: '6 min read', image: '', content: ['Every piece of furniture we make begins not in a factory, but in the hands of a karigar whose family has practised the craft for generations.', 'In the workshops of Saharanpur and Jodhpur, joinery is still cut by eye and finished by feel. This is what gives a Made Royale piece its soul — the subtle irregularities that machine production can never replicate.', 'When you choose handcrafted furniture, you are not just buying an object. You are commissioning an heirloom, and keeping a centuries-old tradition alive.'] },
+  { id: 'b-1', slug: 'art-of-indian-woodcraft', title: 'The Living Art of Indian Woodcraft', excerpt: 'From the walnut carvers of Kashmir to the brass inlay of Lucknow — meet the karigars behind every Shizenta piece.', category: 'Craftsmanship', author: 'Shizenta Studio', date: '12 Jun 2026', readTime: '6 min read', image: '', content: ['Every piece of furniture we make begins not in a factory, but in the hands of a karigar whose family has practised the craft for generations.', 'In the workshops of Saharanpur and Jodhpur, joinery is still cut by eye and finished by feel. This is what gives a Shizenta piece its soul — the subtle irregularities that machine production can never replicate.', 'When you choose handcrafted furniture, you are not just buying an object. You are commissioning an heirloom, and keeping a centuries-old tradition alive.'] },
   { id: 'b-2', slug: 'styling-the-royal-living-room', title: 'How to Style a Royal Yet Liveable Living Room', excerpt: 'Layering velvet, brass and marble without tipping into excess — a designer’s guide to understated grandeur.', category: 'Interior Styling', author: 'Ishita Kapoor', date: '28 May 2026', readTime: '5 min read', image: '', content: ['Royal does not mean crowded. The secret to grandeur is restraint — one hero piece, supported by quieter companions.', 'Anchor the room with a statement sofa such as the Udaipur Chesterfield, then let a marble-and-brass coffee table and a hand-knotted rug do the supporting work.', 'Keep your palette to three tones: a jewel colour, a warm neutral, and a metallic accent. Repeat them across the room for a cohesive, curated feel.'] },
-  { id: 'b-3', slug: 'caring-for-solid-wood-furniture', title: 'Caring for Solid Wood Furniture in Indian Climates', excerpt: 'Humidity, monsoon and sunlight — a practical care guide to keep your teak and Sheesham pristine for decades.', category: 'Care & Maintenance', author: 'Made Royale Studio', date: '14 May 2026', readTime: '4 min read', image: '', content: ['Solid wood is a living material — it breathes with the seasons. A little care keeps it beautiful for generations.', 'Dust weekly with a soft, dry cloth, and apply a wood conditioner twice a year. Keep pieces out of direct sunlight and away from air-conditioning vents to prevent drying.', 'During monsoon, ensure good ventilation and wipe away any moisture promptly. Never place hot vessels directly on wood or marble surfaces.'] },
-  { id: 'b-4', slug: 'maharaja-collection-story', title: 'Inside the Maharaja Collection', excerpt: 'The inspiration, the materials, and the months of work behind our most opulent line of furniture.', category: 'Collections', author: 'Made Royale Studio', date: '02 May 2026', readTime: '7 min read', image: '', content: ['The Maharaja Collection is our love letter to the palaces of Rajasthan and the Deccan.', 'Each piece is built from solid teak or Sheesham, finished with genuine Makrana marble and hand-cut brass. Nothing is veneered where it can be solid, and nothing is stamped where it can be carved.', 'Because every piece is made to order, no two are ever identical — which is exactly the point of true luxury.'] },
+  { id: 'b-3', slug: 'caring-for-solid-wood-furniture', title: 'Caring for Solid Wood Furniture in Indian Climates', excerpt: 'Humidity, monsoon and sunlight — a practical care guide to keep your teak and Sheesham pristine for decades.', category: 'Care & Maintenance', author: 'Shizenta Studio', date: '14 May 2026', readTime: '4 min read', image: '', content: ['Solid wood is a living material — it breathes with the seasons. A little care keeps it beautiful for generations.', 'Dust weekly with a soft, dry cloth, and apply a wood conditioner twice a year. Keep pieces out of direct sunlight and away from air-conditioning vents to prevent drying.', 'During monsoon, ensure good ventilation and wipe away any moisture promptly. Never place hot vessels directly on wood or marble surfaces.'] },
+  { id: 'b-4', slug: 'maharaja-collection-story', title: 'Inside the Maharaja Collection', excerpt: 'The inspiration, the materials, and the months of work behind our most opulent line of furniture.', category: 'Collections', author: 'Shizenta Studio', date: '02 May 2026', readTime: '7 min read', image: '', content: ['The Maharaja Collection is our love letter to the palaces of Rajasthan and the Deccan.', 'Each piece is built from solid teak or Sheesham, finished with genuine Makrana marble and hand-cut brass. Nothing is veneered where it can be solid, and nothing is stamped where it can be carved.', 'Because every piece is made to order, no two are ever identical — which is exactly the point of true luxury.'] },
   { id: 'b-5', slug: 'small-spaces-big-luxury', title: 'Big Luxury for Small Spaces', excerpt: 'You do not need a palace to live like royalty. Multi-functional, space-smart pieces for compact urban homes.', category: 'Interior Styling', author: 'Kabir Nair', date: '18 Apr 2026', readTime: '5 min read', image: '', content: ['Luxury and small spaces are not opposites. The trick is choosing pieces that work harder.', 'A sofa-cum-bed, nesting side tables and a lift-up storage bed give you flexibility without sacrificing style.', 'Use mirrors and warm lighting to expand the sense of space, and keep the floor visible with legged furniture rather than boxy, floor-hugging designs.'] },
-  { id: 'b-6', slug: 'choosing-the-right-dining-set', title: 'Choosing the Right Dining Set for Your Home', excerpt: 'Marble or wood? Four seats or six? A simple framework to pick a dining set you will love for years.', category: 'Buying Guide', author: 'Made Royale Studio', date: '30 Mar 2026', readTime: '4 min read', image: '', content: ['Start with how you actually live. A family that hosts often will value a six-seater; a couple in a compact flat may be happier with a nimble four-seater.', 'Marble tops bring drama and are wonderfully cool, but need sealing; solid wood is warmer and more forgiving. Choose the material that fits your lifestyle, not just the photograph.', 'Finally, leave at least 90 cm of clearance around the table so chairs can be pulled out comfortably.'] },
+  { id: 'b-6', slug: 'choosing-the-right-dining-set', title: 'Choosing the Right Dining Set for Your Home', excerpt: 'Marble or wood? Four seats or six? A simple framework to pick a dining set you will love for years.', category: 'Buying Guide', author: 'Shizenta Studio', date: '30 Mar 2026', readTime: '4 min read', image: '', content: ['Start with how you actually live. A family that hosts often will value a six-seater; a couple in a compact flat may be happier with a nimble four-seater.', 'Marble tops bring drama and are wonderfully cool, but need sealing; solid wood is warmer and more forgiving. Choose the material that fits your lifestyle, not just the photograph.', 'Finally, leave at least 90 cm of clearance around the table so chairs can be pulled out comfortably.'] },
 ];
 
 // ── Coupons ─────────────────────────────────────────────────────────────────
@@ -515,6 +617,24 @@ export function validateCoupon(code: string, orderAmount: number): { valid: bool
 
 // ── Query helpers ─────────────────────────────────────────────────────────────
 export function getCategory(slug: string) { return categories.find((c) => c.slug === slug); }
+export function getCollection(slug: string) { return collections.find((c) => c.slug === slug); }
+export function getRoom(slug: string) { return rooms.find((r) => r.slug === slug); }
+
+// Products belonging to a room = any product whose category OR subcategory is
+// listed on the room, sorted by featured first.
+export function filterByRoom(room: Room, sort: SortKey = 'featured'): Product[] {
+  const cats = new Set(room.categories);
+  const subs = new Set(room.subs ?? []);
+  const list = products.filter((p) => cats.has(p.categorySlug) || subs.has(p.subcategorySlug));
+  return sortProducts(list, sort);
+}
+
+// Categories represented inside a room (for the "browse by category" strip).
+export function roomCategories(room: Room): Category[] {
+  const slugs = new Set(room.categories);
+  categories.forEach((c) => { if (c.subcategories.some((s) => room.subs?.includes(s.slug))) slugs.add(c.slug); });
+  return categories.filter((c) => slugs.has(c.slug));
+}
 export function getBlog(slug: string) { return blogs.find((b) => b.slug === slug); }
 export function getProduct(slug: string) { return products.find((p) => p.slug === slug); }
 export function getProductById(id: string) { return products.find((p) => p.id === id); }
@@ -534,6 +654,18 @@ export function getUpsell(product: Product): Product[] {
 export type SortKey = 'featured' | 'price-asc' | 'price-desc' | 'rating' | 'newest';
 export interface ProductFilter { category?: string; sub?: string; collection?: string; search?: string; minPrice?: number; maxPrice?: number; sort?: SortKey; }
 
+export function sortProducts(list: Product[], sort: SortKey = 'featured'): Product[] {
+  const out = [...list];
+  switch (sort) {
+    case 'price-asc': out.sort((a, b) => a.price - b.price); break;
+    case 'price-desc': out.sort((a, b) => b.price - a.price); break;
+    case 'rating': out.sort((a, b) => b.rating - a.rating); break;
+    case 'newest': out.sort((a, b) => (b.badge === 'New Arrival' ? 1 : 0) - (a.badge === 'New Arrival' ? 1 : 0)); break;
+    default: out.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
+  }
+  return out;
+}
+
 export function filterProducts(filter: ProductFilter): Product[] {
   let list = [...products];
   if (filter.category) list = list.filter((p) => p.categorySlug === filter.category);
@@ -545,14 +677,7 @@ export function filterProducts(filter: ProductFilter): Product[] {
     const q = filter.search.toLowerCase();
     list = list.filter((p) => p.name.toLowerCase().includes(q) || p.categoryName.toLowerCase().includes(q) || p.tags.some((t) => t.includes(q)));
   }
-  switch (filter.sort) {
-    case 'price-asc': list.sort((a, b) => a.price - b.price); break;
-    case 'price-desc': list.sort((a, b) => b.price - a.price); break;
-    case 'rating': list.sort((a, b) => b.rating - a.rating); break;
-    case 'newest': list.sort((a, b) => (b.badge === 'New Arrival' ? 1 : 0) - (a.badge === 'New Arrival' ? 1 : 0)); break;
-    default: list.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
-  }
-  return list;
+  return sortProducts(list, filter.sort);
 }
 
 export const priceBounds = { min: Math.min(...products.map((p) => p.price)), max: Math.max(...products.map((p) => p.price)) };
@@ -575,7 +700,7 @@ export function careFor(material: string): string[] {
 }
 
 export function boxContentsFor(name: string): string[] {
-  return [`1 × ${name}`, 'Assembly hardware & tools (where required)', 'Care guide & warranty card', 'Made Royale certificate of authenticity'];
+  return [`1 × ${name}`, 'Assembly hardware & tools (where required)', 'Care guide & warranty card', 'Shizenta certificate of authenticity'];
 }
 
 export const bankOffers = [

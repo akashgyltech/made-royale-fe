@@ -34,7 +34,7 @@ const OrderConfirmationMain = ({ orderNumber }: { orderNumber: string }) => {
                     <div><span>Estimated Delivery</span><strong>{order.estimatedDelivery}</strong></div>
                     <div><span>Payment</span><strong>{order.paymentLabel}</strong></div>
                   </div>
-                  <div className="mr-oc-actions"><Link href={`/track-order?order=${order.orderNumber}`} className="mr-btn-gold">Track Order</Link><Link href="/shop" className="mr-btn-outline">Continue Shopping</Link></div>
+                  <div className="mr-oc-actions"><Link href={`/track-order?order=${order.orderNumber}`} className="mr-btn-gold">Track Order</Link><Link href={`/invoice/${order.orderNumber}`} className="mr-btn-solid">Download Invoice</Link><Link href="/shop" className="mr-btn-outline">Continue Shopping</Link></div>
                 </div>
 
                 <div className="mr-oc-grid">

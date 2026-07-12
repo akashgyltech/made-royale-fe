@@ -1,11 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Product, formatINR, getReviews, getRelated, getUpsell, emiPerMonth, careFor, boxContentsFor, bankOffers } from '@/data/catalog';
+import { Product, Review, formatINR, getReviews, getRelated, getUpsell, emiPerMonth, careFor, boxContentsFor, bankOffers } from '@/data/catalog';
 import { useCart } from '@/provider/CartProvider';
 import { useWishlist } from '@/provider/WishlistProvider';
 import { useToast } from '@/provider/ToastProvider';
+import { useAuth } from '@/provider/AuthProvider';
 import SmartImage from '@/components/ui/smart-image';
 import Icon from '@/components/ui/icon';
 import Stars from '@/components/ui/stars';
@@ -25,6 +26,9 @@ export default function ProductDetail({ product }: { product: Product }) {
   const [color, setColor] = useState(product.colors[0]?.name);
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState<Tab>('description');
+  const { user } = useAuth();
+  const [userReviews, setUserReviews] = useState<Review[]>([]);
+  const [showReview, setShowReview] = useState(false);
 
   const reviews = getReviews(product.id);
   const related = getRelated(product);
@@ -41,6 +45,25 @@ export default function ProductDetail({ product }: { product: Product }) {
   const dist = [
     Math.round(n * 0.72), Math.round(n * 0.19), Math.round(n * 0.06), Math.round(n * 0.02), Math.max(0, n - Math.round(n * 0.72) - Math.round(n * 0.19) - Math.round(n * 0.06) - Math.round(n * 0.02)),
   ];
+
+  useEffect(() => {
+    try { const r = localStorage.getItem(`mr_reviews_${product.id}`); if (r) setUserReviews(JSON.parse(r)); } catch { /* ignore */ }
+  }, [product.id]);
+  const allReviews = [...userReviews, ...reviews];
+  const totalReviews = product.reviewCount + userReviews.length;
+  const submitReview = (data: { rating: number; title: string; comment: string; author: string }) => {
+    const rev: Review = {
+      id: `ur-${Date.now()}`, productId: product.id, author: data.author || 'Shizenta Customer', location: 'Verified Buyer',
+      rating: data.rating, title: data.title, comment: data.comment,
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }), verified: true,
+    };
+    const next = [rev, ...userReviews];
+    setUserReviews(next);
+    try { localStorage.setItem(`mr_reviews_${product.id}`, JSON.stringify(next)); } catch { /* ignore */ }
+    setShowReview(false);
+    toast('Thank you! Your review has been posted.');
+    setTab('reviews');
+  };
 
   const share = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
@@ -89,9 +112,13 @@ export default function ProductDetail({ product }: { product: Product }) {
             <h1 className="mr-pdp-title">{product.name}</h1>
             <div className="mr-pdp-rating">
               <Stars rating={product.rating} size={16} /><span>{product.rating.toFixed(1)}</span><em>•</em>
-              <button onClick={() => setTab('reviews')} className="mr-pdp-reviews-link">{product.reviewCount} reviews</button>
+              <button onClick={() => setTab('reviews')} className="mr-pdp-reviews-link">{totalReviews} reviews</button>
               <em>•</em><span className={product.stock <= 6 ? 'mr-pdp-lowstock' : 'mr-pdp-instock'}>{product.stock <= 6 ? `Only ${product.stock} left` : 'In stock'}</span>
             </div>
+            <button className="mr-pdp-writereview" onClick={() => setShowReview(true)}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z" /></svg>
+              Write a review
+            </button>
 
             <div className="mr-pdp-price">
               <span className="mr-pdp-now">{formatINR(product.price)}</span>
@@ -163,7 +190,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             <button className={tab === 'description' ? 'is-active' : ''} onClick={() => setTab('description')}>Description</button>
             <button className={tab === 'specs' ? 'is-active' : ''} onClick={() => setTab('specs')}>Specifications</button>
             <button className={tab === 'dimensions' ? 'is-active' : ''} onClick={() => setTab('dimensions')}>Dimensions &amp; Care</button>
-            <button className={tab === 'reviews' ? 'is-active' : ''} onClick={() => setTab('reviews')}>Reviews ({product.reviewCount})</button>
+            <button className={tab === 'reviews' ? 'is-active' : ''} onClick={() => setTab('reviews')}>Reviews ({totalReviews})</button>
           </div>
           <div className="mr-pdp-tabbody">
             {tab === 'description' && (
@@ -207,7 +234,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                   <div className="mr-pdp-review-score">
                     <strong>{product.rating.toFixed(1)}</strong>
                     <Stars rating={product.rating} size={18} />
-                    <span>{product.reviewCount} verified reviews</span>
+                    <span>{totalReviews} verified reviews</span>
                   </div>
                   <div className="mr-pdp-review-bars">
                     {[5, 4, 3, 2, 1].map((star, i) => (
@@ -219,8 +246,12 @@ export default function ProductDetail({ product }: { product: Product }) {
                     ))}
                   </div>
                 </div>
+                <div className="mr-pdp-review-cta">
+                  <div><strong>Enjoyed this piece?</strong><span>Share your experience to help other buyers.</span></div>
+                  <button className="mr-btn-gold mr-btn-sm" onClick={() => setShowReview(true)}>Write a Review</button>
+                </div>
                 <div className="mr-pdp-review-list">
-                  {reviews.map((r) => (
+                  {allReviews.map((r) => (
                     <div key={r.id} className="mr-pdp-review">
                       <div className="mr-pdp-review-head">
                         <div className="mr-pdp-review-avatar">{r.author.charAt(0)}</div>
@@ -253,6 +284,15 @@ export default function ProductDetail({ product }: { product: Product }) {
         )}
       </div>
 
+      {showReview && (
+        <ReviewModal
+          productName={product.name}
+          defaultAuthor={user?.name || ''}
+          onClose={() => setShowReview(false)}
+          onSubmit={submitReview}
+        />
+      )}
+
       {/* Sticky mobile buy bar */}
       <div className="mr-pdp-mobilebar">
         <div className="mr-pdp-mobilebar-price">
@@ -282,6 +322,70 @@ function PincodeCheck({ toast }: { toast: (m: string, v?: 'success' | 'info' | '
         <button onClick={check}>Check</button>
       </div>
       {result && <p className="mr-pdp-pincode-result">{result}</p>}
+    </div>
+  );
+}
+
+function ReviewModal({ productName, defaultAuthor, onClose, onSubmit }: {
+  productName: string; defaultAuthor: string; onClose: () => void;
+  onSubmit: (d: { rating: number; title: string; comment: string; author: string }) => void;
+}) {
+  const [rating, setRating] = useState(5);
+  const [hover, setHover] = useState(0);
+  const [author, setAuthor] = useState(defaultAuthor);
+  const [title, setTitle] = useState('');
+  const [comment, setComment] = useState('');
+  const [err, setErr] = useState('');
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) { setErr('Please add a short review title.'); return; }
+    if (comment.trim().length < 10) { setErr('Please write at least 10 characters in your review.'); return; }
+    onSubmit({ rating, title: title.trim(), comment: comment.trim(), author: author.trim() });
+  };
+  const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+
+  return (
+    <div className="mr-review-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="mr-review-modal" role="dialog" aria-modal="true" aria-label="Write a review">
+        <button className="mr-auth-close" onClick={onClose} aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+        </button>
+        <h3 className="mr-review-modal-title">Write a Review</h3>
+        <p className="mr-review-modal-sub">Share your experience with the <strong>{productName}</strong></p>
+        <form onSubmit={submit} noValidate>
+          <div className="mr-review-field">
+            <label>Your Rating</label>
+            <div className="mr-review-stars">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <button type="button" key={s} className={`mr-review-star ${(hover || rating) >= s ? 'is-on' : ''}`} onMouseEnter={() => setHover(s)} onMouseLeave={() => setHover(0)} onClick={() => setRating(s)} aria-label={`${s} star`}>★</button>
+              ))}
+              <span className="mr-review-stars-label">{labels[hover || rating]}</span>
+            </div>
+          </div>
+          <div className="mr-review-field">
+            <label>Name <span className="mr-optional">(optional)</span></label>
+            <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="How should we display your name?" />
+          </div>
+          <div className="mr-review-field">
+            <label>Review Title</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Sum it up in a few words" maxLength={80} />
+          </div>
+          <div className="mr-review-field">
+            <label>Your Review</label>
+            <textarea rows={4} value={comment} onChange={(e) => setComment(e.target.value)} placeholder="What did you love? How is the quality, comfort and finish?" maxLength={600} />
+          </div>
+          {err && <div className="mr-submit-error">{err}</div>}
+          <button type="submit" className="mr-btn-gold w-100">Submit Review</button>
+          <p className="mr-review-modal-note">Your review will be posted to this device instantly. Thank you for helping other shoppers.</p>
+        </form>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ShopMain from "@/pages/shop/shop-main";
 
 export const metadata: Metadata = {
-  title: "Made Royale — Shop Luxury Furniture",
+  title: "Shizenta — Shop Luxury Furniture",
 };
 
 const ShopPage = () => {

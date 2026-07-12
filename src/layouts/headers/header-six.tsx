@@ -33,7 +33,7 @@ export default function HeaderSix({ transparent = false }: Props) {
 
   const innerClass = transparent && !isSticky ? 'tp-inner-header-white' : 'tp-inner-header-2-bg';
   const submitSearch = () => { const q = term.trim(); router.push(q ? `/shop?q=${encodeURIComponent(q)}` : '/shop'); };
-  const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'MR';
+  const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'SZ';
 
   return (
     <>
@@ -42,7 +42,7 @@ export default function HeaderSix({ transparent = false }: Props) {
           <div className="container container-1800">
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">
-                <Link href="/" className="mr-logo">Made <span>Royale</span></Link>
+                <Link href="/" className="mr-logo">Shi<span>zenta</span></Link>
               </div>
               <div className="col-xl-5 d-none d-xl-block">
                 <div className="tp-inner-header-2-menu header-main-menu">

@@ -4,7 +4,7 @@ import Stars from "@/components/ui/stars";
 
 const TESTIMONIALS = [
   { name: "Aditya & Meera Rathore", location: "Jaipur, Rajasthan", rating: 5, text: "Our Udaipur Chesterfield is the soul of our living room now. The finish is flawless and the installation team treated our home like a palace." },
-  { name: "Rohan Malhotra", location: "Gurugram, Haryana", rating: 5, text: "I compared five luxury brands before choosing Made Royale. Nothing came close to this craftsmanship. It genuinely feels like an heirloom." },
+  { name: "Rohan Malhotra", location: "Gurugram, Haryana", rating: 5, text: "I compared five luxury brands before choosing Shizenta. Nothing came close to this craftsmanship. It genuinely feels like an heirloom." },
   { name: "Ananya Sen", location: "Kolkata, West Bengal", rating: 5, text: "The Mysore poster bed is a work of art. Delivery was on time, white-glove, and utterly seamless. Worth every rupee." },
 ];
 

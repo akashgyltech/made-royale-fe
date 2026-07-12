@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import ErrorMain from '@/pages/error/error-main'
  
 export const metadata: Metadata = {
-  title: "Liko - Not Found Page",
+  title: "Page Not Found — Shizenta",
 };
 
 export default function NotFound() {

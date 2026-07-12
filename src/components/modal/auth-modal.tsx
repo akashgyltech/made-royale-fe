@@ -42,8 +42,8 @@ export default function AuthModal() {
       <div className="mr-auth-modal">
         <div className="mr-auth-deco">
           <div className="mr-auth-deco-content">
-            <div className="mr-auth-brand-mark">MADE ROYALE</div>
-            <h2 className="mr-auth-deco-title">{view === 'register' ? 'Join the\nRoyale Circle' : 'Welcome\nBack'}</h2>
+            <div className="mr-auth-brand-mark">SHIZENTA</div>
+            <h2 className="mr-auth-deco-title">{view === 'register' ? 'Join the\nShizenta Circle' : 'Welcome\nBack'}</h2>
             <p className="mr-auth-deco-sub">Luxury interiors & bespoke furniture, handcrafted for the discerning home.</p>
             <div className="mr-auth-deco-divider" />
             <div className="mr-auth-deco-quote">&ldquo;Every great room begins with a singular piece.&rdquo;</div>
@@ -83,7 +83,7 @@ function LoginView({ showPass, setShowPass, submitting, setSubmitting, error, se
   });
   return (
     <form onSubmit={onSubmit} className="mr-auth-form" noValidate>
-      <div className="mr-auth-welcome"><h3>Sign In</h3><p>Access your exclusive Made Royale account</p></div>
+      <div className="mr-auth-welcome"><h3>Sign In</h3><p>Access your exclusive Shizenta account</p></div>
       <div className="mr-field-group">
         <label>Email Address</label>
         <div className="mr-field-wrap"><input {...register('email')} type="email" placeholder="your@email.com" autoComplete="email" /></div>
@@ -115,7 +115,7 @@ function RegisterView({ showPass, setShowPass, submitting, setSubmitting, error,
   });
   return (
     <form onSubmit={onSubmit} className="mr-auth-form" noValidate>
-      <div className="mr-auth-welcome"><h3>Create Account</h3><p>Join the Made Royale family today</p></div>
+      <div className="mr-auth-welcome"><h3>Create Account</h3><p>Join the Shizenta family today</p></div>
       <div className="mr-field-group">
         <label>Full Name</label>
         <div className="mr-field-wrap"><input {...register('name')} type="text" placeholder="Your full name" autoComplete="name" /></div>
