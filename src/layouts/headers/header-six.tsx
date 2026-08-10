@@ -10,6 +10,11 @@ import useStickyHeader from '@/hooks/use-sticky-header';
 import { useAuth } from '@/provider/AuthProvider';
 import { useCart } from '@/provider/CartProvider';
 import { useWishlist } from '@/provider/WishlistProvider';
+import menu_data from '@/data/menu-data';
+import type { IMenuDT } from '@/types/menu-d-t';
+import { cmsApi } from '@/lib/store-api';
+import { adaptHeaderMenu } from '@/lib/cms-content';
+import SiteLogo from '@/components/ui/site-logo';
 
 type Props = { transparent?: boolean };
 
@@ -18,6 +23,9 @@ export default function HeaderSix({ transparent = false }: Props) {
   const [openOffCanvas, setOpenOffcanvas] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [term, setTerm] = useState('');
+  // Static menu_data is the default/fallback — CMS content (if an admin has configured a
+  // `header` doc) overwrites it once the fetch below resolves. Never leaves nav empty.
+  const [menu, setMenu] = useState<IMenuDT[]>(menu_data);
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
   const { user, isLoggedIn, openAuthModal, logout } = useAuth();
@@ -29,6 +37,15 @@ export default function HeaderSix({ transparent = false }: Props) {
     const onClick = (e: MouseEvent) => { if (profileRef.current && !profileRef.current.contains(e.target as Node)) setProfileOpen(false); };
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
+  }, []);
+  useEffect(() => {
+    let cancelled = false;
+    cmsApi.getByKey('header').then((content) => {
+      if (cancelled) return;
+      const adapted = adaptHeaderMenu(content);
+      if (adapted) setMenu(adapted);
+    }).catch(() => { /* no `header` CMS doc configured yet (or request failed) — keep the static fallback */ });
+    return () => { cancelled = true; };
   }, []);
 
   const innerClass = transparent && !isSticky ? 'tp-inner-header-white' : 'tp-inner-header-2-bg';
@@ -42,11 +59,15 @@ export default function HeaderSix({ transparent = false }: Props) {
           <div className="container container-1800">
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">
-                <Link href="/" className="mr-logo">Shi<span>zenta</span></Link>
+                <Link href="/" className="mr-logo">
+                  <SiteLogo variant={transparent && !isSticky ? 'light' : 'dark'} className="mr-logo-img">
+                    Shi<span>zenta</span>
+                  </SiteLogo>
+                </Link>
               </div>
               <div className="col-xl-5 d-none d-xl-block">
                 <div className="tp-inner-header-2-menu header-main-menu">
-                  <nav className="tp-main-menu-content"><HeaderMenus /></nav>
+                  <nav className="tp-main-menu-content"><HeaderMenus menu={menu} /></nav>
                 </div>
               </div>
               <div className="col-xl-5 col-lg-8 col-md-8 col-8">
@@ -98,7 +119,7 @@ export default function HeaderSix({ transparent = false }: Props) {
       </header>
 
       <CartOffcanvas />
-      <MobileOffcanvas openOffcanvas={openOffCanvas} setOpenOffcanvas={setOpenOffcanvas} />
+      <MobileOffcanvas openOffcanvas={openOffCanvas} setOpenOffcanvas={setOpenOffcanvas} menu={menu} />
     </>
   );
 }

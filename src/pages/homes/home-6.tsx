@@ -25,9 +25,19 @@ import { bounceAnimation } from "@/utils/title-animation";
 import { aboutAnim } from "@/utils/about-anim";
 import { panelOneAnimation } from "@/utils/panel-animation";
 import PortfolioSliderHomeTen from "@/components/portfolio/slider/portfolio-slider-home-ten";
+import type { Product, Category } from "@/data/catalog";
+import type { FaqItem } from "@/lib/cms-content";
 // animation
 
-const HomeSixMain = () => {
+interface HomeSixMainProps {
+  featuredProducts: Product[];
+  categories: Category[];
+  collectionCounts: Record<string, number>;
+  roomCounts: Record<string, number>;
+  faqs?: FaqItem[] | null;
+}
+
+const HomeSixMain = ({ featuredProducts, categories, collectionCounts, roomCounts, faqs }: HomeSixMainProps) => {
   useScrollSmooth();
    useEffect(() => {
       document.body.classList.add("tp-smooth-scroll");
@@ -69,21 +79,21 @@ const HomeSixMain = () => {
 
             <AssuranceStrip />
 
-            <ShopCategory />
+            <ShopCategory categories={categories} />
 
-            <RoomShowcase />
+            <RoomShowcase counts={roomCounts} />
 
             <HeroBannerTwo imageSrc={"/assets/img/inner-shop/home/hero-bg-14.webp"} imageAlt={"Hero-banner-12"} buttonLink={"/shop"} buttonText={"Explore Now"} subtitle={"Experience the perfect blend of elegance, comfort, and craftsmanship. Our carefully curated furniture collections are designed to transform your home into a space that reflects your style while providing lasting quality and everyday comfort."} title={"Luxury Meets Comfort"}/>
 
-            <ShopProducts />
+            <ShopProducts products={featuredProducts} />
 
-            <CollectionsShowcase />
+            <CollectionsShowcase counts={collectionCounts} />
 
             <PortfolioSliderHomeTen />
 
             <Testimonials />
 
-            <HomeFaq />
+            <HomeFaq faqs={faqs} />
 
             <BrandFour />
 

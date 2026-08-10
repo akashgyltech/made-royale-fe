@@ -1,9 +1,24 @@
 'use client';
 import React from 'react';
-import { Order, ORDER_STAGES, computeStageIndex } from '@/lib/orders';
+import { ORDER_STAGES, STATUS_LABELS, isTerminalException, stageIndex, exceptionNote } from '@/lib/order-status';
+import type { BackendOrderStatus } from '@/types/backend';
 
-export default function OrderTimeline({ order }: { order: Order }) {
-  const current = computeStageIndex(order);
+export default function OrderTimeline({ status }: { status: BackendOrderStatus }) {
+  if (isTerminalException(status)) {
+    return (
+      <div className="mr-timeline">
+        <div className="mr-timeline-step is-active">
+          <div className="mr-timeline-marker"><span>!</span></div>
+          <div className="mr-timeline-content">
+            <h5>{STATUS_LABELS[status]}</h5>
+            <p>{exceptionNote(status)}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const current = stageIndex(status);
   return (
     <div className="mr-timeline">
       {ORDER_STAGES.map((stage, i) => {

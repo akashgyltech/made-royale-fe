@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Search } from "../svg";
 import faq_banner from '@/assets/img/inner-faq/faq/banner-faq.jpg';
 import FaqItem from "./faq-item";
+import type { FaqItem as CmsFaqItem } from "@/lib/cms-content";
 
 // type 
 type IFaq = {
@@ -50,7 +51,9 @@ export const faq_data:IFaq[] = [
   },
 ];
 
-export default function FaqArea() {
+export default function FaqArea({ faqs }: { faqs?: CmsFaqItem[] | null }) {
+  const data: IFaq[] = faqs && faqs.length > 0 ? faqs.map((f, i) => ({ id: i + 1, ...f })) : faq_data;
+
   return (
     <div className="fq-faq-area fq-faq-bdr pt-80 pb-140">
       <div className="container">
@@ -59,7 +62,7 @@ export default function FaqArea() {
             <div className="fq-faq-wrapper">
               <div className="tp-service-2-accordion-box">
                 <div className="accordion" id="accordionExample">
-                  {faq_data.map((item) => (
+                  {data.map((item) => (
                     <FaqItem key={item.id} item={item} />
                   ))}
                 </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Wrapper from "@/layouts/wrapper";
@@ -8,21 +8,38 @@ import HeaderSix from "@/layouts/headers/header-six";
 import LuxBreadcrumb from "@/components/ui/lux-breadcrumb";
 import SmartImage from "@/components/ui/smart-image";
 import OrderTimeline from "@/components/order/order-timeline";
-import { formatINR, getProductById } from "@/data/catalog";
-import { getOrderByNumber, Order } from "@/lib/orders";
+import { formatINR } from "@/data/catalog";
+import { useAuth } from "@/provider/AuthProvider";
+import { orderApi } from "@/lib/store-api";
+import type { BackendOrder } from "@/types/backend";
 
 const TrackOrderMain = () => {
   const params = useSearchParams();
+  const { isLoggedIn, isInitializing, openAuthModal } = useAuth();
   const initial = params?.get("order") || "";
   const [input, setInput] = useState(initial);
-  const [order, setOrder] = useState<Order | null | undefined>(undefined);
+  const [order, setOrder] = useState<BackendOrder | null | undefined>(undefined);
+  const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
 
-  useEffect(() => {
-    if (initial) { setOrder(getOrderByNumber(initial) ?? null); setSearched(true); } else setOrder(undefined);
-  }, [initial]);
+  const lookup = useCallback(async (orderNumber: string) => {
+    if (!orderNumber.trim()) return;
+    setSearched(true);
+    setOrder(undefined);
+    setError(null);
+    try {
+      const o = await orderApi.getOrderByNumber(orderNumber.trim());
+      setOrder(o);
+    } catch (err) {
+      setOrder(null);
+      setError(err instanceof Error ? err.message : "Could not find this order");
+    }
+  }, []);
 
-  const lookup = () => { setOrder(getOrderByNumber(input.trim()) ?? null); setSearched(true); };
+  useEffect(() => {
+    if (isInitializing || !isLoggedIn || !initial) return;
+    void lookup(initial);
+  }, [isInitializing, isLoggedIn, initial, lookup]);
 
   return (
     <Wrapper>
@@ -31,39 +48,63 @@ const TrackOrderMain = () => {
         <LuxBreadcrumb subtitle="Order Tracking" title="Track Your Order" crumbs={[{ label: "Home", href: "/" }, { label: "Track Order" }]} />
         <section className="mr-track">
           <div className="container container-1300">
-            <div className="mr-track-search">
-              <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") lookup(); }} placeholder="Enter your order number (e.g. MR26123456)" />
-              <button className="mr-btn-gold" onClick={lookup}>Track</button>
-            </div>
-
-            {searched && order === null && (
-              <div className="mr-shop-empty"><div className="mr-shop-empty-glyph">🔍</div><h3>No order found</h3><p>Please check the order number and try again.</p><Link href="/account?tab=orders" className="mr-btn-outline">View my orders</Link></div>
-            )}
-
-            {order && (
-              <div className="mr-track-result">
-                <div className="mr-track-head">
-                  <div><span className="mr-track-label">Order</span><h3>{order.orderNumber}</h3><p>Placed on {new Date(order.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p></div>
-                  <div className="mr-track-eta"><span>Estimated Delivery</span><strong>{order.estimatedDelivery}</strong></div>
-                </div>
-                <OrderTimeline order={order} />
-                <div className="mr-track-items">
-                  {order.items.map((it, i) => (
-                    <div className="mr-track-item" key={i}>
-                      <Link href={`/shop-details/${it.slug}`} className="mr-track-item-thumb"><SmartImage src={getProductById(it.productId)?.image} alt={it.name} ratio="1 / 1" /></Link>
-                      <div className="mr-track-item-info"><Link href={`/shop-details/${it.slug}`}>{it.name}</Link><small>{it.color ? `${it.color} • ` : ""}Qty {it.qty}</small></div>
-                      <div className="mr-track-item-price">{formatINR(it.price * it.qty)}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mr-track-foot">
-                  <div className="mr-track-addr"><span>Delivering to</span><p>{order.address.name}, {order.address.line1}, {order.address.city}, {order.address.state} — {order.address.pincode}</p></div>
-                  <div className="mr-track-total"><span>Order Total</span><strong>{formatINR(order.total)}</strong></div>
-                </div>
+            {isInitializing ? (
+              <div className="mr-oc-loading">Loading…</div>
+            ) : !isLoggedIn ? (
+              <div className="mr-shop-empty">
+                <div className="mr-shop-empty-glyph">🔐</div>
+                <h3>Sign in to track your order</h3>
+                <p>Order tracking is only available to the customer who placed the order — there&rsquo;s no anonymous lookup.</p>
+                <button className="mr-btn-solid" onClick={() => openAuthModal("login")}>Sign In</button>
               </div>
-            )}
+            ) : (
+              <>
+                <div className="mr-track-search">
+                  <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") void lookup(input); }} placeholder="Enter your order number (e.g. MR-20260809-1234)" />
+                  <button className="mr-btn-gold" onClick={() => void lookup(input)}>Track</button>
+                </div>
 
-            {!searched && <div className="mr-track-hint"><p>Enter your order number above, or find it in <Link href="/account?tab=orders">My Orders</Link>.</p></div>}
+                {order === undefined && searched && <div className="mr-oc-loading">Looking up your order…</div>}
+
+                {searched && order === null && (
+                  <div className="mr-shop-empty"><div className="mr-shop-empty-glyph">🔍</div><h3>No order found</h3><p>{error || "Please check the order number and try again."}</p><Link href="/account?tab=orders" className="mr-btn-outline">View my orders</Link></div>
+                )}
+
+                {order && (
+                  <div className="mr-track-result">
+                    <div className="mr-track-head">
+                      <div><span className="mr-track-label">Order</span><h3>{order.orderNumber}</h3><p>{order.createdAt ? `Placed on ${new Date(order.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}` : ""}</p></div>
+                      <div className="mr-track-eta"><span>Estimated Delivery</span><strong>{order.shipment.estimatedDelivery ? new Date(order.shipment.estimatedDelivery).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "To be confirmed"}</strong></div>
+                    </div>
+                    <OrderTimeline status={order.status} />
+                    {order.shipment.trackingNumber && (
+                      <div className="mr-checkout-info">
+                        <span>🚚</span>
+                        <span>
+                          {order.shipment.carrier ? `${order.shipment.carrier} — ` : ""}Tracking #{order.shipment.trackingNumber}
+                          {order.shipment.trackingUrl && <> · <a href={order.shipment.trackingUrl} target="_blank" rel="noreferrer">Track on carrier site</a></>}
+                        </span>
+                      </div>
+                    )}
+                    <div className="mr-track-items">
+                      {order.items.map((it) => (
+                        <div className="mr-track-item" key={it.id}>
+                          <div className="mr-track-item-thumb"><SmartImage src={it.image} alt={it.name} ratio="1 / 1" /></div>
+                          <div className="mr-track-item-info"><span style={{ fontSize: 14, color: "var(--mr-charcoal)" }}>{it.name}</span><small>Qty {it.quantity}</small></div>
+                          <div className="mr-track-item-price">{formatINR(it.total)}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mr-track-foot">
+                      <div className="mr-track-addr"><span>Delivering to</span><p>{order.shippingAddress.name}, {order.shippingAddress.line1}, {order.shippingAddress.city}, {order.shippingAddress.state} — {order.shippingAddress.pincode}</p></div>
+                      <div className="mr-track-total"><span>Order Total</span><strong>{formatINR(order.pricing.grandTotal)}</strong></div>
+                    </div>
+                  </div>
+                )}
+
+                {!searched && <div className="mr-track-hint"><p>Enter your order number above, or find it in <Link href="/account?tab=orders">My Orders</Link>.</p></div>}
+              </>
+            )}
           </div>
         </section>
       </main>

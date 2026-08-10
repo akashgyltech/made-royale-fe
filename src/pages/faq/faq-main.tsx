@@ -12,8 +12,9 @@ import FooterSix from "@/layouts/footers/footer-six";
 import { charAnimation, titleAnimation } from "@/utils/title-animation";
 import FaqArea from "@/components/faq/faq-area";
 import HeaderSix from "@/layouts/headers/header-six";
+import type { FaqItem } from "@/lib/cms-content";
 
-const FaqMain = () => {
+const FaqMain = ({ faqs }: { faqs?: FaqItem[] | null }) => {
   useScrollSmooth();
 
   useGSAP(() => {
@@ -62,7 +63,7 @@ const FaqMain = () => {
               {/* faq hero */}
 
               {/* faq area */}
-              <FaqArea/>
+              <FaqArea faqs={faqs} />
               {/* faq area */}
             </main>
 

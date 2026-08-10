@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CollectionMain from "@/pages/collection/collection-main";
-import { collections, getCollection } from "@/data/catalog";
+import { collections, getCollection, getCollectionProducts } from "@/lib/catalog";
 
 export function generateStaticParams() {
   return collections.map((c) => ({ slug: c.slug }));
@@ -19,6 +19,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CollectionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (!getCollection(slug)) notFound();
-  return <CollectionMain slug={slug} />;
+  const collection = getCollection(slug);
+  if (!collection) notFound();
+
+  const products = await getCollectionProducts(slug, 100);
+
+  return <CollectionMain collection={collection} products={products} />;
 }

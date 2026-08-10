@@ -5,12 +5,10 @@ import FooterSix from "@/layouts/footers/footer-six";
 import HeaderSix from "@/layouts/headers/header-six";
 import LuxBreadcrumb from "@/components/ui/lux-breadcrumb";
 import ShopItem from "@/components/shop/shop-item";
-import { getProductById } from "@/data/catalog";
 import { useWishlist } from "@/provider/WishlistProvider";
 
 const WishlistMain = () => {
-  const { ids, clear } = useWishlist();
-  const products = ids.map((id) => getProductById(id)).filter((p) => !!p);
+  const { products, clear } = useWishlist();
 
   return (
     <Wrapper>
@@ -32,7 +30,7 @@ const WishlistMain = () => {
                   <span>{products.length} {products.length === 1 ? "piece" : "pieces"} saved</span>
                   <button className="mr-shop-clear" onClick={clear}>Clear wishlist</button>
                 </div>
-                <div className="mr-grid mr-grid-4">{products.map((p) => <ShopItem key={p!.id} product={p!} />)}</div>
+                <div className="mr-grid mr-grid-4">{products.map((p) => <ShopItem key={p.id} product={p} />)}</div>
               </>
             )}
           </div>

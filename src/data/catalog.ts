@@ -20,9 +20,12 @@ export interface Category {
   name: string;
   slug: string;
   tagline: string;
+  description?: string;
+  story?: { title: string; body: string }; // ← admin-authored editorial section, optional
   icon: string;
   image?: string; // ← drop a real square image here (used on cards)
   banner?: string; // ← drop a WIDE hero banner here (used on the /category/[slug] page)
+  seo?: { metaTitle?: string; metaDescription?: string; keywords?: string[] };
   subcategories: SubCategory[];
 }
 
@@ -67,7 +70,10 @@ export interface Product {
   categoryName: string;
   subcategorySlug: string;
   subcategoryName: string;
-  collection: CollectionName;
+  // Real (backend) products aren't guaranteed to map onto one of the four demo
+  // collection names, so this is optional there — only the static dummy catalog
+  // below guarantees every product has one.
+  collection?: CollectionName;
   price: number;
   comparePrice: number;
   image?: string; // ← main product image
@@ -76,7 +82,7 @@ export interface Product {
   description: string;
   highlights: string[];
   specs: { label: string; value: string }[];
-  material: string;
+  material?: string;
   dimensions: string;
   colors: ProductColor[];
   sku: string;
@@ -86,10 +92,11 @@ export interface Product {
   tags: string[];
   badge?: 'Bestseller' | 'New Arrival' | 'Limited Edition' | 'Handcrafted';
   isFeatured?: boolean;
-  warranty: string;
-  assembly: string;
+  warranty?: string;
+  assembly?: string;
   upsellIds?: string[];
   relatedIds?: string[];
+  customizations?: import('@/types/backend').BackendCustomization[];
 }
 
 export interface Review {

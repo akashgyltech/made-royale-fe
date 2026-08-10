@@ -1,7 +1,6 @@
-'use client';
 import React from 'react';
 import Link from 'next/link';
-import { collections, filterProducts, formatINR, getCollection, priceBounds } from '@/data/catalog';
+import { collections, formatINR, type Collection, type Product } from '@/data/catalog';
 import SmartImage from '@/components/ui/smart-image';
 import ShopItem from '@/components/shop/shop-item';
 import SectionHeader from '@/components/ui/section-header';
@@ -12,15 +11,11 @@ const Arrow = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
 );
 
-export default function CollectionLanding({ slug }: { slug: string }) {
-  const collection = getCollection(slug);
-  if (!collection) return null;
-
-  const items = filterProducts({ collection: collection.name, sort: 'featured' });
-  const featured = items.slice(0, 8);
-  const catCount = new Set(items.map((p) => p.categorySlug)).size;
-  const priceFrom = items.length ? Math.min(...items.map((p) => p.price)) : priceBounds.min;
-  const others = collections.filter((c) => c.slug !== slug);
+export default function CollectionLanding({ collection, products }: { collection: Collection; products: Product[] }) {
+  const featured = products.slice(0, 8);
+  const catCount = new Set(products.map((p) => p.categorySlug)).size;
+  const priceFrom = products.length ? Math.min(...products.map((p) => p.price)) : 0;
+  const others = collections.filter((c) => c.slug !== collection.slug);
   const shopHref = `/shop?collection=${encodeURIComponent(collection.name)}`;
 
   return (
@@ -32,7 +27,7 @@ export default function CollectionLanding({ slug }: { slug: string }) {
         intro={collection.intro}
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Collections', href: '/#collections' }, { label: collection.name }]}
         stats={[
-          { value: `${items.length}`, label: items.length === 1 ? 'Piece' : 'Pieces' },
+          { value: `${products.length}`, label: products.length === 1 ? 'Piece' : 'Pieces' },
           { value: `${catCount}`, label: catCount === 1 ? 'Category' : 'Categories' },
           { value: formatINR(priceFrom), label: 'Starting from' },
         ]}
@@ -51,10 +46,10 @@ export default function CollectionLanding({ slug }: { slug: string }) {
           ) : (
             <p className="mr-catproducts-empty">New pieces in this collection are arriving soon — explore the full range meanwhile.</p>
           )}
-          {items.length > featured.length && (
+          {products.length > featured.length && (
             <div className="text-center mt-45">
               <Link href={shopHref} className="mr-btn-solid">
-                View all {items.length} {collection.name} pieces <Arrow />
+                View all {products.length} {collection.name} pieces <Arrow />
               </Link>
             </div>
           )}

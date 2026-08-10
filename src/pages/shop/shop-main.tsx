@@ -1,4 +1,3 @@
-"use client";
 import Wrapper from "@/layouts/wrapper";
 import FooterSix from "@/layouts/footers/footer-six";
 import HeaderSix from "@/layouts/headers/header-six";
@@ -8,11 +7,23 @@ import AssuranceStrip from "@/components/home/assurance-strip";
 import RoomShowcase from "@/components/home/room-showcase";
 import CollectionsShowcase from "@/components/home/collections-showcase";
 import CtaBand from "@/components/ui/cta-band";
-import { categories, formatINR, priceBounds, products } from "@/data/catalog";
+import { formatINR, type Category, type Product } from "@/data/catalog";
 
 const SHOP_HERO = "/assets/img/inner-shop/home/hero-bg-13.webp";
 
-const ShopMain = () => {
+interface ShopMainProps {
+  categories: Category[];
+  products: Product[];
+  total: number;
+  totalPages: number;
+  page: number;
+  priceFrom: number;
+  activeCategoryName?: string;
+  collectionCounts: Record<string, number>;
+  roomCounts: Record<string, number>;
+}
+
+const ShopMain = ({ categories, products, total, totalPages, page, priceFrom, activeCategoryName, collectionCounts, roomCounts }: ShopMainProps) => {
   return (
     <Wrapper>
       <HeaderSix transparent />
@@ -24,9 +35,9 @@ const ShopMain = () => {
           intro="Handcrafted sofas, beds, dining sets and more — each piece built to order by master karigars and finished to last generations."
           crumbs={[{ label: "Home", href: "/" }, { label: "Shop" }]}
           stats={[
-            { value: `${products.length}`, label: "Pieces" },
+            { value: `${total}`, label: "Pieces" },
             { value: `${categories.length}`, label: "Categories" },
-            { value: formatINR(priceBounds.min), label: "Starting from" },
+            { value: formatINR(priceFrom), label: "Starting from" },
           ]}
           actions={[
             { label: "Shop Bestsellers", href: "/shop?sort=rating" },
@@ -34,9 +45,17 @@ const ShopMain = () => {
           ]}
         />
         <AssuranceStrip />
-        <ShopCatalog />
-        <RoomShowcase />
-        <CollectionsShowcase />
+        <ShopCatalog
+          categories={categories}
+          products={products}
+          total={total}
+          totalPages={totalPages}
+          page={page}
+          priceFrom={priceFrom}
+          activeCategoryName={activeCategoryName}
+        />
+        <RoomShowcase counts={roomCounts} />
+        <CollectionsShowcase counts={collectionCounts} />
         <CtaBand
           eyebrow="Bespoke Interiors"
           title="Furnishing an entire home?"

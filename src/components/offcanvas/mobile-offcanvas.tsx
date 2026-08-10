@@ -10,6 +10,8 @@ import gallery_3 from "@/assets/img/menu/offcanvas/offcanvas-3.jpg";
 import gallery_4 from "@/assets/img/menu/offcanvas/offcanvas-4.jpg";
 import MobileMenus from "./mobile-menus";
 import Link from "next/link";
+import type { IMenuDT } from "@/types/menu-d-t";
+import SiteLogo from "@/components/ui/site-logo";
 
 const gallery_images = [gallery_1, gallery_2, gallery_3, gallery_4];
 
@@ -17,9 +19,10 @@ const gallery_images = [gallery_1, gallery_2, gallery_3, gallery_4];
 type IProps = {
   openOffcanvas: boolean;
   setOpenOffcanvas: React.Dispatch<React.SetStateAction<boolean>>;
+  menu?: IMenuDT[];
 };
 
-export default function MobileOffcanvas({ openOffcanvas, setOpenOffcanvas }: IProps) {
+export default function MobileOffcanvas({ openOffcanvas, setOpenOffcanvas, menu }: IProps) {
   return (
     <>
       <div className={`tp-offcanvas-area ${openOffcanvas ? "opened" : ""}`}>
@@ -27,7 +30,9 @@ export default function MobileOffcanvas({ openOffcanvas, setOpenOffcanvas }: IPr
           <div className="tp-offcanvas-top d-flex align-items-center justify-content-between">
             <div className="tp-offcanvas-logo">
               <Link href="#">
-                <Image src={logo} alt="logo" />
+                <SiteLogo variant="dark">
+                  <Image src={logo} alt="logo" />
+                </SiteLogo>
               </Link>
             </div>
             <div className="tp-offcanvas-close">
@@ -45,7 +50,7 @@ export default function MobileOffcanvas({ openOffcanvas, setOpenOffcanvas }: IPr
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, </p>
             </div>
             <div className="tp-main-menu-mobile d-xl-none">
-              <MobileMenus />
+              <MobileMenus menu={menu} />
             </div>
             <div className="tp-offcanvas-gallery">
               <div className="row gx-2">

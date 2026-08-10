@@ -1,29 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Wrapper from "@/layouts/wrapper";
 import FooterSix from "@/layouts/footers/footer-six";
 import HeaderSix from "@/layouts/headers/header-six";
 import LuxBreadcrumb from "@/components/ui/lux-breadcrumb";
 import SmartImage from "@/components/ui/smart-image";
-import { formatINR, validateCoupon } from "@/data/catalog";
+import { formatINR } from "@/data/catalog";
 import { useCart } from "@/provider/CartProvider";
 
 const CartMain = () => {
-  const { resolved, subtotal, savings, updateQty, removeLine, count } = useCart();
-  const [couponInput, setCouponInput] = useState("");
-  const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null);
-  const [couponMsg, setCouponMsg] = useState("");
+  const { lines, resolved, subtotal, savings, updateQty, removeLine, count, isLoading } = useCart();
 
-  function applyCoupon() {
-    const res = validateCoupon(couponInput, subtotal);
-    setCouponMsg(res.message);
-    if (res.valid && res.coupon) { setCoupon({ code: res.coupon.code, discount: res.discount }); try { localStorage.setItem("mr_coupon", res.coupon.code); } catch {} }
-    else { setCoupon(null); try { localStorage.removeItem("mr_coupon"); } catch {} }
-  }
-
-  const discount = coupon?.discount ?? 0;
-  const total = Math.max(0, subtotal - discount);
+  // Lines whose product fetch resolved to null (deleted/inactive product) are silently
+  // excluded from `resolved` (and therefore from the priced total) but still linger in
+  // `lines` — surface that instead of letting the total quietly diverge from the cart.
+  const staleLines = lines.filter((l) => !resolved.some((r) => r.productId === l.productId && r.color === l.color));
 
   return (
     <Wrapper>
@@ -39,9 +31,21 @@ const CartMain = () => {
                 <p>Discover pieces worthy of your home.</p>
                 <Link href="/shop" className="mr-btn-solid">Explore the Collection</Link>
               </div>
+            ) : resolved.length === 0 && isLoading ? (
+              <div className="mr-oc-loading">Loading your cart…</div>
             ) : (
               <div className="mr-cart-layout">
                 <div className="mr-cart-items">
+                  {staleLines.length > 0 && (
+                    <div className="mr-checkout-info">
+                      <span>⚠️</span>
+                      {staleLines.length === 1 ? "1 item" : `${staleLines.length} items`} in your cart {staleLines.length === 1 ? "is" : "are"} no longer available and {staleLines.length === 1 ? "has" : "have"} been left out of your total.
+                      {" "}
+                      {staleLines.map((l) => (
+                        <button key={`${l.productId}|${l.color ?? ""}`} className="mr-cart-item-remove" style={{ marginLeft: 8 }} onClick={() => removeLine(`${l.productId}|${l.color ?? ""}`)}>Remove</button>
+                      ))}
+                    </div>
+                  )}
                   {resolved.map((line) => (
                     <div className="mr-cart-item" key={line.key}>
                       <Link href={`/shop-details/${line.product.slug}`} className="mr-cart-item-thumb"><SmartImage src={line.product.image} alt={line.product.name} ratio="1 / 1" /></Link>
@@ -70,19 +74,12 @@ const CartMain = () => {
 
                 <aside className="mr-cart-summary">
                   <h3 className="mr-cart-summary-title">Order Summary</h3>
-                  <div className="mr-cart-coupon">
-                    <input value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="Coupon code (try ROYALE10)" />
-                    <button onClick={applyCoupon}>Apply</button>
-                  </div>
-                  {couponMsg && <p className={`mr-cart-coupon-msg ${coupon ? "ok" : "err"}`}>{couponMsg}</p>}
                   <div className="mr-cart-summary-rows">
                     <div className="mr-cart-summary-row"><span>Subtotal ({count} {count === 1 ? "item" : "items"})</span><span>{formatINR(subtotal)}</span></div>
                     {savings > 0 && <div className="mr-cart-summary-row mr-save"><span>Instant savings</span><span>− {formatINR(savings)}</span></div>}
-                    {discount > 0 && <div className="mr-cart-summary-row mr-save"><span>Coupon ({coupon?.code})</span><span>− {formatINR(discount)}</span></div>}
-                    <div className="mr-cart-summary-row"><span>Delivery & Installation</span><span className="mr-free">Free</span></div>
                   </div>
-                  <div className="mr-cart-summary-total"><span>Total</span><span>{formatINR(total)}</span></div>
-                  <p className="mr-cart-summary-tax">Inclusive of all taxes</p>
+                  <div className="mr-cart-summary-total"><span>Estimated Total</span><span>{formatINR(subtotal)}</span></div>
+                  <p className="mr-cart-summary-tax">Coupons, shipping & GST are calculated at checkout</p>
                   <Link href="/checkout" className="mr-btn-gold mr-cart-checkout-btn">Proceed to Checkout</Link>
                   <div className="mr-cart-trust"><span>🔒 Secure checkout</span><span>🛡️ Assured warranty</span><span>🚚 White-glove delivery</span></div>
                 </aside>

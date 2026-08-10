@@ -1,7 +1,6 @@
-'use client';
 import React from 'react';
 import Link from 'next/link';
-import { categories, filterProducts, formatINR, getCategory, priceBounds } from '@/data/catalog';
+import { formatINR, type Category, type Product } from '@/data/catalog';
 import SmartImage from '@/components/ui/smart-image';
 import ShopItem from '@/components/shop/shop-item';
 import SectionHeader from '@/components/ui/section-header';
@@ -12,8 +11,8 @@ const Arrow = () => (
 );
 
 // ── Editorial copy per category ───────────────────────────────────────────────
-// Freely edit the copy below, or drop a real image path into each category's
-// `image` / `banner` slot in src/data/catalog.ts to replace the placeholders.
+// Freely edit the copy below — this is presentational content only, the backend
+// has no CMS field for it. Product data (counts, listings) is real.
 type Copy = { intro: string; story: { title: string; body: string }; features: { icon: string; title: string; text: string }[] };
 const DEFAULT_FEATURES = [
   { icon: '🛠️', title: 'Handcrafted to order', text: 'Built by master karigars, never mass-produced.' },
@@ -64,23 +63,33 @@ const COPY: Record<string, Copy> = {
   },
 };
 
-export default function CategoryLanding({ slug }: { slug: string }) {
-  const category = getCategory(slug);
-  if (!category) return null;
+interface CategoryLandingProps {
+  category: Category;
+  featuredProducts: Product[];
+  totalInCategory: number;
+  priceFrom: number;
+  subCategoryCounts: Record<string, number>;
+  otherCategories: Category[];
+}
 
-  const items = filterProducts({ category: slug, sort: 'featured' });
-  const featured = items.slice(0, 8);
-  const priceFrom = items.length ? Math.min(...items.map((p) => p.price)) : priceBounds.min;
-  const copy = COPY[slug] ?? {
+export default function CategoryLanding({ category, featuredProducts, totalInCategory, priceFrom, subCategoryCounts, otherCategories }: CategoryLandingProps) {
+  const fallback = COPY[category.slug] ?? {
     intro: category.tagline,
     story: { title: category.name, body: category.tagline },
     features: DEFAULT_FEATURES,
   };
-  const others = categories.filter((c) => c.slug !== slug).slice(0, 6);
+  const copy = {
+    intro: category.description || fallback.intro,
+    story: {
+      title: category.story?.title || fallback.story.title,
+      body: category.story?.body || fallback.story.body,
+    },
+    features: DEFAULT_FEATURES,
+  };
 
   return (
     <>
-      {/* ── Hero banner (drop a wide image into `banner` in catalog.ts) ── */}
+      {/* ── Hero banner ── */}
       <section className="mr-cathero">
         <div className="mr-cathero-media" aria-hidden="true">
           {category.banner ? (
@@ -102,7 +111,7 @@ export default function CategoryLanding({ slug }: { slug: string }) {
             <h1 className="mr-cathero-title">{category.name}</h1>
             <p className="mr-cathero-intro">{copy.intro}</p>
             <div className="mr-cathero-meta">
-              <div><strong>{items.length}</strong><span>{items.length === 1 ? 'Piece' : 'Pieces'}</span></div>
+              <div><strong>{totalInCategory}</strong><span>{totalInCategory === 1 ? 'Piece' : 'Pieces'}</span></div>
               <div><strong>{category.subcategories.length}</strong><span>Styles</span></div>
               <div><strong>{formatINR(priceFrom)}</strong><span>Starting from</span></div>
             </div>
@@ -121,9 +130,9 @@ export default function CategoryLanding({ slug }: { slug: string }) {
             <SectionHeader subtitle="Refine Your Search" title={`Browse ${category.name} by Type`} />
             <div className="mr-subcat-grid">
               {category.subcategories.map((s) => {
-                const count = filterProducts({ category: slug, sub: s.slug }).length;
+                const count = subCategoryCounts[s.slug] ?? 0;
                 return (
-                  <Link key={s.id} href={`/shop?category=${slug}&sub=${s.slug}`} className="mr-subcat-card">
+                  <Link key={s.id} href={`/shop?category=${category.slug}&sub=${s.slug}`} className="mr-subcat-card">
                     <div className="mr-subcat-card-media">
                       <SmartImage src={s.image} alt={s.name} glyph={category.icon} label={category.name} ratio="4 / 3" />
                     </div>
@@ -143,14 +152,14 @@ export default function CategoryLanding({ slug }: { slug: string }) {
       <section className="mr-catproducts">
         <div className="container container-1500">
           <SectionHeader subtitle="Handpicked for You" title={`Bestselling ${category.name}`} />
-          {featured.length > 0 ? (
-            <div className="mr-grid mr-grid-4">{featured.map((p) => <ShopItem key={p.id} product={p} />)}</div>
+          {featuredProducts.length > 0 ? (
+            <div className="mr-grid mr-grid-4">{featuredProducts.map((p) => <ShopItem key={p.id} product={p} />)}</div>
           ) : (
             <p className="mr-catproducts-empty">New pieces in this category are arriving soon — explore the full collection meanwhile.</p>
           )}
           <div className="text-center mt-45">
             <Link href={`/shop?category=${category.slug}`} className="mr-btn-solid">
-              View all {items.length} {category.name} <Arrow />
+              View all {totalInCategory} {category.name} <Arrow />
             </Link>
           </div>
         </div>
@@ -196,22 +205,24 @@ export default function CategoryLanding({ slug }: { slug: string }) {
       </section>
 
       {/* ── Explore other categories ── */}
-      <section className="mr-catother">
-        <div className="container container-1400">
-          <SectionHeader subtitle="Keep Exploring" title="Discover Other Categories" />
-          <div className="mr-catother-grid">
-            {others.map((c) => (
-              <Link key={c.id} href={`/category/${c.slug}`} className="mr-cat-card">
-                <div className="mr-cat-card-media">
-                  <SmartImage src={c.image} alt={c.name} glyph={c.icon} label={c.tagline} ratio="1 / 1" />
-                  <div className="mr-cat-card-overlay"><span className="mr-cat-card-shop">Explore <Arrow /></span></div>
-                </div>
-                <div className="mr-cat-card-title">{c.name}</div>
-              </Link>
-            ))}
+      {otherCategories.length > 0 && (
+        <section className="mr-catother">
+          <div className="container container-1400">
+            <SectionHeader subtitle="Keep Exploring" title="Discover Other Categories" />
+            <div className="mr-catother-grid">
+              {otherCategories.map((c) => (
+                <Link key={c.id} href={`/category/${c.slug}`} className="mr-cat-card">
+                  <div className="mr-cat-card-media">
+                    <SmartImage src={c.image} alt={c.name} glyph={c.icon} label={c.tagline} ratio="1 / 1" />
+                    <div className="mr-cat-card-overlay"><span className="mr-cat-card-shop">Explore <Arrow /></span></div>
+                  </div>
+                  <div className="mr-cat-card-title">{c.name}</div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <CtaBand
         eyebrow="Bespoke Interiors"

@@ -1,9 +1,10 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { categories, filterProducts, formatINR, getCategory, priceBounds, SortKey } from '@/data/catalog';
+import { formatINR, type Category, type Product, type SortKey } from '@/data/catalog';
 import ShopItem from '@/components/shop/shop-item';
+import Pagination from '@/components/ui/pagination';
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: 'featured', label: 'Featured' },
@@ -20,7 +21,17 @@ const PRICE_STEPS = [
 ];
 const COLLECTIONS = ['Maharaja', 'Vintage', 'Contemporary Royale', 'Heritage'];
 
-export default function ShopCatalog() {
+interface ShopCatalogProps {
+  categories: Category[];
+  products: Product[];
+  total: number;
+  totalPages: number;
+  page: number;
+  priceFrom: number;
+  activeCategoryName?: string;
+}
+
+export default function ShopCatalog({ categories, products, total, totalPages, page, priceFrom, activeCategoryName }: ShopCatalogProps) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -34,18 +45,14 @@ export default function ShopCatalog() {
   const basePath = pathname ?? '/shop';
 
   const [showFilters, setShowFilters] = useState(false);
-  const priceStep = priceIdx !== null ? PRICE_STEPS[Number(priceIdx)] : undefined;
 
-  const list = useMemo(() => filterProducts({
-    category: category || undefined, sub: sub || undefined, collection: collection || undefined,
-    search: search || undefined, minPrice: priceStep?.min, maxPrice: priceStep?.max, sort,
-  }), [category, sub, collection, search, priceStep, sort]);
-
-  const activeCat = category ? getCategory(category) : undefined;
+  const activeCat = category ? categories.find((c) => c.slug === category) : undefined;
 
   function pushParams(next: Record<string, string | null>) {
     const sp = new URLSearchParams(params?.toString());
     Object.entries(next).forEach(([k, v]) => { if (v === null || v === '') sp.delete(k); else sp.set(k, v); });
+    // Any filter change should reset back to page 1 unless the change *is* the page.
+    if (!('page' in next)) sp.delete('page');
     router.push(`${basePath}?${sp.toString()}`, { scroll: false });
   }
   const hasFilters = category || sub || collection || priceIdx !== null || search;
@@ -54,7 +61,7 @@ export default function ShopCatalog() {
     <div className="mr-shop">
       <div className="container container-1500">
         <div className="mr-shop-toolbar">
-          <div className="mr-shop-count"><strong>{list.length}</strong> {list.length === 1 ? 'piece' : 'pieces'}{activeCat && <> in <span>{activeCat.name}</span></>}</div>
+          <div className="mr-shop-count"><strong>{total}</strong> {total === 1 ? 'piece' : 'pieces'}{(activeCat || activeCategoryName) && <> in <span>{activeCat?.name || activeCategoryName}</span></>}</div>
           <div className="mr-shop-toolbar-right">
             <button className="mr-shop-filter-toggle" onClick={() => setShowFilters(true)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M4 6h16M7 12h10M10 18h4" strokeLinecap="round" /></svg>Filters
@@ -89,7 +96,7 @@ export default function ShopCatalog() {
                 {categories.map((c) => (
                   <li key={c.id}>
                     <button className={category === c.slug ? 'is-active' : ''} onClick={() => pushParams({ category: c.slug, sub: null })}>{c.name}</button>
-                    {category === c.slug && (
+                    {category === c.slug && c.subcategories.length > 0 && (
                       <ul className="mr-filter-sublist">
                         {c.subcategories.map((s) => (
                           <li key={s.id}><button className={sub === s.slug ? 'is-active' : ''} onClick={() => pushParams({ sub: sub === s.slug ? null : s.slug })}>{s.name}</button></li>
@@ -119,20 +126,32 @@ export default function ShopCatalog() {
               </div>
             </div>
 
-            <div className="mr-filter-note"><span>Prices from</span><strong>{formatINR(priceBounds.min)}</strong></div>
+            <div className="mr-filter-note"><span>Prices from</span><strong>{formatINR(priceFrom)}</strong></div>
           </aside>
           {showFilters && <div className="mr-shop-sidebar-backdrop d-lg-none" onClick={() => setShowFilters(false)} />}
 
           <div className="mr-shop-main">
-            {list.length === 0 ? (
+            {products.length === 0 ? (
               <div className="mr-shop-empty">
                 <div className="mr-shop-empty-glyph">❖</div>
-                <h3>No pieces match your selection</h3>
-                <p>Try adjusting your filters or explore the full collection.</p>
-                <Link href="/shop" className="mr-btn-solid">View all furniture</Link>
+                <h3>{hasFilters ? 'No pieces match your selection' : 'No products found yet'}</h3>
+                <p>{hasFilters ? 'Try adjusting your filters or explore the full collection.' : 'New pieces are on their way — please check back soon.'}</p>
+                {hasFilters && <Link href="/shop" className="mr-btn-solid">View all furniture</Link>}
               </div>
             ) : (
-              <div className="mr-grid mr-grid-3">{list.map((p) => <ShopItem key={p.id} product={p} />)}</div>
+              <>
+                <div className="mr-grid mr-grid-3">{products.map((p) => <ShopItem key={p.id} product={p} />)}</div>
+                {totalPages > 1 && (
+                  <Pagination
+                    pageCount={totalPages}
+                    forcePage={page - 1}
+                    handlePageClick={(e) => {
+                      pushParams({ page: String(e.selected + 1) });
+                      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>

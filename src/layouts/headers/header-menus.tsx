@@ -2,10 +2,15 @@ import banner1 from "../../../public/assets/img/menu/shop-menu/banner-1.jpg";
 import menu_data from "@/data/menu-data";
 import Image from "next/image";
 import Link from "next/link";
-const HeaderMenus = () => {
+import type { IMenuDT } from "@/types/menu-d-t";
+
+type Props = { menu?: IMenuDT[] };
+
+const HeaderMenus = ({ menu: menuProp }: Props) => {
+  const menuItems = menuProp ?? menu_data;
   return (
     <ul>
-      {menu_data.map((menu) => (
+      {menuItems.map((menu) => (
         <li key={menu.id} className="has-dropdown">
           <Link href={menu.link}>{menu.title}</Link>
           {menu.home_menus ? (

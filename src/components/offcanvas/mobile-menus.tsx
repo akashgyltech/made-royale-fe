@@ -4,8 +4,12 @@ import Link from "next/link";
 import menu_data from "@/data/menu-data";
 import shop_banner from '@/assets/img/menu/shop-menu/banner-1.jpg';
 import port_img from '@/assets/img/menu/portfolio-menu/portfolio.png';
+import type { IMenuDT } from "@/types/menu-d-t";
 
-export default function MobileMenus() {
+type Props = { menu?: IMenuDT[] };
+
+export default function MobileMenus({ menu: menuProp }: Props) {
+  const menuItems = menuProp ?? menu_data;
   const [navTitle, setNavTitle] = React.useState<string>("");
 
   //openMobileMenu
@@ -20,7 +24,7 @@ export default function MobileMenus() {
     <>
       <nav className="tp-main-menu-content">
         <ul>
-          {menu_data.map((menu) => (
+          {menuItems.map((menu) => (
             <li
               key={menu.id}
               className={`has-dropdown ${menu.home_menus || menu.portfolio_mega_menus

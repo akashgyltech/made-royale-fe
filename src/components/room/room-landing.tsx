@@ -1,7 +1,6 @@
-'use client';
 import React from 'react';
 import Link from 'next/link';
-import { filterByRoom, formatINR, getRoom, priceBounds, roomCategories, rooms } from '@/data/catalog';
+import { rooms, formatINR, type Category, type Product, type Room } from '@/data/catalog';
 import SmartImage from '@/components/ui/smart-image';
 import ShopItem from '@/components/shop/shop-item';
 import SectionHeader from '@/components/ui/section-header';
@@ -12,15 +11,10 @@ const Arrow = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
 );
 
-export default function RoomLanding({ slug }: { slug: string }) {
-  const room = getRoom(slug);
-  if (!room) return null;
-
-  const items = filterByRoom(room, 'featured');
-  const featured = items.slice(0, 8);
-  const cats = roomCategories(room);
-  const priceFrom = items.length ? Math.min(...items.map((p) => p.price)) : priceBounds.min;
-  const others = rooms.filter((r) => r.slug !== slug);
+export default function RoomLanding({ room, products, cats }: { room: Room; products: Product[]; cats: Category[] }) {
+  const featured = products.slice(0, 8);
+  const priceFrom = products.length ? Math.min(...products.map((p) => p.price)) : 0;
+  const others = rooms.filter((r) => r.slug !== room.slug);
 
   return (
     <>
@@ -31,7 +25,7 @@ export default function RoomLanding({ slug }: { slug: string }) {
         intro={room.intro}
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop by Room', href: '/shop' }, { label: room.name }]}
         stats={[
-          { value: `${items.length}`, label: items.length === 1 ? 'Piece' : 'Pieces' },
+          { value: `${products.length}`, label: products.length === 1 ? 'Piece' : 'Pieces' },
           { value: `${cats.length}`, label: cats.length === 1 ? 'Category' : 'Categories' },
           { value: formatINR(priceFrom), label: 'Starting from' },
         ]}

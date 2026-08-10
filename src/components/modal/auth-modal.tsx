@@ -7,28 +7,36 @@ import { useAuth } from '@/provider/AuthProvider';
 
 const loginSchema = yup.object({
   email: yup.string().required('Email is required').email('Enter a valid email'),
-  password: yup.string().required('Password is required').min(6, 'Minimum 6 characters'),
+  password: yup.string().required('Password is required'),
 });
-const registerSchema = yup.object({
+const detailsSchema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Minimum 2 characters'),
   email: yup.string().required('Email is required').email('Enter a valid email'),
   phone: yup.string().optional(),
-  password: yup.string().required('Password is required').min(6, 'Minimum 6 characters'),
+  password: yup.string().required('Password is required').min(8, 'Minimum 8 characters')
+    .matches(/\d/, 'Must contain at least 1 number').matches(/[a-zA-Z]/, 'Must contain at least 1 letter'),
+});
+const otpSchema = yup.object({ otp: yup.string().required('Enter the code').length(6, 'Code must be 6 digits') });
+const emailSchema = yup.object({ email: yup.string().required('Email is required').email('Enter a valid email') });
+const resetSchema = yup.object({
+  otp: yup.string().required('Enter the code').length(6, 'Code must be 6 digits'),
+  newPassword: yup.string().required('Password is required').min(8, 'Minimum 8 characters')
+    .matches(/\d/, 'Must contain at least 1 number').matches(/[a-zA-Z]/, 'Must contain at least 1 letter'),
 });
 
 type LoginData = { email: string; password: string };
-type RegisterData = { name: string; email: string; phone?: string; password: string };
-type View = 'login' | 'register';
+type DetailsData = { name: string; email: string; phone?: string; password: string };
+type OtpData = { otp: string };
+type EmailData = { email: string };
+type ResetData = { otp: string; newPassword: string };
+type View = 'login' | 'register' | 'forgot';
 
 export default function AuthModal() {
-  const { authModalOpen, authModalTab, closeAuthModal, login, register } = useAuth();
+  const { authModalOpen, authModalTab, closeAuthModal } = useAuth();
   const [view, setView] = useState<View>('login');
-  const [showPass, setShowPass] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setView(authModalTab); setError(''); setShowPass(false); }, [authModalTab, authModalOpen]);
+  useEffect(() => { setView(authModalTab); }, [authModalTab, authModalOpen]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeAuthModal(); };
     document.addEventListener('keydown', onKey);
@@ -37,14 +45,20 @@ export default function AuthModal() {
 
   if (!authModalOpen) return null;
 
+  const titles: Record<View, { heading: string; sub: string }> = {
+    login: { heading: 'Welcome\nBack', sub: 'Luxury interiors & bespoke furniture, handcrafted for the discerning home.' },
+    register: { heading: 'Join the\nShizenta Circle', sub: 'Luxury interiors & bespoke furniture, handcrafted for the discerning home.' },
+    forgot: { heading: 'Reset Your\nPassword', sub: 'We will email you a verification code to reset your password.' },
+  };
+
   return (
     <div ref={overlayRef} className="mr-auth-overlay" onClick={(e) => { if (e.target === overlayRef.current) closeAuthModal(); }}>
       <div className="mr-auth-modal">
         <div className="mr-auth-deco">
           <div className="mr-auth-deco-content">
             <div className="mr-auth-brand-mark">SHIZENTA</div>
-            <h2 className="mr-auth-deco-title">{view === 'register' ? 'Join the\nShizenta Circle' : 'Welcome\nBack'}</h2>
-            <p className="mr-auth-deco-sub">Luxury interiors & bespoke furniture, handcrafted for the discerning home.</p>
+            <h2 className="mr-auth-deco-title">{titles[view].heading}</h2>
+            <p className="mr-auth-deco-sub">{titles[view].sub}</p>
             <div className="mr-auth-deco-divider" />
             <div className="mr-auth-deco-quote">&ldquo;Every great room begins with a singular piece.&rdquo;</div>
           </div>
@@ -55,16 +69,16 @@ export default function AuthModal() {
           <button className="mr-auth-close" onClick={closeAuthModal} aria-label="Close">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           </button>
-          <div className="mr-auth-tabs">
-            <button className={`mr-auth-tab ${view === 'login' ? 'active' : ''}`} onClick={() => { setView('login'); setError(''); }}>Sign In</button>
-            <button className={`mr-auth-tab ${view === 'register' ? 'active' : ''}`} onClick={() => { setView('register'); setError(''); }}>Create Account</button>
-          </div>
+          {view !== 'forgot' && (
+            <div className="mr-auth-tabs">
+              <button className={`mr-auth-tab ${view === 'login' ? 'active' : ''}`} onClick={() => setView('login')}>Sign In</button>
+              <button className={`mr-auth-tab ${view === 'register' ? 'active' : ''}`} onClick={() => setView('register')}>Create Account</button>
+            </div>
+          )}
           <div className="mr-auth-form-scroll">
-            {view === 'login' ? (
-              <LoginView showPass={showPass} setShowPass={setShowPass} submitting={submitting} setSubmitting={setSubmitting} error={error} setError={setError} login={login} />
-            ) : (
-              <RegisterView showPass={showPass} setShowPass={setShowPass} submitting={submitting} setSubmitting={setSubmitting} error={error} setError={setError} register={register} />
-            )}
+            {view === 'login' && <LoginView onForgot={() => setView('forgot')} />}
+            {view === 'register' && <RegisterView />}
+            {view === 'forgot' && <ForgotPasswordView onDone={() => setView('login')} />}
           </div>
         </div>
       </div>
@@ -72,10 +86,11 @@ export default function AuthModal() {
   );
 }
 
-function LoginView({ showPass, setShowPass, submitting, setSubmitting, error, setError, login }: {
-  showPass: boolean; setShowPass: (v: boolean) => void; submitting: boolean; setSubmitting: (v: boolean) => void;
-  error: string; setError: (v: string) => void; login: (email: string, password: string) => Promise<void>;
-}) {
+function LoginView({ onForgot }: { onForgot: () => void }) {
+  const { login } = useAuth();
+  const [showPass, setShowPass] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({ resolver: yupResolver(loginSchema) });
   const onSubmit = handleSubmit(async (data) => {
     setSubmitting(true); setError('');
@@ -97,49 +112,172 @@ function LoginView({ showPass, setShowPass, submitting, setSubmitting, error, se
         </div>
         {errors.password && <span className="mr-field-error">{errors.password.message}</span>}
       </div>
+      <button type="button" className="mr-auth-link" onClick={onForgot}>Forgot Password?</button>
       {error && <div className="mr-submit-error">{error}</div>}
       <button type="submit" className="mr-auth-submit" disabled={submitting}>{submitting ? 'Signing in…' : 'Sign In'}</button>
-      <p className="mr-auth-hint">Demo mode — any valid email &amp; 6+ char password signs you in.</p>
     </form>
   );
 }
 
-function RegisterView({ showPass, setShowPass, submitting, setSubmitting, error, setError, register: registerFn }: {
-  showPass: boolean; setShowPass: (v: boolean) => void; submitting: boolean; setSubmitting: (v: boolean) => void;
-  error: string; setError: (v: string) => void; register: (p: RegisterData) => Promise<void>;
-}) {
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterData>({ resolver: yupResolver(registerSchema) });
-  const onSubmit = handleSubmit(async (data) => {
+function RegisterView() {
+  const { sendOtp, register: registerFn } = useAuth();
+  const [showPass, setShowPass] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [stage, setStage] = useState<'details' | 'otp'>('details');
+  const [details, setDetails] = useState<DetailsData | null>(null);
+  const [devOtp, setDevOtp] = useState<string | undefined>();
+
+  const detailsForm = useForm<DetailsData>({ resolver: yupResolver(detailsSchema) });
+  const otpForm = useForm<OtpData>({ resolver: yupResolver(otpSchema) });
+
+  const onSendOtp = detailsForm.handleSubmit(async (data) => {
     setSubmitting(true); setError('');
-    try { await registerFn(data); } catch (e) { setError(e instanceof Error ? e.message : 'Registration failed'); } finally { setSubmitting(false); }
+    try {
+      const res = await sendOtp(data.email, 'registration');
+      setDetails(data);
+      setDevOtp(res.devOtp);
+      setStage('otp');
+      otpForm.reset({ otp: res.devOtp || '' });
+    } catch (e) { setError(e instanceof Error ? e.message : 'Could not send verification code'); }
+    finally { setSubmitting(false); }
   });
+
+  const onVerifyAndRegister = otpForm.handleSubmit(async (data) => {
+    if (!details) return;
+    setSubmitting(true); setError('');
+    try {
+      await registerFn({ ...details, otp: data.otp });
+    } catch (e) { setError(e instanceof Error ? e.message : 'Registration failed'); }
+    finally { setSubmitting(false); }
+  });
+
+  if (stage === 'otp') {
+    return (
+      <form onSubmit={onVerifyAndRegister} className="mr-auth-form" noValidate>
+        <div className="mr-auth-welcome"><h3>Verify Your Email</h3><p>Enter the 6-digit code sent to {details?.email}</p></div>
+        <div className="mr-field-group">
+          <label>Verification Code</label>
+          <div className="mr-field-wrap"><input {...otpForm.register('otp')} type="text" inputMode="numeric" maxLength={6} placeholder="123456" autoComplete="one-time-code" /></div>
+          {otpForm.formState.errors.otp && <span className="mr-field-error">{otpForm.formState.errors.otp.message}</span>}
+          {devOtp && <span className="mr-auth-hint">Dev mode — no email service configured, code auto-filled: {devOtp}</span>}
+        </div>
+        {error && <div className="mr-submit-error">{error}</div>}
+        <button type="submit" className="mr-auth-submit" disabled={submitting}>{submitting ? 'Creating…' : 'Verify & Create Account'}</button>
+        <button type="button" className="mr-auth-link" onClick={() => { setStage('details'); setError(''); }}>Edit details</button>
+      </form>
+    );
+  }
+
   return (
-    <form onSubmit={onSubmit} className="mr-auth-form" noValidate>
+    <form onSubmit={onSendOtp} className="mr-auth-form" noValidate>
       <div className="mr-auth-welcome"><h3>Create Account</h3><p>Join the Shizenta family today</p></div>
       <div className="mr-field-group">
         <label>Full Name</label>
-        <div className="mr-field-wrap"><input {...register('name')} type="text" placeholder="Your full name" autoComplete="name" /></div>
-        {errors.name && <span className="mr-field-error">{errors.name.message}</span>}
+        <div className="mr-field-wrap"><input {...detailsForm.register('name')} type="text" placeholder="Your full name" autoComplete="name" /></div>
+        {detailsForm.formState.errors.name && <span className="mr-field-error">{detailsForm.formState.errors.name.message}</span>}
       </div>
       <div className="mr-field-group">
         <label>Email Address</label>
-        <div className="mr-field-wrap"><input {...register('email')} type="email" placeholder="your@email.com" autoComplete="email" /></div>
-        {errors.email && <span className="mr-field-error">{errors.email.message}</span>}
+        <div className="mr-field-wrap"><input {...detailsForm.register('email')} type="email" placeholder="your@email.com" autoComplete="email" /></div>
+        {detailsForm.formState.errors.email && <span className="mr-field-error">{detailsForm.formState.errors.email.message}</span>}
       </div>
       <div className="mr-field-group">
         <label>Phone <span className="mr-optional">(optional)</span></label>
-        <div className="mr-field-wrap"><input {...register('phone')} type="tel" placeholder="+91 98765 43210" autoComplete="tel" /></div>
+        <div className="mr-field-wrap"><input {...detailsForm.register('phone')} type="tel" placeholder="+91 98765 43210" autoComplete="tel" /></div>
       </div>
       <div className="mr-field-group">
         <label>Password</label>
         <div className="mr-field-wrap">
-          <input {...register('password')} type={showPass ? 'text' : 'password'} placeholder="Min. 6 characters" autoComplete="new-password" />
+          <input {...detailsForm.register('password')} type={showPass ? 'text' : 'password'} placeholder="Min. 8 characters" autoComplete="new-password" />
           <button type="button" className="mr-eye-toggle" onClick={() => setShowPass(!showPass)}>{showPass ? 'Hide' : 'Show'}</button>
         </div>
-        {errors.password && <span className="mr-field-error">{errors.password.message}</span>}
+        {detailsForm.formState.errors.password && <span className="mr-field-error">{detailsForm.formState.errors.password.message}</span>}
       </div>
       {error && <div className="mr-submit-error">{error}</div>}
-      <button type="submit" className="mr-auth-submit" disabled={submitting}>{submitting ? 'Creating…' : 'Create Account'}</button>
+      <button type="submit" className="mr-auth-submit" disabled={submitting}>{submitting ? 'Sending code…' : 'Send Verification Code'}</button>
+    </form>
+  );
+}
+
+function ForgotPasswordView({ onDone }: { onDone: () => void }) {
+  const { sendOtp, resetPassword } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [stage, setStage] = useState<'email' | 'reset' | 'done'>('email');
+  const [email, setEmail] = useState('');
+  const [devOtp, setDevOtp] = useState<string | undefined>();
+  const [showPass, setShowPass] = useState(false);
+
+  const emailForm = useForm<EmailData>({ resolver: yupResolver(emailSchema) });
+  const resetForm = useForm<ResetData>({ resolver: yupResolver(resetSchema) });
+
+  const onSendCode = emailForm.handleSubmit(async (data) => {
+    setSubmitting(true); setError('');
+    try {
+      const res = await sendOtp(data.email, 'password_reset');
+      setEmail(data.email);
+      setDevOtp(res.devOtp);
+      setStage('reset');
+      resetForm.reset({ otp: res.devOtp || '', newPassword: '' });
+    } catch (e) { setError(e instanceof Error ? e.message : 'Could not send reset code'); }
+    finally { setSubmitting(false); }
+  });
+
+  const onReset = resetForm.handleSubmit(async (data) => {
+    setSubmitting(true); setError('');
+    try {
+      await resetPassword(email, data.otp, data.newPassword);
+      setStage('done');
+    } catch (e) { setError(e instanceof Error ? e.message : 'Password reset failed'); }
+    finally { setSubmitting(false); }
+  });
+
+  if (stage === 'done') {
+    return (
+      <div className="mr-auth-form">
+        <div className="mr-auth-welcome"><h3>Password Updated</h3><p>Your password has been reset successfully.</p></div>
+        <button type="button" className="mr-auth-submit" onClick={onDone}>Back to Sign In</button>
+      </div>
+    );
+  }
+
+  if (stage === 'reset') {
+    return (
+      <form onSubmit={onReset} className="mr-auth-form" noValidate>
+        <div className="mr-auth-welcome"><h3>Enter Reset Code</h3><p>Sent to {email}</p></div>
+        <div className="mr-field-group">
+          <label>Verification Code</label>
+          <div className="mr-field-wrap"><input {...resetForm.register('otp')} type="text" inputMode="numeric" maxLength={6} placeholder="123456" autoComplete="one-time-code" /></div>
+          {resetForm.formState.errors.otp && <span className="mr-field-error">{resetForm.formState.errors.otp.message}</span>}
+          {devOtp && <span className="mr-auth-hint">Dev mode — no email service configured, code auto-filled: {devOtp}</span>}
+        </div>
+        <div className="mr-field-group">
+          <label>New Password</label>
+          <div className="mr-field-wrap">
+            <input {...resetForm.register('newPassword')} type={showPass ? 'text' : 'password'} placeholder="Min. 8 characters" autoComplete="new-password" />
+            <button type="button" className="mr-eye-toggle" onClick={() => setShowPass(!showPass)}>{showPass ? 'Hide' : 'Show'}</button>
+          </div>
+          {resetForm.formState.errors.newPassword && <span className="mr-field-error">{resetForm.formState.errors.newPassword.message}</span>}
+        </div>
+        {error && <div className="mr-submit-error">{error}</div>}
+        <button type="submit" className="mr-auth-submit" disabled={submitting}>{submitting ? 'Resetting…' : 'Reset Password'}</button>
+        <button type="button" className="mr-auth-link" onClick={onDone}>Back to Sign In</button>
+      </form>
+    );
+  }
+
+  return (
+    <form onSubmit={onSendCode} className="mr-auth-form" noValidate>
+      <div className="mr-auth-welcome"><h3>Forgot Password</h3><p>Enter your email to receive a reset code</p></div>
+      <div className="mr-field-group">
+        <label>Email Address</label>
+        <div className="mr-field-wrap"><input {...emailForm.register('email')} type="email" placeholder="your@email.com" autoComplete="email" /></div>
+        {emailForm.formState.errors.email && <span className="mr-field-error">{emailForm.formState.errors.email.message}</span>}
+      </div>
+      {error && <div className="mr-submit-error">{error}</div>}
+      <button type="submit" className="mr-auth-submit" disabled={submitting}>{submitting ? 'Sending…' : 'Send Reset Code'}</button>
+      <button type="button" className="mr-auth-link" onClick={onDone}>Back to Sign In</button>
     </form>
   );
 }

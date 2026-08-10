@@ -2,7 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Product, Review, formatINR, getReviews, getRelated, getUpsell, emiPerMonth, careFor, boxContentsFor, bankOffers } from '@/data/catalog';
+import { Product, formatINR, emiPerMonth, careFor, boxContentsFor, bankOffers } from '@/data/catalog';
+import { reviewApi } from '@/lib/store-api';
+import { ApiError } from '@/lib/api';
+import type { BackendReview } from '@/types/backend';
 import { useCart } from '@/provider/CartProvider';
 import { useWishlist } from '@/provider/WishlistProvider';
 import { useToast } from '@/provider/ToastProvider';
@@ -15,51 +18,75 @@ import SectionHeader from '@/components/ui/section-header';
 
 type Tab = 'description' | 'specs' | 'dimensions' | 'reviews';
 
-export default function ProductDetail({ product }: { product: Product }) {
+interface ProductDetailProps {
+  product: Product;
+  initialReviews: BackendReview[];
+  related: Product[];
+}
+
+function reviewerName(customer: BackendReview['customer']): string {
+  return typeof customer === 'string' ? 'Shizenta Customer' : customer.name || 'Shizenta Customer';
+}
+
+export default function ProductDetail({ product, initialReviews, related }: ProductDetailProps) {
   const router = useRouter();
   const { addToCart } = useCart();
   const { has, toggle } = useWishlist();
   const { toast } = useToast();
+  const { isLoggedIn, openAuthModal } = useAuth();
 
   const gallery = product.gallery && product.gallery.length ? product.gallery : [product.image || '', '', '', ''];
   const [active, setActive] = useState(0);
   const [color, setColor] = useState(product.colors[0]?.name);
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState<Tab>('description');
-  const { user } = useAuth();
-  const [userReviews, setUserReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<BackendReview[]>(initialReviews);
+  const [reviewPage, setReviewPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [showReview, setShowReview] = useState(false);
 
-  const reviews = getReviews(product.id);
-  const related = getRelated(product);
-  const upsell = getUpsell(product);
   const wished = has(product.id);
   const discount = product.comparePrice > product.price ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100) : 0;
   const savings = product.comparePrice - product.price;
   const emi = emiPerMonth(product.price);
-  const care = careFor(product.material);
+  const care = careFor(product.material || '');
   const box = boxContentsFor(product.name);
 
-  // Realistic rating distribution for the summary bars
-  const n = product.reviewCount;
-  const dist = [
-    Math.round(n * 0.72), Math.round(n * 0.19), Math.round(n * 0.06), Math.round(n * 0.02), Math.max(0, n - Math.round(n * 0.72) - Math.round(n * 0.19) - Math.round(n * 0.06) - Math.round(n * 0.02)),
-  ];
+  // Rating distribution computed from the reviews we've actually fetched (a real,
+  // if partial, sample) rather than a fabricated curve.
+  const distCounts = [5, 4, 3, 2, 1].map((star) => reviews.filter((r) => Math.round(r.rating) === star).length);
+  const distMax = Math.max(1, ...distCounts);
 
-  useEffect(() => {
-    try { const r = localStorage.getItem(`mr_reviews_${product.id}`); if (r) setUserReviews(JSON.parse(r)); } catch { /* ignore */ }
-  }, [product.id]);
-  const allReviews = [...userReviews, ...reviews];
-  const totalReviews = product.reviewCount + userReviews.length;
-  const submitReview = (data: { rating: number; title: string; comment: string; author: string }) => {
-    const rev: Review = {
-      id: `ur-${Date.now()}`, productId: product.id, author: data.author || 'Shizenta Customer', location: 'Verified Buyer',
-      rating: data.rating, title: data.title, comment: data.comment,
-      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }), verified: true,
-    };
-    const next = [rev, ...userReviews];
-    setUserReviews(next);
-    try { localStorage.setItem(`mr_reviews_${product.id}`, JSON.stringify(next)); } catch { /* ignore */ }
+  const totalReviews = product.reviewCount;
+  const hasMoreReviews = reviews.length < totalReviews;
+
+  const loadMoreReviews = async () => {
+    setLoadingMore(true);
+    try {
+      const next = reviewPage + 1;
+      const page = await reviewApi.getProductReviews(product.id, next, 20);
+      setReviews((prev) => [...prev, ...page.results]);
+      setReviewPage(next);
+    } catch {
+      toast('Could not load more reviews right now.', 'error');
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const openReviewModal = () => {
+    if (!isLoggedIn) { openAuthModal('login'); return; }
+    setShowReview(true);
+  };
+
+  const submitReview = async (data: { rating: number; title: string; comment: string }) => {
+    const created = await reviewApi.createReview({
+      productId: product.id,
+      rating: data.rating,
+      title: data.title || undefined,
+      comment: data.comment,
+    });
+    setReviews((prev) => [created, ...prev]);
     setShowReview(false);
     toast('Thank you! Your review has been posted.');
     setTab('reviews');
@@ -101,21 +128,21 @@ export default function ProductDetail({ product }: { product: Product }) {
             </div>
             <div className="mr-pdp-madein">
               <span><Icon name="gem" size={15} /> Handcrafted in India</span>
-              <span><Icon name="wood" size={15} /> {product.material}</span>
-              <span><Icon name="tag" size={15} /> SKU {product.sku}</span>
+              {product.material && <span><Icon name="wood" size={15} /> {product.material}</span>}
+              {product.sku && <span><Icon name="tag" size={15} /> SKU {product.sku}</span>}
             </div>
           </div>
 
           {/* Summary */}
           <div className="mr-pdp-summary">
-            <span className="mr-pdp-collection">{product.collection} Collection</span>
+            {product.collection && <span className="mr-pdp-collection">{product.collection} Collection</span>}
             <h1 className="mr-pdp-title">{product.name}</h1>
             <div className="mr-pdp-rating">
               <Stars rating={product.rating} size={16} /><span>{product.rating.toFixed(1)}</span><em>•</em>
               <button onClick={() => setTab('reviews')} className="mr-pdp-reviews-link">{totalReviews} reviews</button>
               <em>•</em><span className={product.stock <= 6 ? 'mr-pdp-lowstock' : 'mr-pdp-instock'}>{product.stock <= 6 ? `Only ${product.stock} left` : 'In stock'}</span>
             </div>
-            <button className="mr-pdp-writereview" onClick={() => setShowReview(true)}>
+            <button className="mr-pdp-writereview" onClick={openReviewModal}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z" /></svg>
               Write a review
             </button>
@@ -138,9 +165,11 @@ export default function ProductDetail({ product }: { product: Product }) {
 
             <p className="mr-pdp-short">{product.shortDescription}</p>
 
-            <ul className="mr-pdp-highlights">
-              {product.highlights.map((h) => <li key={h}><span className="mr-pdp-tick">✓</span>{h}</li>)}
-            </ul>
+            {product.highlights.length > 0 && (
+              <ul className="mr-pdp-highlights">
+                {product.highlights.map((h) => <li key={h}><span className="mr-pdp-tick">✓</span>{h}</li>)}
+              </ul>
+            )}
 
             {product.colors.length > 0 && (
               <div className="mr-pdp-option">
@@ -170,9 +199,9 @@ export default function ProductDetail({ product }: { product: Product }) {
 
             {/* Feature cards */}
             <div className="mr-pdp-features">
-              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="wood" size={20} /></span><div><strong>Material</strong><small>{product.material}</small></div></div>
-              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="shield" size={20} /></span><div><strong>Warranty</strong><small>{product.warranty}</small></div></div>
-              <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="truck" size={20} /></span><div><strong>Delivery</strong><small>{product.assembly}</small></div></div>
+              {product.material && <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="wood" size={20} /></span><div><strong>Material</strong><small>{product.material}</small></div></div>}
+              {product.warranty && <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="shield" size={20} /></span><div><strong>Warranty</strong><small>{product.warranty}</small></div></div>}
+              {product.assembly && <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="truck" size={20} /></span><div><strong>Delivery</strong><small>{product.assembly}</small></div></div>}
               <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="returns" size={20} /></span><div><strong>Returns</strong><small>7-day easy returns</small></div></div>
             </div>
 
@@ -196,8 +225,12 @@ export default function ProductDetail({ product }: { product: Product }) {
             {tab === 'description' && (
               <div className="mr-pdp-desc">
                 <p>{product.description}</p>
-                <h4 className="mr-pdp-subhead">Why you’ll love it</h4>
-                <ul>{product.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
+                {product.highlights.length > 0 && (
+                  <>
+                    <h4 className="mr-pdp-subhead">Why you’ll love it</h4>
+                    <ul>{product.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
+                  </>
+                )}
                 <div className="mr-pdp-craft">
                   <div className="mr-pdp-craft-icon"><Icon name="crown" size={26} /></div>
                   <div><strong>Handcrafted, made to order</strong><p>Each piece is built by master karigars using time-honoured techniques. Because it is made for you, subtle variations in grain and finish are the signature of genuine craftsmanship — never a flaw.</p></div>
@@ -207,18 +240,24 @@ export default function ProductDetail({ product }: { product: Product }) {
             {tab === 'specs' && (
               <table className="mr-pdp-spectable"><tbody>
                 {product.specs.map((s) => <tr key={s.label}><th>{s.label}</th><td>{s.value}</td></tr>)}
-                <tr><th>Collection</th><td>{product.collection}</td></tr>
-                <tr><th>Material</th><td>{product.material}</td></tr>
-                <tr><th>Warranty</th><td>{product.warranty}</td></tr>
-                <tr><th>Assembly</th><td>{product.assembly}</td></tr>
-                <tr><th>SKU</th><td>{product.sku}</td></tr>
+                {product.collection && <tr><th>Collection</th><td>{product.collection}</td></tr>}
+                {product.material && <tr><th>Material</th><td>{product.material}</td></tr>}
+                {product.warranty && <tr><th>Warranty</th><td>{product.warranty}</td></tr>}
+                {product.assembly && <tr><th>Assembly</th><td>{product.assembly}</td></tr>}
+                {product.sku && <tr><th>SKU</th><td>{product.sku}</td></tr>}
               </tbody></table>
             )}
             {tab === 'dimensions' && (
               <div className="mr-pdp-dims">
                 <div className="mr-pdp-dims-col">
                   <h4 className="mr-pdp-subhead">Dimensions</h4>
-                  <div className="mr-pdp-dimbox"><span><Icon name="ruler" size={22} /></span><div><strong>{product.dimensions}</strong><small>Please measure your space & doorways before ordering.</small></div></div>
+                  <div className="mr-pdp-dimbox">
+                    <span><Icon name="ruler" size={22} /></span>
+                    <div>
+                      <strong>{product.dimensions || 'Not specified for this piece'}</strong>
+                      <small>Please measure your space & doorways before ordering.</small>
+                    </div>
+                  </div>
                   <h4 className="mr-pdp-subhead">What’s in the Box</h4>
                   <ul className="mr-pdp-boxlist">{box.map((b, i) => <li key={i}>{b}</li>)}</ul>
                 </div>
@@ -240,42 +279,51 @@ export default function ProductDetail({ product }: { product: Product }) {
                     {[5, 4, 3, 2, 1].map((star, i) => (
                       <div className="mr-pdp-review-bar" key={star}>
                         <span>{star}★</span>
-                        <div className="mr-pdp-review-track"><span style={{ width: `${n ? (dist[i] / n) * 100 : 0}%` }} /></div>
-                        <em>{dist[i]}</em>
+                        <div className="mr-pdp-review-track"><span style={{ width: `${(distCounts[i] / distMax) * 100}%` }} /></div>
+                        <em>{distCounts[i]}</em>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div className="mr-pdp-review-cta">
                   <div><strong>Enjoyed this piece?</strong><span>Share your experience to help other buyers.</span></div>
-                  <button className="mr-btn-gold mr-btn-sm" onClick={() => setShowReview(true)}>Write a Review</button>
+                  <button className="mr-btn-gold mr-btn-sm" onClick={openReviewModal}>Write a Review</button>
                 </div>
-                <div className="mr-pdp-review-list">
-                  {allReviews.map((r) => (
-                    <div key={r.id} className="mr-pdp-review">
-                      <div className="mr-pdp-review-head">
-                        <div className="mr-pdp-review-avatar">{r.author.charAt(0)}</div>
-                        <div>
-                          <div className="mr-pdp-review-author">{r.author}{r.verified && <span className="mr-pdp-review-verified">Verified Buyer</span>}</div>
-                          <div className="mr-pdp-review-loc">{r.location} • {r.date}</div>
+                {reviews.length === 0 ? (
+                  <p className="mr-catproducts-empty">No reviews yet — be the first to share your experience.</p>
+                ) : (
+                  <div className="mr-pdp-review-list">
+                    {reviews.map((r) => {
+                      const name = reviewerName(r.customer);
+                      return (
+                        <div key={r.id} className="mr-pdp-review">
+                          <div className="mr-pdp-review-head">
+                            <div className="mr-pdp-review-avatar">{name.charAt(0)}</div>
+                            <div>
+                              <div className="mr-pdp-review-author">{name}{r.order && <span className="mr-pdp-review-verified">Verified Buyer</span>}</div>
+                            </div>
+                            <div className="mr-pdp-review-stars"><Stars rating={r.rating} size={13} /></div>
+                          </div>
+                          {r.title && <h5>{r.title}</h5>}
+                          <p>{r.comment}</p>
+                          {r.adminReply && <p style={{ marginTop: 8, opacity: 0.8 }}><em>Shizenta: {r.adminReply.message}</em></p>}
                         </div>
-                        <div className="mr-pdp-review-stars"><Stars rating={r.rating} size={13} /></div>
-                      </div>
-                      <h5>{r.title}</h5><p>{r.comment}</p>
-                    </div>
-                  ))}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {hasMoreReviews && (
+                  <div className="text-center mt-30">
+                    <button className="mr-btn-outline" onClick={loadMoreReviews} disabled={loadingMore}>
+                      {loadingMore ? 'Loading…' : 'Load more reviews'}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
 
-        {upsell.length > 0 && (
-          <div className="mr-pdp-related">
-            <SectionHeader subtitle="Styled by our designers" title="Complete the Look" />
-            <div className="mr-grid mr-grid-4">{upsell.map((p) => <ShopItem key={p.id} product={p} />)}</div>
-          </div>
-        )}
         {related.length > 0 && (
           <div className="mr-pdp-related">
             <SectionHeader subtitle="Curated for you" title="You May Also Love" />
@@ -287,7 +335,6 @@ export default function ProductDetail({ product }: { product: Product }) {
       {showReview && (
         <ReviewModal
           productName={product.name}
-          defaultAuthor={user?.name || ''}
           onClose={() => setShowReview(false)}
           onSubmit={submitReview}
         />
@@ -326,16 +373,16 @@ function PincodeCheck({ toast }: { toast: (m: string, v?: 'success' | 'info' | '
   );
 }
 
-function ReviewModal({ productName, defaultAuthor, onClose, onSubmit }: {
-  productName: string; defaultAuthor: string; onClose: () => void;
-  onSubmit: (d: { rating: number; title: string; comment: string; author: string }) => void;
+function ReviewModal({ productName, onClose, onSubmit }: {
+  productName: string; onClose: () => void;
+  onSubmit: (d: { rating: number; title: string; comment: string }) => Promise<void>;
 }) {
   const [rating, setRating] = useState(5);
   const [hover, setHover] = useState(0);
-  const [author, setAuthor] = useState(defaultAuthor);
   const [title, setTitle] = useState('');
   const [comment, setComment] = useState('');
   const [err, setErr] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -343,11 +390,19 @@ function ReviewModal({ productName, defaultAuthor, onClose, onSubmit }: {
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErr('');
     if (!title.trim()) { setErr('Please add a short review title.'); return; }
     if (comment.trim().length < 10) { setErr('Please write at least 10 characters in your review.'); return; }
-    onSubmit({ rating, title: title.trim(), comment: comment.trim(), author: author.trim() });
+    setSubmitting(true);
+    try {
+      await onSubmit({ rating, title: title.trim(), comment: comment.trim() });
+    } catch (e) {
+      setErr(e instanceof ApiError ? e.message : 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
   const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
@@ -370,10 +425,6 @@ function ReviewModal({ productName, defaultAuthor, onClose, onSubmit }: {
             </div>
           </div>
           <div className="mr-review-field">
-            <label>Name <span className="mr-optional">(optional)</span></label>
-            <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="How should we display your name?" />
-          </div>
-          <div className="mr-review-field">
             <label>Review Title</label>
             <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Sum it up in a few words" maxLength={80} />
           </div>
@@ -382,8 +433,8 @@ function ReviewModal({ productName, defaultAuthor, onClose, onSubmit }: {
             <textarea rows={4} value={comment} onChange={(e) => setComment(e.target.value)} placeholder="What did you love? How is the quality, comfort and finish?" maxLength={600} />
           </div>
           {err && <div className="mr-submit-error">{err}</div>}
-          <button type="submit" className="mr-btn-gold w-100">Submit Review</button>
-          <p className="mr-review-modal-note">Your review will be posted to this device instantly. Thank you for helping other shoppers.</p>
+          <button type="submit" className="mr-btn-gold w-100" disabled={submitting}>{submitting ? 'Submitting…' : 'Submit Review'}</button>
+          <p className="mr-review-modal-note">Your review will be visible once posted. Thank you for helping other shoppers.</p>
         </form>
       </div>
     </div>

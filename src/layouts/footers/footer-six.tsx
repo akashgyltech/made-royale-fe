@@ -1,8 +1,13 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Email, Location } from "@/components/svg";
 import payment from "@/assets/img/inner-shop/payment.png";
 import social_data from "@/data/social-data";
+import { cmsApi } from "@/lib/store-api";
+import { adaptFooterContent, type FooterColumn, type FooterContent } from "@/lib/cms-content";
+import SiteLogo from "@/components/ui/site-logo";
 
 const SHOP_LINKS = [
   { title: "Sofas & Seating", link: "/category/sofas" },
@@ -27,7 +32,46 @@ const LEGAL_LINKS = [
   { title: "Shipping & Delivery", link: "/shipping-policy" },
 ];
 
+const DEFAULT_DESCRIPTION = "Nature-inspired luxury furniture, handcrafted to become tomorrow’s heirlooms.";
+const DEFAULT_COLUMNS: FooterColumn[] = [
+  { title: "Shop", links: SHOP_LINKS },
+  { title: "Company & Help", links: COMPANY_LINKS },
+];
+
+const SOCIAL_PLATFORMS: { key: keyof NonNullable<FooterContent["social"]>; icon: string }[] = [
+  { key: "facebook", icon: "fa-brands fa-facebook-f" },
+  { key: "instagram", icon: "fa-brands fa-instagram" },
+  { key: "youtube", icon: "fa-brands fa-youtube" },
+  { key: "twitter", icon: "fa-brands fa-twitter" },
+  { key: "linkedin", icon: "fa-brands fa-linkedin-in" },
+  { key: "pinterest", icon: "fa-brands fa-pinterest-p" },
+];
+
 export default function FooterSix() {
+  // Static content above is the default/fallback — a CMS `footer` doc (if an admin has
+  // configured one) overrides individual fields once the fetch below resolves.
+  const [content, setContent] = useState<FooterContent | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    cmsApi.getByKey("footer").then((raw) => {
+      if (cancelled) return;
+      setContent(adaptFooterContent(raw));
+    }).catch(() => { /* no `footer` CMS doc configured yet (or request failed) — keep static fallback */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  const description = content?.description ?? DEFAULT_DESCRIPTION;
+  const columns = content?.columns ?? DEFAULT_COLUMNS;
+  const copyright = content?.copyright ?? `All rights reserved — ${new Date().getFullYear()} © Shizenta`;
+  const gstin = content?.gstin;
+
+  const socialLinks = content?.social
+    ? SOCIAL_PLATFORMS
+        .filter((p) => content.social?.[p.key])
+        .map((p) => ({ id: p.key, icon: p.icon, link: content.social![p.key] as string }))
+    : social_data.map((s) => ({ id: String(s.id), icon: s.icon, link: s.link }));
+
   return (
     <footer>
       <div className="tp-footer-6-area black-bg pt-100">
@@ -37,9 +81,13 @@ export default function FooterSix() {
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-60">
                 <div className="tp-footer-6-widget footer-col-6-1">
                   <div className="tp-footer-6-logo">
-                    <Link href="/" className="mr-logo mr-logo-light">Shi<span>zenta</span></Link>
+                    <Link href="/" className="mr-logo mr-logo-light">
+                      <SiteLogo variant="light" className="mr-logo-img">
+                        Shi<span>zenta</span>
+                      </SiteLogo>
+                    </Link>
                   </div>
-                  <p className="mr-footer-about">Nature-inspired luxury furniture, handcrafted to become tomorrow&rsquo;s heirlooms.</p>
+                  <p className="mr-footer-about">{description}</p>
                   <div className="tp-footer-6-talk">
                     <span>Got Questions? Call us</span>
                     <h4>
@@ -74,30 +122,20 @@ export default function FooterSix() {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-60">
-                <div className="tp-footer-6-widget footer-col-6-2">
-                  <h4 className="tp-footer-6-widget-title">Shop</h4>
-                  <div className="tp-footer-6-list">
-                    <ul>
-                      {SHOP_LINKS.map((l) => (
-                        <li key={l.title}><Link href={l.link}>{l.title}</Link></li>
-                      ))}
-                    </ul>
+              {columns.map((col, i) => (
+                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-60" key={col.title + i}>
+                  <div className={`tp-footer-6-widget footer-col-6-${i + 2}`}>
+                    <h4 className="tp-footer-6-widget-title">{col.title}</h4>
+                    <div className="tp-footer-6-list">
+                      <ul>
+                        {col.links.map((l) => (
+                          <li key={l.title}><Link href={l.link}>{l.title}</Link></li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-xl-2 col-lg-4 col-md-6 col-sm-4 mb-60">
-                <div className="tp-footer-6-widget footer-col-6-3">
-                  <h4 className="tp-footer-6-widget-title">Company &amp; Help</h4>
-                  <div className="tp-footer-6-list">
-                    <ul>
-                      {COMPANY_LINKS.map((l) => (
-                        <li key={l.title}><Link href={l.link}>{l.title}</Link></li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              ))}
               <div className="col-xl-4 col-lg-5 col-md-6 col-sm-8 mb-60">
                 <div className="tp-footer-6-widget footer-col-6-4">
                   <h4 className="tp-footer-6-widget-title">Newsletter</h4>
@@ -115,7 +153,7 @@ export default function FooterSix() {
                   <div className="tp-footer-6-social-box">
                     <h4 className="tp-footer-6-social-title">Follow Us On</h4>
                     <div className="tp-footer-6-social">
-                      {social_data.map((item) => (
+                      {socialLinks.map((item) => (
                         <Link key={item.id} href={item.link} target="_blank">
                           <i className={item.icon}></i>
                         </Link>
@@ -127,13 +165,14 @@ export default function FooterSix() {
             </div>
           </div>
         </div>
-        <div className="tp-copyright-2-area tp-copyright-2-bdr-top black-bg">
+        <div className="tp-copyright-2-area tp-copyright-2-bdr-top black-bg py-2">
           <div className="container container-1300">
             <div className="row align-items-center">
               <div className="col-lg-5 col-md-12">
                 <div className="tp-copyright-2-left text-center text-lg-start">
                   <p className="mb-0">
-                    All rights reserved — {new Date().getFullYear()} © Shizenta
+                    {copyright}
+                    {gstin && <><br /><span style={{ opacity: 0.7 }}>GSTIN: {gstin}</span></>}
                   </p>
                 </div>
               </div>
@@ -147,9 +186,6 @@ export default function FooterSix() {
                   ))}
                 </div>
               </div>
-            </div>
-            <div className="mr-footer-payment text-center">
-              <Image src={payment} alt="Accepted payment methods" />
             </div>
           </div>
         </div>

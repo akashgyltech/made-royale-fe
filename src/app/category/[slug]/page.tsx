@@ -2,23 +2,52 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CategoryMain from "@/pages/category/category-main";
-import { categories, getCategory } from "@/data/catalog";
+import { getCategories, getCategoryBySlug, getProducts } from "@/lib/catalog";
 
-export function generateStaticParams() {
-  return categories.map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  try {
+    const categories = await getCategories();
+    return categories.map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const category = getCategory(slug);
+  const category = await getCategoryBySlug(slug);
+  if (!category) return { title: "Shop by Category — Shizenta" };
   return {
-    title: category ? `${category.name} — Shizenta` : "Shop by Category — Shizenta",
-    description: category ? `${category.name}: ${category.tagline}. Handcrafted luxury furniture by Shizenta.` : undefined,
+    title: category.seo?.metaTitle || `${category.name} — Shizenta`,
+    description: category.seo?.metaDescription || `${category.name}: ${category.tagline}. Handcrafted luxury furniture by Shizenta.`,
+    keywords: category.seo?.keywords?.length ? category.seo.keywords : undefined,
   };
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (!getCategory(slug)) notFound();
-  return <CategoryMain slug={slug} />;
+  const category = await getCategoryBySlug(slug);
+  if (!category) notFound();
+
+  const [featured, cheapest, subCounts, allCategories] = await Promise.all([
+    getProducts({ categorySlug: slug, sort: 'featured', limit: 8 }),
+    getProducts({ categorySlug: slug, sort: 'price-asc', limit: 1 }),
+    Promise.all(
+      category.subcategories.map(async (s) => [s.slug, (await getProducts({ subcategorySlug: s.slug, limit: 1 })).total] as const)
+    ).then(Object.fromEntries),
+    getCategories(),
+  ]);
+
+  const otherCategories = allCategories.filter((c) => c.slug !== slug).slice(0, 6);
+
+  return (
+    <CategoryMain
+      category={category}
+      featuredProducts={featured.items}
+      totalInCategory={featured.total}
+      priceFrom={cheapest.items[0]?.price ?? 0}
+      subCategoryCounts={subCounts}
+      otherCategories={otherCategories}
+    />
+  );
 }
