@@ -1,7 +1,4 @@
-// Thin fetch wrapper around the made-royale-be REST API. Every response is the
-// backend's `{ success, data }` envelope (errors: `{ success: false, data: "message" }`,
-// see src/middlewares/error.js) — this unwraps that envelope so callers just get `data`
-// or a thrown ApiError. Handles Bearer auth + a single silent refresh-and-retry on 401.
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 export class ApiError extends Error {
     status;
