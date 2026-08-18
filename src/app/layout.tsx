@@ -13,6 +13,7 @@ import { QuickViewProvider } from "@/provider/QuickViewProvider";
 import AuthModal from "@/components/modal/auth-modal";
 import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
+import { buildPageMetadata } from "@/lib/seo-cms";
 import "swiper/css/bundle";
 import "./globals.scss";
 
@@ -64,10 +65,19 @@ const syne = Syne({
 });
 
 
-export const metadata: Metadata = {
-  title: "Shizenta — Nature-Inspired Luxury Furniture",
-  description: "Handcrafted luxury furniture, curated collections and bespoke interiors — designed to transform your home.",
-};
+// Sitewide fallback (CMS `seo-default` doc) — used as-is by any page below that doesn't
+// define its own generateMetadata, and layered under every page that does (see
+// src/lib/seo-cms.ts buildPageMetadata).
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await buildPageMetadata("default", {
+    title: "Shizenta — Nature-Inspired Luxury Furniture",
+    description: "Handcrafted luxury furniture, curated collections and bespoke interiors — designed to transform your home.",
+  });
+  return {
+    ...seo,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  };
+}
 
 export default function RootLayout({
   children,

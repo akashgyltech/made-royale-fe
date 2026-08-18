@@ -136,32 +136,6 @@ export default function FooterSix() {
                   </div>
                 </div>
               ))}
-              <div className="col-xl-4 col-lg-5 col-md-6 col-sm-8 mb-60">
-                <div className="tp-footer-6-widget footer-col-6-4">
-                  <h4 className="tp-footer-6-widget-title">Newsletter</h4>
-                  <div className="tp-footer-6-input-box">
-                    <form action="#" onSubmit={(e) => e.preventDefault()}>
-                      <label>Be the first to see new collections &amp; private offers.</label>
-                      <div className="tp-footer-6-input p-relative">
-                        <input type="email" placeholder="Enter Your Email" />
-                        <button className="tp-btn-subscribe" type="submit">
-                          Subscribe
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                  <div className="tp-footer-6-social-box">
-                    <h4 className="tp-footer-6-social-title">Follow Us On</h4>
-                    <div className="tp-footer-6-social">
-                      {socialLinks.map((item) => (
-                        <Link key={item.id} href={item.link} target="_blank">
-                          <i className={item.icon}></i>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

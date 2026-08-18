@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import BlogArticleMain from '@/pages/blog/blog-article-main';
 import { cmsApi } from '@/lib/store-api';
+import { buildPageMetadata } from '@/lib/seo-cms';
 import type { BackendBlog } from '@/types/backend';
 
 // The dynamic segment here is keyed by slug (not the Mongo _id) — confirmed by the old
@@ -17,7 +18,12 @@ async function fetchBlog(slug: string): Promise<BackendBlog | null> {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const blog = await fetchBlog(id);
-  return { title: blog ? `${blog.title} — Shizenta` : 'Journal — Shizenta' };
+  return buildPageMetadata('blog', {
+    title: blog ? blog.seo?.metaTitle || `${blog.title} — Shizenta` : 'Journal — Shizenta',
+    description: blog?.seo?.metaDescription || blog?.excerpt,
+    image: blog?.thumbnail,
+    path: `/blog-details/${id}`,
+  });
 }
 
 export default async function BlogDetailsPage({ params }: { params: Promise<{ id: string }> }) {

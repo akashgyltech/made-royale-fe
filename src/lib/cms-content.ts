@@ -170,6 +170,7 @@ export interface LegalCmsDoc {
   intro?: string;
   body: string;
   updatedAt?: string;
+  bannerImage?: string;
 }
 
 export function adaptLegalDoc(content: unknown): LegalCmsDoc | null {
@@ -182,5 +183,62 @@ export function adaptLegalDoc(content: unknown): LegalCmsDoc | null {
     subtitle: isNonEmptyString(c.subtitle) ? c.subtitle : undefined,
     intro: isNonEmptyString(c.intro) ? c.intro : undefined,
     updatedAt: isNonEmptyString(c.updatedAt) ? c.updatedAt : undefined,
+    bannerImage: isNonEmptyString(c.bannerImage) ? c.bannerImage : undefined,
   };
+}
+
+// ── SEO ──────────────────────────────────────────────────────────────────────
+// Expected shape (matches made-royale-admin's SEO tab, one CMS doc per page key
+// `seo-<page>` plus a `seo-default` sitewide fallback — see src/lib/seo-cms.ts):
+//   { title?, description?, siteName?, og?: {title?,description?,image?}, twitter?: {card?,title?,description?,image?} }
+
+export interface SeoOpenGraph { title?: string; description?: string; image?: string; }
+export type TwitterCardType = 'summary' | 'summary_large_image';
+export interface SeoTwitter { card?: TwitterCardType; title?: string; description?: string; image?: string; }
+export interface SeoContent {
+  title?: string;
+  description?: string;
+  siteName?: string;
+  og?: SeoOpenGraph;
+  twitter?: SeoTwitter;
+}
+
+function adaptOpenGraph(raw: unknown): SeoOpenGraph | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const r = raw as Record<string, unknown>;
+  const out: SeoOpenGraph = {};
+  if (isNonEmptyString(r.title)) out.title = r.title;
+  if (isNonEmptyString(r.description)) out.description = r.description;
+  if (isNonEmptyString(r.image)) out.image = r.image;
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
+function adaptTwitterCard(raw: unknown): SeoTwitter | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const r = raw as Record<string, unknown>;
+  const out: SeoTwitter = {};
+  if (r.card === 'summary' || r.card === 'summary_large_image') out.card = r.card;
+  if (isNonEmptyString(r.title)) out.title = r.title;
+  if (isNonEmptyString(r.description)) out.description = r.description;
+  if (isNonEmptyString(r.image)) out.image = r.image;
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
+/** Validated SeoContent from a CMS `seo` doc's content, or null if empty/malformed —
+ * caller (src/lib/seo-cms.ts) falls back per-field to the `seo-default` doc, then to a
+ * hardcoded default passed in by the page. */
+export function adaptSeoContent(content: unknown): SeoContent | null {
+  if (!content || typeof content !== 'object') return null;
+  const c = content as Record<string, unknown>;
+
+  const result: SeoContent = {
+    title: isNonEmptyString(c.title) ? c.title : undefined,
+    description: isNonEmptyString(c.description) ? c.description : undefined,
+    siteName: isNonEmptyString(c.siteName) ? c.siteName : undefined,
+    og: adaptOpenGraph(c.og),
+    twitter: adaptTwitterCard(c.twitter),
+  };
+
+  const hasAnything = !!(result.title || result.description || result.siteName || result.og || result.twitter);
+  return hasAnything ? result : null;
 }

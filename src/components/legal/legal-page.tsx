@@ -36,7 +36,7 @@ export default function LegalPage({ slug, doc, cms }: Props) {
 
     return (
       <>
-        <LuxBreadcrumb subtitle={subtitle} title={title} crumbs={[{ label: "Home", href: "/" }, { label: "Legal" }, { label: title }]} />
+        <LuxBreadcrumb subtitle={subtitle} title={title} image={cms.bannerImage} crumbs={[{ label: "Home", href: "/" }, { label: "Legal" }, { label: title }]} />
         <section className="mr-legal">
           <div className="container container-1300">
             <div className="mr-legal-layout">

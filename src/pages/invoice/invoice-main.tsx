@@ -96,8 +96,8 @@ function InvoiceSheet({ order }: { order: BackendOrder }) {
       <div className="mr-invoice-parties">
         <div>
           <span className="mr-invoice-label">From</span>
-          <strong>Made Royale Furnishings Pvt. Ltd.</strong>
-          <p>4th Floor, Design Arcade, Andheri East<br />Mumbai, Maharashtra 400069<br />care@maderoyale.com</p>
+          <strong>Shizenta Furnishings Pvt. Ltd.</strong>
+          <p>4th Floor, Design Arcade, Andheri East<br />Mumbai, Maharashtra 400069<br />care@shizenta.com</p>
         </div>
         <div>
           <span className="mr-invoice-label">Bill To</span>
@@ -170,7 +170,7 @@ function InvoiceSheet({ order }: { order: BackendOrder }) {
         </div>
       </div>
 
-      <p className="mr-invoice-note">Prices are inclusive of all applicable taxes. This is a computer-generated invoice and does not require a signature. Thank you for choosing Made Royale.</p>
+      <p className="mr-invoice-note">Prices are inclusive of all applicable taxes. This is a computer-generated invoice and does not require a signature. Thank you for choosing Shizenta.</p>
     </div>
   );
 }

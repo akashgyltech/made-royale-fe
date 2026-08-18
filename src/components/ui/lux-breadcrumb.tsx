@@ -3,9 +3,17 @@ import Link from 'next/link';
 
 export interface Crumb { label: string; href?: string; }
 
-export default function LuxBreadcrumb({ title, subtitle, crumbs }: { title: string; subtitle?: string; crumbs: Crumb[] }) {
+type Props = { title: string; subtitle?: string; crumbs: Crumb[]; image?: string };
+
+export default function LuxBreadcrumb({ title, subtitle, crumbs, image }: Props) {
   return (
     <section className="mr-breadcrumb">
+      {image && (
+        <>
+          <img src={image} alt="" className="mr-breadcrumb-bg" />
+          <div className="mr-breadcrumb-overlay" aria-hidden="true" />
+        </>
+      )}
       <div className="mr-breadcrumb-pattern" aria-hidden="true" />
       <div className="container">
         <div className="mr-breadcrumb-inner text-center">

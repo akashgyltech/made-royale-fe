@@ -211,7 +211,7 @@ export default function CheckoutFlow() {
         amount: rp.amount,
         currency: rp.currency,
         order_id: rp.razorpayOrderId,
-        name: 'Made Royale',
+        name: 'Shizenta',
         description: `Order ${rp.orderNumber}`,
         prefill: { name: address.name, contact: address.phone, email: user?.email || '' },
         theme: { color: '#b8965a' },

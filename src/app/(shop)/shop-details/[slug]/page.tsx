@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import ShopDetailsMain from "@/pages/shop/shop-details-main";
 import { getProductBySlug, getProducts, getRelatedProducts } from "@/lib/catalog";
 import { reviewApi } from "@/lib/store-api";
+import { buildPageMetadata } from "@/lib/seo-cms";
 import type { BackendPage, BackendReview } from "@/types/backend";
 
 export async function generateStaticParams() {
@@ -18,7 +19,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  return { title: product ? `${product.name} — Shizenta` : "Shizenta", description: product?.shortDescription };
+  return buildPageMetadata("product", {
+    title: product ? `${product.name} — Shizenta` : "Shizenta",
+    description: product?.shortDescription,
+    image: product?.image,
+    path: `/shop-details/${slug}`,
+  });
 }
 
 export default async function ShopDetailsPage({ params }: { params: Promise<{ slug: string }> }) {

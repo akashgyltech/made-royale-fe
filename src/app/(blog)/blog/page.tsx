@@ -2,9 +2,16 @@ import React from "react";
 import { Metadata } from "next";
 import BlogListMain from "@/pages/blog/blog-list-main";
 import { cmsApi } from "@/lib/store-api";
+import { buildPageMetadata } from "@/lib/seo-cms";
 import type { BackendBlog, BackendPage } from "@/types/backend";
 
-export const metadata: Metadata = { title: "The Journal — Shizenta" };
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata("blog", {
+    title: "The Journal — Shizenta",
+    description: "Stories on craft, design and interiors from Shizenta.",
+    path: "/blog",
+  });
+}
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 

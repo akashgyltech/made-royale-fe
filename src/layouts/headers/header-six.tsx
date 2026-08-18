@@ -23,8 +23,6 @@ export default function HeaderSix({ transparent = false }: Props) {
   const [openOffCanvas, setOpenOffcanvas] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [term, setTerm] = useState('');
-  // Static menu_data is the default/fallback — CMS content (if an admin has configured a
-  // `header` doc) overwrites it once the fetch below resolves. Never leaves nav empty.
   const [menu, setMenu] = useState<IMenuDT[]>(menu_data);
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
@@ -107,7 +105,6 @@ export default function HeaderSix({ transparent = false }: Props) {
                   <Link className="tp-inner-header-2-wishlist p-relative mr-icon-btn" href="/wishlist" aria-label="Wishlist">
                     <span><Wishlist /></span>{wishCount > 0 && <span className="mr-icon-badge">{wishCount}</span>}
                   </Link>
-                  <button onClick={() => setOpenOffcanvas(true)} className="tp-inner-header-2-bar tp-offcanvas-open-btn" aria-label="Menu"><span><Menu /></span></button>
                   <button onClick={openDrawer} className="tp-inner-header-2-cart cartmini-open-btn mr-icon-btn" aria-label="Cart">
                     <span><Zero /></span>{cartCount > 0 && <span className="mr-icon-badge">{cartCount}</span>}
                   </button>

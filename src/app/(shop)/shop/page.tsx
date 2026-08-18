@@ -4,11 +4,16 @@ import ShopMain from "@/pages/shop/shop-main";
 import { getCategories, getCategoryBySlug, collections, getCollectionProducts, getRoomProducts, rooms } from "@/lib/catalog";
 import { productApi } from "@/lib/store-api";
 import { adaptProduct } from "@/lib/adapters";
+import { buildPageMetadata } from "@/lib/seo-cms";
 import type { SortKey } from "@/data/catalog";
 
-export const metadata: Metadata = {
-  title: "Shizenta — Shop Luxury Furniture",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata("shop", {
+    title: "Shizenta — Shop Luxury Furniture",
+    description: "Browse our full range of handcrafted luxury furniture — sofas, beds, dining and more.",
+    path: "/shop",
+  });
+}
 
 // Price-step filter used by the sidebar (kept in sync with src/components/shop/shop-catalog.tsx).
 const PRICE_STEPS = [

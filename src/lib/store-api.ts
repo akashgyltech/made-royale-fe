@@ -191,7 +191,8 @@ export const reviewApi = {
 // ── CMS & Blog ───────────────────────────────────────────────────────────────
 export const cmsApi = {
   getByKey: <T = unknown>(key: string) => apiFetch<T>(`/store/cms/${key}`),
-  getByType: (type: string) => apiFetch<{ key: string; type: string; label?: string; content: unknown }[]>(`/store/cms/type/${type}`),
+  getByType: (type: string) =>
+    apiFetch<{ key: string; type: string; label?: string; content: unknown; isActive?: boolean; updatedAt?: string }[]>(`/store/cms/type/${type}`),
 
   getBlogs: (query: { page?: number; limit?: number; category?: string; tag?: string; search?: string } = {}) =>
     apiFetch<BackendPage<BackendBlog>>('/store/cms/blogs', { params: query }),

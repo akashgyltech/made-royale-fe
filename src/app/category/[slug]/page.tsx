@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CategoryMain from "@/pages/category/category-main";
 import { getCategories, getCategoryBySlug, getProducts } from "@/lib/catalog";
+import { buildPageMetadata } from "@/lib/seo-cms";
 
 export async function generateStaticParams() {
   try {
@@ -16,12 +17,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const category = await getCategoryBySlug(slug);
-  if (!category) return { title: "Shop by Category — Shizenta" };
-  return {
+  if (!category) return buildPageMetadata("category", { title: "Shop by Category — Shizenta" });
+  return buildPageMetadata("category", {
     title: category.seo?.metaTitle || `${category.name} — Shizenta`,
     description: category.seo?.metaDescription || `${category.name}: ${category.tagline}. Handcrafted luxury furniture by Shizenta.`,
-    keywords: category.seo?.keywords?.length ? category.seo.keywords : undefined,
-  };
+    image: category.banner || category.image,
+    path: `/category/${slug}`,
+  });
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
