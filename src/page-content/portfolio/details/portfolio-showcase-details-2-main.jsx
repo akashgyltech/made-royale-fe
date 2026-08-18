@@ -1,0 +1,44 @@
+"use client";
+import { gsap } from "gsap";
+import React from "react";
+import { useGSAP } from "@gsap/react";
+import useScrollSmooth from "@/hooks/use-scroll-smooth";
+import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+// internal imports
+import Wrapper from "@/layouts/wrapper";
+import PortfolioDetailsShowcaseTwoArea from "@/components/portfolio/details/portfolio-details-showcase-2-area";
+import FooterSix from "@/layouts/footers/footer-six";
+// animation
+import { charAnimation, titleAnimation } from "@/utils/title-animation";
+import { movingImageSlider } from "@/utils/scroll-marque";
+import HeaderSix from "@/layouts/headers/header-six";
+const PortfolioDetailsShowcaseTwoMain = () => {
+    useScrollSmooth();
+    useGSAP(() => {
+        const timer = setTimeout(() => {
+            charAnimation();
+            titleAnimation();
+            movingImageSlider();
+        }, 100);
+        return () => clearTimeout(timer);
+    });
+    return (<Wrapper>
+      <HeaderSix />
+
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <main>
+            {/* portfolio details area */}
+            <PortfolioDetailsShowcaseTwoArea />
+            {/* portfolio details area */}
+          </main>
+
+          {/* footer area */}
+          <FooterSix />
+          {/* footer area */}
+        </div>
+      </div>
+    </Wrapper>);
+};
+export default PortfolioDetailsShowcaseTwoMain;

@@ -1,9 +1,8 @@
 import $ from 'jquery';
 import * as THREE from 'three'; // Import Three.js
-
 export default class WebGL {
     constructor(e) {
-        	(this.scene = new THREE.Scene()),
+        (this.scene = new THREE.Scene()),
             (this.vertex = "varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}"),
             (this.material = e.material),
             (this.fragment = e.fragment),
@@ -38,9 +37,9 @@ export default class WebGL {
             });
             t.push(h);
         }),
-        Promise.all(t).then(() => {
-            e();
-        });
+            Promise.all(t).then(() => {
+                e();
+            });
     }
     setupResize() {
         window.addEventListener("resize", this.resize.bind(this));
@@ -48,15 +47,15 @@ export default class WebGL {
     resize() {
         let e, t;
         (this.width = this.container.offsetWidth),
-        (this.height = this.container.offsetHeight),
-        this.renderer.setSize(this.width, this.height),
-        (this.camera.aspect = this.width / this.height),
-        (this.imageAspect = this.textures[0].image.height / this.textures[0].image.width),
-        this.height / this.width > this.imageAspect ? ((e = (this.width / this.height) * this.imageAspect), (t = 1)) : ((e = 1), (t = this.height / this.width / this.imageAspect)),
-        (this.material.uniforms.resolution.value.x = this.width),
-        (this.material.uniforms.resolution.value.y = this.height),
-        (this.material.uniforms.resolution.value.z = e),
-        (this.material.uniforms.resolution.value.w = t);
+            (this.height = this.container.offsetHeight),
+            this.renderer.setSize(this.width, this.height),
+            (this.camera.aspect = this.width / this.height),
+            (this.imageAspect = this.textures[0].image.height / this.textures[0].image.width),
+            this.height / this.width > this.imageAspect ? ((e = (this.width / this.height) * this.imageAspect), (t = 1)) : ((e = 1), (t = this.height / this.width / this.imageAspect)),
+            (this.material.uniforms.resolution.value.x = this.width),
+            (this.material.uniforms.resolution.value.y = this.height),
+            (this.material.uniforms.resolution.value.z = e),
+            (this.material.uniforms.resolution.value.w = t);
         const i = this.camera.position.z;
         (this.camera.fov = (180 / Math.PI) * 2 * Math.atan(1 / (2 * i))), (this.plane.scale.x = this.camera.aspect), (this.plane.scale.y = 1), this.camera.updateProjectionMatrix();
     }

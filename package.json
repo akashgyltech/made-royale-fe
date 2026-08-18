@@ -38,23 +38,11 @@
     "yup": "^1.4.0"
   },
   "resolutions": {
-    "three": "^0.179.1",
-    "@types/react": "19.2.3",
-    "@types/react-dom": "19.2.3"
+    "three": "^0.179.1"
   },
   "devDependencies": {
-    "@types/imagesloaded": "^4.1.6",
-    "@types/isotope-layout": "^3.0.13",
-    "@types/jquery": "^3.5.29",
-    "@types/node": "^20",
-    "@types/react": "19.2.3",
-    "@types/react-dom": "19.2.3",
-    "@types/react-scroll": "^1.8.10",
-    "@types/react-slick": "^0.23.13",
-    "@types/three": "^0.164.0",
     "baseline-browser-mapping": "^2.10.34",
     "eslint": "^9.0.0",
-    "eslint-config-next": "16.0.1",
-    "typescript": "^5"
+    "eslint-config-next": "16.0.1"
   }
 }
