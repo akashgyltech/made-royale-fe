@@ -20,12 +20,24 @@ export default function HeaderSix({ transparent = false }) {
     const [profileOpen, setProfileOpen] = useState(false);
     const [term, setTerm] = useState('');
     const [menu, setMenu] = useState(menu_data);
+    const [bannerHeight, setBannerHeight] = useState(37);
     const router = useRouter();
     const profileRef = useRef(null);
+    const bannerRef = useRef(null);
     const { user, isLoggedIn, openAuthModal, logout } = useAuth();
     const { count: cartCount, openDrawer } = useCart();
     const { count: wishCount } = useWishlist();
     useEffect(() => { headerFullWidth(); }, []);
+    useEffect(() => {
+        const el = bannerRef.current;
+        if (!el)
+            return;
+        const measure = () => setBannerHeight(el.offsetHeight);
+        measure();
+        const ro = new ResizeObserver(measure);
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, []);
     useEffect(() => {
         const onClick = (e) => { if (profileRef.current && !profileRef.current.contains(e.target))
             setProfileOpen(false); };
@@ -47,7 +59,12 @@ export default function HeaderSix({ transparent = false }) {
     const submitSearch = () => { const q = term.trim(); router.push(q ? `/shop?q=${encodeURIComponent(q)}` : '/shop'); };
     const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'SZ';
     return (<>
-      <div role="alert" style={{
+      <div ref={bannerRef} role="alert" style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
             background: '#b8860b',
             color: '#111',
             textAlign: 'center',
@@ -61,7 +78,7 @@ export default function HeaderSix({ transparent = false }) {
         product ordered during this period.
       </div>
       <header className="tp-header-height" ref={headerRef}>
-        <div className={`tp-inner-header-2-area tp-shop-mob-space ${innerClass}`}>
+        <div className={`tp-inner-header-2-area tp-shop-mob-space ${innerClass}`} style={{ top: bannerHeight }}>
           <div className="container container-1800">
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">
