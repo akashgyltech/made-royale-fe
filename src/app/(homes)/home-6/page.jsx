@@ -2,6 +2,7 @@ import React from 'react';
 import HomeSixMain from '@/page-content/homes/home-6';
 import { getFeaturedProducts, getCategories, getCollectionProducts, getRoomProducts, collections, rooms } from '@/lib/catalog';
 import { getFaqCmsList } from '@/lib/faq-cms';
+
 export const metadata = {
     title: "Liko - Home Six Page",
 };

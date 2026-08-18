@@ -2,6 +2,7 @@ import React from "react";
 import BlogListMain from "@/page-content/blog/blog-list-main";
 import { cmsApi } from "@/lib/store-api";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export async function generateMetadata() {
     return buildPageMetadata("blog", {
         title: "The Journal — Shizenta",

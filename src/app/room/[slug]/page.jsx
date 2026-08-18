@@ -2,6 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import RoomMain from "@/page-content/room/room-main";
 import { getRoom, rooms, getRoomProducts, getCategories } from "@/lib/catalog";
+
 export function generateStaticParams() {
     return rooms.map((r) => ({ slug: r.slug }));
 }

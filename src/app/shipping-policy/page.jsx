@@ -1,6 +1,7 @@
 import LegalMain from "@/page-content/legal/legal-main";
 import { getLegalDoc } from "@/data/legal";
 import { getLegalCmsDoc } from "@/lib/legal-cms";
+
 const SLUG = "shipping-policy";
 const doc = getLegalDoc(SLUG);
 export async function generateMetadata() {

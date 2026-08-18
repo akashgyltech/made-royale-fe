@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import CategoryMain from "@/page-content/category/category-main";
 import { getCategories, getCategoryBySlug, getProducts } from "@/lib/catalog";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export async function generateStaticParams() {
     try {
         const categories = await getCategories();

@@ -11,6 +11,7 @@ import { ThemeProvider } from "next-themes";
 import { buildPageMetadata } from "@/lib/seo-cms";
 import "swiper/css/bundle";
 import "./globals.scss";
+
 const gellery = localFont({
   src: [
     {

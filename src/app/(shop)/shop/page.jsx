@@ -4,6 +4,7 @@ import { getCategories, getCategoryBySlug, collections, getCollectionProducts, g
 import { productApi } from "@/lib/store-api";
 import { adaptProduct } from "@/lib/adapters";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export async function generateMetadata() {
     return buildPageMetadata("shop", {
         title: "Shizenta — Shop Luxury Furniture",

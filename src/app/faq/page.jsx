@@ -2,6 +2,7 @@ import React from "react";
 import FaqMain from "@/page-content/faq/faq-main";
 import { getFaqCmsList } from "@/lib/faq-cms";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export async function generateMetadata() {
     return buildPageMetadata("faq", {
         title: "FAQs — Shizenta",

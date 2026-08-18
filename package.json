@@ -18,12 +18,12 @@
     "imagesloaded": "^5.0.0",
     "isotope-layout": "^3.0.6",
     "jquery": "^3.7.1",
-    "next": "16.0.10",
+    "next": "16.3.1",
     "next-themes": "^0.4.6",
-    "react": "19.2.0",
+    "react": "19.2.8",
     "react-bootstrap": "^2.10.2",
     "react-compare-image": "^3.4.0",
-    "react-dom": "19.2.0",
+    "react-dom": "19.2.8",
     "react-fast-marquee": "^1.6.4",
     "react-hook-form": "^7.51.5",
     "react-paginate": "^8.2.0",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "baseline-browser-mapping": "^2.10.34",
-    "eslint": "^9.0.0",
-    "eslint-config-next": "16.0.1"
+    "eslint": "10.8.1",
+    "eslint-config-next": "16.3.1"
   }
 }

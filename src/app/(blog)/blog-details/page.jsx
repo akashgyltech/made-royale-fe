@@ -1,5 +1,6 @@
 import React from "react";
 import BlogDetailsMain from "@/page-content/blog/blog-details";
+
 export const metadata = {
     title: "Liko - Blog Classic page",
 };

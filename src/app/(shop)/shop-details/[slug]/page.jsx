@@ -4,6 +4,7 @@ import ShopDetailsMain from "@/page-content/shop/shop-details-main";
 import { getProductBySlug, getProducts, getRelatedProducts } from "@/lib/catalog";
 import { reviewApi } from "@/lib/store-api";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export async function generateStaticParams() {
     try {
         const { items } = await getProducts({ limit: 100 });

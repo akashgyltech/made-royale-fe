@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import CollectionMain from "@/page-content/collection/collection-main";
 import { collections, getCollection, getCollectionProducts } from "@/lib/catalog";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export function generateStaticParams() {
     return collections.map((c) => ({ slug: c.slug }));
 }

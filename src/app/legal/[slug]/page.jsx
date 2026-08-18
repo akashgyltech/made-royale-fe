@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import LegalMain from "@/page-content/legal/legal-main";
 import { getLegalCmsDoc } from "@/lib/legal-cms";
 import { buildPageMetadata } from "@/lib/seo-cms";
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const cms = await getLegalCmsDoc(slug);

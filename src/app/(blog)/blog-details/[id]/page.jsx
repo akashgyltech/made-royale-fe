@@ -2,6 +2,7 @@ import React from 'react';
 import BlogArticleMain from '@/page-content/blog/blog-article-main';
 import { cmsApi } from '@/lib/store-api';
 import { buildPageMetadata } from '@/lib/seo-cms';
+
 // The dynamic segment here is keyed by slug (not the Mongo _id) — confirmed by the old
 // dummy-data wiring (`blogs.map((b) => ({ id: b.slug }))`) and matches cmsApi.getBlogBySlug.
 async function fetchBlog(slug) {
