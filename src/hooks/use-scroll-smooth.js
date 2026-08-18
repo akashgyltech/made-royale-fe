@@ -11,28 +11,35 @@ export default function useScrollSmooth() {
         gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
         const smoothWrapper = document.getElementById("smooth-wrapper");
         const smoothContent = document.getElementById("smooth-content");
-        if (smoothWrapper && smoothContent && isScrollSmooth) {
-            gsap.config({
-                nullTargetWarn: false,
-            });
-            // create the smooth scroller FIRST
-            ScrollSmoother.create({
-                wrapper: smoothWrapper,
-                content: smoothContent,
-                smooth: 2,
-                effects: true,
-                smoothTouch: 0.1,
-                normalizeScroll: false,
-                ignoreMobileResize: true,
-            });
-            // example ScrollTrigger (you can remove if not needed)
-            ScrollTrigger.create({
-                trigger: ".shape",
-                pin: true,
-                start: "center center",
-                end: "+=300",
-                markers: false,
-            });
-        }
+        if (!(smoothWrapper && smoothContent && isScrollSmooth))
+            return;
+        gsap.config({
+            nullTargetWarn: false,
+        });
+        // create the smooth scroller FIRST
+        const smoother = ScrollSmoother.create({
+            wrapper: smoothWrapper,
+            content: smoothContent,
+            smooth: 2,
+            effects: true,
+            smoothTouch: 0.1,
+            normalizeScroll: false,
+            ignoreMobileResize: true,
+        });
+        // example ScrollTrigger (you can remove if not needed)
+        const shapeTrigger = ScrollTrigger.create({
+            trigger: ".shape",
+            pin: true,
+            start: "center center",
+            end: "+=300",
+            markers: false,
+        });
+        // Without this, navigating to another route leaves the smoother running against
+        // DOM nodes that React is about to unmount — its inertia keeps animating and the
+        // next page visibly scrolls from the old (e.g. bottom) position back to top.
+        return () => {
+            shapeTrigger.kill();
+            smoother.kill();
+        };
     }, [isScrollSmooth]);
 }

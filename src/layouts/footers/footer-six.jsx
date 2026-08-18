@@ -130,9 +130,9 @@ export default function FooterSix() {
             <div className="row align-items-center">
               <div className="col-lg-5 col-md-12">
                 <div className="tp-copyright-2-left text-center text-lg-start">
-                  <p className="mb-0">
+                  <p className="mb-0 mr-footer-copyright">
                     {copyright}
-                    {gstin && <><br /><span style={{ opacity: 0.7 }}>GSTIN: {gstin}</span></>}
+                    {gstin && <><em>·</em>GSTIN: {gstin}</>}
                   </p>
                 </div>
               </div>

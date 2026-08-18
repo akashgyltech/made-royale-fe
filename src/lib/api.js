@@ -74,7 +74,7 @@ async function doFetch(url, opts, token) {
         headers['Content-Type'] = 'application/json';
         body = JSON.stringify(opts.body);
     }
-    return fetch(url, { method: opts.method || 'GET', headers, body });
+    return fetch(url, { method: opts.method || 'GET', headers, body, cache: 'no-store' });
 }
 export async function apiFetch(path, opts = {}) {
     const url = new URL(`${API_BASE}${path}`);
