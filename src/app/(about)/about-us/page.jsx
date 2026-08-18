@@ -4,7 +4,7 @@ import { buildPageMetadata } from "@/lib/seo-cms";
 
 export async function generateMetadata() {
     return buildPageMetadata("about", {
-        title: "About Us — Shizenta",
+        title: "About Us | Shizenta",
         description: "The story, craft and people behind Shizenta's handcrafted luxury furniture.",
         path: "/about-us",
     });
