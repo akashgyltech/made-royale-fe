@@ -511,8 +511,8 @@
   .tp-main-menu-content ul li:not(:last-child) .home-menu-title a {
     border-bottom: none;
   }
-  & *ul,
-  & *li {
+  & * ul,
+  & * li {
     transition: none !important;
   }
 }

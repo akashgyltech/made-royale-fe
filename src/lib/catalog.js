@@ -14,8 +14,13 @@ const sortByToQuery = {
     newest: 'createdAt:desc',
 };
 export async function getCategories() {
-    const cats = await productApi.getCategories(null);
-    return cats.map(adaptCategory);
+    try {
+        const cats = await productApi.getCategories(null);
+        return cats.map(adaptCategory);
+    }
+    catch {
+        return [];
+    }
 }
 export async function getCategoryBySlug(slug) {
     try {
@@ -59,8 +64,13 @@ export async function getProductBySlug(slug) {
     }
 }
 export async function getFeaturedProducts(limit = 8) {
-    const page = await productApi.getProducts({ isFeatured: true, limit });
-    return page.results.map(adaptProduct);
+    try {
+        const page = await productApi.getProducts({ isFeatured: true, limit });
+        return page.results.map(adaptProduct);
+    }
+    catch {
+        return [];
+    }
 }
 // Other active products sharing this product's category — a real, computed signal
 // (not a hand-authored relatedIds list, which the backend has no field for).
@@ -74,12 +84,22 @@ export async function getRelatedProducts(product, limit = 4) {
 // src/lib/adapters.ts for the convention). Empty until an admin actually tags
 // products that way — intentionally no fallback/fake content.
 export async function getCollectionProducts(collectionSlug, limit = 24) {
-    const page = await productApi.getProducts({ tag: `collection:${collectionSlug}`, limit });
-    return page.results.map(adaptProduct);
+    try {
+        const page = await productApi.getProducts({ tag: `collection:${collectionSlug}`, limit });
+        return page.results.map(adaptProduct);
+    }
+    catch {
+        return [];
+    }
 }
 export async function getRoomProducts(roomSlug, limit = 24) {
-    const page = await productApi.getProducts({ tag: `room:${roomSlug}`, limit });
-    return page.results.map(adaptProduct);
+    try {
+        const page = await productApi.getProducts({ tag: `room:${roomSlug}`, limit });
+        return page.results.map(adaptProduct);
+    }
+    catch {
+        return [];
+    }
 }
 export function productCollectionSlug(product) {
     return product.collection ? collections.find((c) => c.name === product.collection)?.slug : undefined;
