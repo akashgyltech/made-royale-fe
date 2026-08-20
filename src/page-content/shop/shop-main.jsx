@@ -9,7 +9,7 @@ import CollectionsShowcase from "@/components/home/collections-showcase";
 import CtaBand from "@/components/ui/cta-band";
 import { formatINR } from "@/data/catalog";
 const SHOP_HERO = "/assets/img/inner-shop/home/hero-bg-13.webp";
-const ShopMain = ({ categories, products, total, totalPages, page, priceFrom, activeCategoryName, collectionCounts, roomCounts }) => {
+const ShopMain = ({ categories, products, total, totalPages, page, priceFrom, activeCategoryName, collections, collectionCounts, rooms, roomCounts }) => {
     return (<Wrapper>
       <HeaderSix transparent/>
       <main>
@@ -23,8 +23,8 @@ const ShopMain = ({ categories, products, total, totalPages, page, priceFrom, ac
         ]}/>
         <AssuranceStrip />
         <ShopCatalog categories={categories} products={products} total={total} totalPages={totalPages} page={page} priceFrom={priceFrom} activeCategoryName={activeCategoryName}/>
-        <RoomShowcase counts={roomCounts}/>
-        <CollectionsShowcase counts={collectionCounts}/>
+        <RoomShowcase rooms={rooms} counts={roomCounts}/>
+        <CollectionsShowcase collections={collections} counts={collectionCounts}/>
         <CtaBand eyebrow="Bespoke Interiors" title="Furnishing an entire home?" text="Tell us about your space and our design consultants will curate a room-by-room selection tailored to your taste and budget." primaryLabel="Book a Free Consultation" primaryHref="/contact" secondaryLabel="Bulk & Trade Enquiry" secondaryHref="/bulk-enquiry"/>
       </main>
       <FooterSix />

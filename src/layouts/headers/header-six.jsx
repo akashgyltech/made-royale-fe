@@ -13,6 +13,8 @@ import { useWishlist } from '@/provider/WishlistProvider';
 import menu_data from '@/data/menu-data';
 import { cmsApi } from '@/lib/store-api';
 import { adaptHeaderMenu } from '@/lib/cms-content';
+import { getCategories, getRoomCategories, getShopCollections } from '@/lib/catalog';
+import { buildLiveMegaMenus, attachLiveMegaMenus } from '@/lib/nav-menu';
 import SiteLogo from '@/components/ui/site-logo';
 export default function HeaderSix({ transparent = false }) {
     const { isSticky, headerRef, headerFullWidth } = useStickyHeader(20);
@@ -46,12 +48,17 @@ export default function HeaderSix({ transparent = false }) {
     }, []);
     useEffect(() => {
         let cancelled = false;
-        cmsApi.getByKey('header').then((content) => {
+        Promise.all([
+            cmsApi.getByKey('header').then(adaptHeaderMenu).catch(() => null),
+            getCategories(),
+            getRoomCategories(),
+            getShopCollections(),
+        ]).then(([adapted, categories, rooms, collections]) => {
             if (cancelled)
                 return;
-            const adapted = adaptHeaderMenu(content);
-            if (adapted)
-                setMenu(adapted);
+            const baseMenu = adapted || menu_data;
+            const liveMegaMenus = buildLiveMegaMenus({ categories, rooms, collections });
+            setMenu(attachLiveMegaMenus(baseMenu, liveMegaMenus));
         }).catch(() => { });
         return () => { cancelled = true; };
     }, []);

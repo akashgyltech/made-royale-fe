@@ -6,7 +6,7 @@ const Arrow = () => (<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
 // Drop a wide image path here to replace the elegant placeholder, e.g.
 // const BANNER_IMG = "/assets/img/inner-shop/category/category-banner.webp";
 const BANNER_IMG = "";
-export default function ShopCategory({ categories }) {
+export default function ShopCategory({ categories, counts = {} }) {
     return (<div className="mr-cats">
       <div className="container container-1400">
         <SectionHeader subtitle="Curated Categories" title="Explore Luxury Furniture by Category"/>
@@ -27,18 +27,20 @@ export default function ShopCategory({ categories }) {
           </div>
         </div>
 
-        {categories.length > 0 ? (<div className="mr-cats-grid">
-            {categories.map((item) => (<Link key={item.id} href={`/category/${item.slug}`} className="mr-cat-card">
-                <div className="mr-cat-card-media">
-                  <SmartImage src={item.image} alt={item.name} glyph={item.icon} label={item.tagline} ratio="1 / 1"/>
-                  <div className="mr-cat-card-overlay">
-                    <span className="mr-cat-card-shop">Explore
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </span>
-                  </div>
-                </div>
-                <div className="mr-cat-card-title">{item.name}</div>
-              </Link>))}
+        {categories.length > 0 ? (<div className="mr-collections-grid">
+            {categories.map((item) => {
+                const count = counts[item.slug] ?? 0;
+                return (<Link key={item.id} href={`/category/${item.slug}`} className={`mr-collection-card${item.image ? " has-image" : ""}`}>
+                    {item.image && (<span className="mr-collection-media" aria-hidden="true">
+                        <img src={item.image} alt="" loading="lazy"/>
+                      </span>)}
+                    <div className="mr-collection-body">
+                      <h3 className="mr-collection-name">{item.name}</h3>
+                      <p className="mr-collection-tag">{item.tagline}</p>
+                      <span className="mr-collection-link">Explore{count > 0 ? ` ${count} pieces` : ""} <Arrow /></span>
+                    </div>
+                  </Link>);
+            })}
           </div>) : (<p className="mr-catproducts-empty">Categories are being curated — check back soon.</p>)}
 
         <div className="mr-cats-cta">

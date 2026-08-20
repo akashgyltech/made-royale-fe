@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { collections } from "@/data/catalog";
 import SectionHeader from "@/components/ui/section-header";
 const Arrow = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>;
-export default function CollectionsShowcase({ counts }) {
+export default function CollectionsShowcase({ collections, counts = {} }) {
+    if (!collections || collections.length === 0)
+        return null;
     return (<section className="mr-collections" id="collections">
       <div className="container container-1400">
         <SectionHeader subtitle="Signature Lines" title="Explore Our Collections"/>

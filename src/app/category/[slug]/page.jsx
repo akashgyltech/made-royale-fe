@@ -37,5 +37,6 @@ export default async function CategoryPage({ params }) {
         getCategories(),
     ]);
     const otherCategories = allCategories.filter((c) => c.slug !== slug).slice(0, 6);
-    return (<CategoryMain category={category} featuredProducts={featured.items} totalInCategory={featured.total} priceFrom={cheapest.items[0]?.price ?? 0} subCategoryCounts={subCounts} otherCategories={otherCategories}/>);
+    const otherCategoryCounts = await Promise.all(otherCategories.map(async (c) => [c.slug, (await getProducts({ categorySlug: c.slug, limit: 1 })).total])).then(Object.fromEntries);
+    return (<CategoryMain category={category} featuredProducts={featured.items} totalInCategory={featured.total} priceFrom={cheapest.items[0]?.price ?? 0} subCategoryCounts={subCounts} otherCategories={otherCategories} otherCategoryCounts={otherCategoryCounts}/>);
 }

@@ -91,77 +91,6 @@ export const categories = [
         ],
     },
 ];
-// ── Collections (signature lines) ─────────────────────────────────────────────
-// Each collection has its own landing page at /collection/[slug]. Drop a wide
-// image into `banner` to replace the placeholder on that page.
-const COL_IMG = '/assets/img/home/collection';
-export const collections = [
-    {
-        id: 'col-maharaja', name: 'Maharaja', slug: 'maharaja', icon: '👑',
-        tagline: 'Opulent teak, Makrana marble & hand-cut brass — our most regal line.',
-        intro: 'Our most opulent line — solid teak, genuine Makrana marble and hand-cut brass, crafted to become tomorrow’s heirlooms.',
-        story: { title: 'A love letter to the palaces of India', body: 'The Maharaja Collection draws on the durbars of Rajasthan and the Deccan. Nothing is veneered where it can be solid, and nothing is stamped where it can be carved. Because every piece is made to order, no two are ever identical — which is exactly the point of true luxury.' },
-        image: `${COL_IMG}/maharaja_collection_cta.webp`, banner: `${COL_IMG}/maharaja_collection_cta.webp`,
-    },
-    {
-        id: 'col-vintage', name: 'Vintage', slug: 'vintage', icon: '🕰️',
-        tagline: 'Timeworn character and heritage silhouettes, reborn.',
-        intro: 'Timeworn character and heritage silhouettes, reborn for the modern home with the patina of pieces passed down through generations.',
-        story: { title: 'Character that only time can give', body: 'The Vintage Collection celebrates the beauty of age — softened edges, deepened grains and silhouettes that feel found rather than bought. Each piece is finished by hand to carry warmth and story from the very first day.' },
-        image: `${COL_IMG}/vintage_collection_cta.webp`, banner: `${COL_IMG}/vintage_collection_cta.webp`,
-    },
-    {
-        id: 'col-contemporary', name: 'Contemporary Royale', slug: 'contemporary-royale', icon: '✦',
-        tagline: 'Clean modern lines with an unmistakably royal soul.',
-        intro: 'Clean, architectural lines with an unmistakably royal soul — modern proportions dressed in premium materials and quiet, confident detailing.',
-        story: { title: 'Modern proportions, royal materials', body: 'Contemporary Royale is for those who want the grandeur without the ornament. Low, considered silhouettes meet brass, marble and velvet — a restrained kind of luxury that feels at home in a city apartment or a country villa alike.' },
-        image: `${COL_IMG}/contemporary_roayel_cta.webp`, banner: `${COL_IMG}/contemporary_roayel_cta.webp`,
-    },
-    {
-        id: 'col-heritage', name: 'Heritage', slug: 'heritage', icon: '🪷',
-        tagline: 'Craft traditions of India, preserved in every joint.',
-        intro: 'The craft traditions of India, preserved in every joint — walnut carving, brass inlay and hand-knotting kept alive by generational karigars.',
-        story: { title: 'Preserving a living craft', body: 'The Heritage Collection is our commitment to the karigars whose families have practised their craft for generations. From the walnut carvers of Kashmir to the brass inlay of Lucknow, each piece keeps a centuries-old tradition alive in your home.' },
-        image: `${CAT_IMG}/shop-by-wardrobe.webp`, banner: `${CAT_IMG}/shop-by-wardrobe.webp`,
-    },
-];
-// ── Rooms (shop by room) ──────────────────────────────────────────────────────
-// A room simply groups existing categories/subcategories so shoppers can browse
-// by space. Each has its own landing page at /room/[slug].
-export const rooms = [
-    {
-        id: 'room-living', name: 'Living Room', slug: 'living-room', icon: '🛋️',
-        tagline: 'Where the home comes together',
-        intro: 'Anchor your living room with statement seating, sculptural tables and warm lighting — everything you need to gather, host and unwind in style.',
-        story: { title: 'A living room built around you', body: 'From deep-buttoned chesterfields to marble-and-brass coffee tables, our living-room pieces are made to be lived in. Solid frames, premium upholstery and considered proportions keep the room both grand and genuinely comfortable.' },
-        image: `${CAT_IMG}/shop-by-sofa.webp`, banner: `${CAT_IMG}/shop-by-sofa.webp`,
-        categories: ['sofas', 'chairs', 'tables', 'storage', 'decor'],
-    },
-    {
-        id: 'room-bedroom', name: 'Bedroom', slug: 'bedroom', icon: '🛏️',
-        tagline: 'Rest like royalty',
-        intro: 'Compose a serene, storage-smart bedroom — solid-wood beds, hand-finished wardrobes and the quiet accents that turn a room into a retreat.',
-        story: { title: 'Your private retreat', body: 'A bedroom should feel calm and considered. Solid Sheesham and teak beds, soft-close wardrobes and thoughtful bedside pieces come together to keep the space serene, uncluttered and unmistakably yours.' },
-        image: `${CAT_IMG}/shop-by-bed.webp`, banner: `${CAT_IMG}/shop-by-bed.webp`,
-        categories: ['beds', 'wardrobes'], subs: ['side-tables', 'accent-chairs'],
-    },
-    {
-        id: 'room-dining', name: 'Dining Room', slug: 'dining-room', icon: '🍽️',
-        tagline: 'Feasts fit for a durbar',
-        intro: 'Gather family around marble-topped and solid-wood dining sets, paired with sideboards that keep the good china close and the room composed.',
-        story: { title: 'Made for gathering', body: 'The best conversations happen over a shared table. Genuine Makrana marble, hand-cut joinery and brass-inlay sideboards create a dining room built for long, lingering meals night after night.' },
-        image: `${CAT_IMG}/shop-by-dining.webp`, banner: `${CAT_IMG}/shop-by-dining.webp`,
-        categories: ['dining'], subs: ['cabinets'],
-    },
-    {
-        id: 'room-study', name: 'Study & Office', slug: 'study-office', icon: '📚',
-        tagline: 'A room to think in',
-        intro: 'Set up a study worthy of a maharaja’s correspondence — leather-topped desks, solid-wood bookshelves and seating that means business.',
-        story: { title: 'Focus, beautifully furnished', body: 'A great study balances function and calm. Hand-tooled leather desks, cable-managed drawers and leaning ladder bookshelves in solid Sheesham give you a workspace that is as handsome as it is productive.' },
-        image: `${CAT_IMG}/shop-by-centertable.webp`, banner: `${CAT_IMG}/shop-by-centertable.webp`,
-        categories: [], subs: ['study-tables', 'bookshelves'],
-    },
-];
 // ── Products ──────────────────────────────────────────────────────────────────
 const C = {
     walnut: { name: 'Royal Walnut', hex: '#5a3a22' },
@@ -489,23 +418,6 @@ export function validateCoupon(code, orderAmount) {
 }
 // ── Query helpers ─────────────────────────────────────────────────────────────
 export function getCategory(slug) { return categories.find((c) => c.slug === slug); }
-export function getCollection(slug) { return collections.find((c) => c.slug === slug); }
-export function getRoom(slug) { return rooms.find((r) => r.slug === slug); }
-// Products belonging to a room = any product whose category OR subcategory is
-// listed on the room, sorted by featured first.
-export function filterByRoom(room, sort = 'featured') {
-    const cats = new Set(room.categories);
-    const subs = new Set(room.subs ?? []);
-    const list = products.filter((p) => cats.has(p.categorySlug) || subs.has(p.subcategorySlug));
-    return sortProducts(list, sort);
-}
-// Categories represented inside a room (for the "browse by category" strip).
-export function roomCategories(room) {
-    const slugs = new Set(room.categories);
-    categories.forEach((c) => { if (c.subcategories.some((s) => room.subs?.includes(s.slug)))
-        slugs.add(c.slug); });
-    return categories.filter((c) => slugs.has(c.slug));
-}
 export function getBlog(slug) { return blogs.find((b) => b.slug === slug); }
 export function getProduct(slug) { return products.find((p) => p.slug === slug); }
 export function getProductById(id) { return products.find((p) => p.id === id); }

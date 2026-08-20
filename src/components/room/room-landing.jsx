@@ -1,43 +1,29 @@
 import React from 'react';
 import Link from 'next/link';
-import { rooms, formatINR } from '@/data/catalog';
+import { formatINR } from '@/data/catalog';
 import SmartImage from '@/components/ui/smart-image';
 import ShopItem from '@/components/shop/shop-item';
 import SectionHeader from '@/components/ui/section-header';
 import CtaBand from '@/components/ui/cta-band';
 import LuxHero from '@/components/ui/lux-hero';
 const Arrow = () => (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>);
-export default function RoomLanding({ room, products, cats }) {
+export default function RoomLanding({ room, products, otherRooms }) {
     const featured = products.slice(0, 8);
+    const catCount = new Set(products.map((p) => p.categorySlug)).size;
     const priceFrom = products.length ? Math.min(...products.map((p) => p.price)) : 0;
-    const others = rooms.filter((r) => r.slug !== room.slug);
+    const others = otherRooms || [];
+    const introText = room.description || `Discover our ${room.name} collection — thoughtfully curated pieces for your home.`;
+    const storyTitle = room.story?.title || room.name;
+    const storyBody = room.story?.body || room.tagline || room.description || `Handpicked craftsmanship, curated for the ${room.name}.`;
     return (<>
-      <LuxHero banner={room.banner || room.image} eyebrow="Shop by Room" title={room.name} intro={room.intro} crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop by Room', href: '/shop' }, { label: room.name }]} stats={[
+      <LuxHero banner={room.banner || room.image} eyebrow="Shop by Room" title={room.name} intro={introText} crumbs={[{ label: 'Home', href: '/' }, { label: 'Shop by Room', href: '/shop' }, { label: room.name }]} stats={[
             { value: `${products.length}`, label: products.length === 1 ? 'Piece' : 'Pieces' },
-            { value: `${cats.length}`, label: cats.length === 1 ? 'Category' : 'Categories' },
+            { value: `${catCount}`, label: catCount === 1 ? 'Category' : 'Categories' },
             { value: formatINR(priceFrom), label: 'Starting from' },
         ]} actions={[
             { label: 'Shop the Room', href: '#room-products' },
             { label: 'Book a Consultation', href: '/contact', variant: 'ghost' },
         ]}/>
-
-      {/* ── Browse the categories that make up this room ── */}
-      {cats.length > 0 && (<section className="mr-subcat">
-          <div className="container container-1400">
-            <SectionHeader subtitle="Everything for the Space" title={`Shop ${room.name} by Category`}/>
-            <div className="mr-subcat-grid">
-              {cats.map((c) => (<Link key={c.id} href={`/category/${c.slug}`} className="mr-subcat-card">
-                  <div className="mr-subcat-card-media">
-                    <SmartImage src={c.image} alt={c.name} glyph={c.icon} label={c.tagline} ratio="4 / 3"/>
-                  </div>
-                  <div className="mr-subcat-card-body">
-                    <strong>{c.name}</strong>
-                    <span>Explore <Arrow /></span>
-                  </div>
-                </Link>))}
-            </div>
-          </div>
-        </section>)}
 
       {/* ── Products for this room ── */}
       <section className="mr-catproducts" id="room-products">
@@ -60,8 +46,8 @@ export default function RoomLanding({ room, products, cats }) {
             </div>
             <div className="mr-catstory-content">
               <span className="mr-catstory-eyebrow">The Shizenta Difference</span>
-              <h2 className="mr-catstory-title">{room.story.title}</h2>
-              <p className="mr-catstory-body">{room.story.body}</p>
+              <h2 className="mr-catstory-title">{storyTitle}</h2>
+              <p className="mr-catstory-body">{storyBody}</p>
               <ul className="mr-catstory-list">
                 <li><span>✦</span> A coordinated look, room by room</li>
                 <li><span>✦</span> Hand-finished by generational artisans</li>

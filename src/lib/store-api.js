@@ -68,6 +68,8 @@ export const productApi = {
     getCategories: (parent) => apiFetch('/store/products/categories', {
         params: parent === null ? { parent: 'null' } : parent ? { parent } : undefined,
     }),
+    getShopCategories: () => apiFetch('/store/products/categories', { params: { showInShop: 'true' } }),
+    getRoomCategories: () => apiFetch('/store/products/categories', { params: { showInRoom: 'true' } }),
     getCategoryBySlug: (slug) => apiFetch(`/store/products/categories/${slug}`),
 };
 // ── Shipping ─────────────────────────────────────────────────────────────────

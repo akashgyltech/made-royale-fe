@@ -1,11 +1,8 @@
 // Real, async replacement for @/data/catalog's query functions — backed by the
 // made-royale-be API instead of the static dummy dataset. Page-level components
-// (app/**/page.tsx) should fetch through this module; @/data/catalog now only
-// supplies TypeScript types (Product, Category, ...) plus editorial copy for
-// collections/rooms (name/tagline/story/banner) that has no CMS backing yet.
+// (app/**/page.tsx) should fetch through this module.
 import { productApi } from './store-api';
-import { adaptProduct, adaptCategory, deriveCollection, deriveRoomSlugs } from './adapters';
-import { collections, rooms, getCollection, getRoom } from '@/data/catalog';
+import { adaptProduct, adaptCategory } from './adapters';
 const sortByToQuery = {
     featured: 'isFeatured:desc,createdAt:desc',
     'price-asc': 'price:asc',
@@ -29,6 +26,24 @@ export async function getCategoryBySlug(slug) {
     }
     catch {
         return undefined;
+    }
+}
+export async function getShopCollections() {
+    try {
+        const cats = await productApi.getShopCategories();
+        return cats.map(adaptCategory);
+    }
+    catch {
+        return [];
+    }
+}
+export async function getRoomCategories() {
+    try {
+        const cats = await productApi.getRoomCategories();
+        return cats.map(adaptCategory);
+    }
+    catch {
+        return [];
     }
 }
 export async function getProducts(filter = {}) {
@@ -80,34 +95,9 @@ export async function getRelatedProducts(product, limit = 4) {
     const { items } = await getProducts({ categorySlug: product.categorySlug, limit: limit + 1 });
     return items.filter((p) => p.id !== product.id).slice(0, limit);
 }
-// Products tagged `collection:<slug>` / `room:<slug>` in the admin panel (see
-// src/lib/adapters.ts for the convention). Empty until an admin actually tags
-// products that way — intentionally no fallback/fake content.
-export async function getCollectionProducts(collectionSlug, limit = 24) {
-    try {
-        const page = await productApi.getProducts({ tag: `collection:${collectionSlug}`, limit });
-        return page.results.map(adaptProduct);
-    }
-    catch {
-        return [];
-    }
+export async function getCollectionProducts(collectionSlug, limit = 100) {
+    return getProducts({ categorySlug: collectionSlug, limit }).then((r) => r.items);
 }
-export async function getRoomProducts(roomSlug, limit = 24) {
-    try {
-        const page = await productApi.getProducts({ tag: `room:${roomSlug}`, limit });
-        return page.results.map(adaptProduct);
-    }
-    catch {
-        return [];
-    }
+export async function getRoomProducts(roomSlug, limit = 100) {
+    return getProducts({ categorySlug: roomSlug, limit }).then((r) => r.items);
 }
-export function productCollectionSlug(product) {
-    return product.collection ? collections.find((c) => c.name === product.collection)?.slug : undefined;
-}
-export function productRoomSlugs(product) {
-    return deriveRoomSlugs(product.tags);
-}
-// Editorial metadata for collections/rooms (name/tagline/story/banner) has no CMS
-// backing in the backend yet, so it's still sourced from the static demo module —
-// only the product listings within each page are real.
-export { collections, rooms, getCollection, getRoom, deriveCollection };

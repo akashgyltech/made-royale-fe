@@ -1,57 +1,11 @@
+// "Shop" and "Collections" below intentionally carry no static pages_mega_menu — their
+// mega-menu columns are always attached live from real category data at render time
+// (see src/lib/nav-menu.js, wired in src/layouts/headers/header-six.jsx), so this is
+// only ever seen as a flash-of-unfetched-content fallback before that resolves.
 const menu_data = [
     { id: 1, title: 'Home', link: '/' },
-    {
-        id: 2, title: 'Shop', link: '/shop',
-        pages_mega_menu: {
-            first: {
-                title: 'Shop by Category',
-                submenus: [
-                    { title: 'Sofas & Seating', link: '/category/sofas' },
-                    { title: 'Beds & Bedroom', link: '/category/beds' },
-                    { title: 'Dining', link: '/category/dining' },
-                    { title: 'Wardrobes', link: '/category/wardrobes' },
-                    { title: 'Chairs & Accent', link: '/category/chairs' },
-                    { title: 'Tables', link: '/category/tables' },
-                    { title: 'Storage & TV', link: '/category/storage' },
-                    { title: 'Decor & Lighting', link: '/category/decor' },
-                ],
-            },
-            second: {
-                title: 'Shop by Room',
-                submenus: [
-                    { title: 'Living Room', link: '/room/living-room' },
-                    { title: 'Bedroom', link: '/room/bedroom' },
-                    { title: 'Dining Room', link: '/room/dining-room' },
-                    { title: 'Study & Office', link: '/room/study-office' },
-                    { title: 'View All Furniture', link: '/shop' },
-                ],
-            },
-        },
-    },
-    {
-        id: 3, title: 'Collections', link: '/shop',
-        pages_mega_menu: {
-            first: {
-                title: 'Signature Collections',
-                submenus: [
-                    { title: 'Maharaja Collection', link: '/collection/maharaja' },
-                    { title: 'Vintage Collection', link: '/collection/vintage' },
-                    { title: 'Contemporary Royale', link: '/collection/contemporary-royale' },
-                    { title: 'Heritage Collection', link: '/collection/heritage' },
-                ],
-            },
-            second: {
-                title: 'Quick Links',
-                submenus: [
-                    { title: 'Bestsellers', link: '/shop?sort=rating' },
-                    { title: 'New Arrivals', link: '/shop?sort=newest' },
-                    { title: 'Bulk & Trade Enquiry', link: '/bulk-enquiry' },
-                    { title: 'Track Order', link: '/track-order' },
-                    { title: 'My Account', link: '/account' },
-                ],
-            },
-        },
-    },
+    { id: 2, title: 'Shop', link: '/shop' },
+    { id: 3, title: 'Collections', link: '/shop' },
     { id: 4, title: 'Journal', link: '/blog' },
     { id: 5, title: 'Contact', link: '/contact' },
 ];

@@ -1,20 +1,23 @@
 import React from 'react';
 import Link from 'next/link';
-import { collections, formatINR } from '@/data/catalog';
+import { formatINR } from '@/data/catalog';
 import SmartImage from '@/components/ui/smart-image';
 import ShopItem from '@/components/shop/shop-item';
 import SectionHeader from '@/components/ui/section-header';
 import CtaBand from '@/components/ui/cta-band';
 import LuxHero from '@/components/ui/lux-hero';
 const Arrow = () => (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>);
-export default function CollectionLanding({ collection, products }) {
+export default function CollectionLanding({ collection, products, otherCollections }) {
     const featured = products.slice(0, 8);
     const catCount = new Set(products.map((p) => p.categorySlug)).size;
     const priceFrom = products.length ? Math.min(...products.map((p) => p.price)) : 0;
-    const others = collections.filter((c) => c.slug !== collection.slug);
-    const shopHref = `/shop?collection=${encodeURIComponent(collection.name)}`;
+    const others = otherCollections || [];
+    const shopHref = `/shop?category=${encodeURIComponent(collection.slug)}`;
+    const introText = collection.description || `Discover our ${collection.name} collection — thoughtfully curated pieces for your home.`;
+    const storyTitle = collection.story?.title || collection.name;
+    const storyBody = collection.story?.body || collection.tagline || collection.description || `Handpicked craftsmanship, curated under ${collection.name}.`;
     return (<>
-      <LuxHero banner={collection.banner || collection.image} eyebrow="Signature Collection" title={collection.name} intro={collection.intro} crumbs={[{ label: 'Home', href: '/' }, { label: 'Collections', href: '/#collections' }, { label: collection.name }]} stats={[
+      <LuxHero banner={collection.banner || collection.image} eyebrow="Signature Collection" title={collection.name} intro={introText} crumbs={[{ label: 'Home', href: '/' }, { label: 'Collections', href: '/#collections' }, { label: collection.name }]} stats={[
             { value: `${products.length}`, label: products.length === 1 ? 'Piece' : 'Pieces' },
             { value: `${catCount}`, label: catCount === 1 ? 'Category' : 'Categories' },
             { value: formatINR(priceFrom), label: 'Starting from' },
@@ -46,8 +49,8 @@ export default function CollectionLanding({ collection, products }) {
             </div>
             <div className="mr-catstory-content">
               <span className="mr-catstory-eyebrow">The Shizenta Difference</span>
-              <h2 className="mr-catstory-title">{collection.story.title}</h2>
-              <p className="mr-catstory-body">{collection.story.body}</p>
+              <h2 className="mr-catstory-title">{storyTitle}</h2>
+              <p className="mr-catstory-body">{storyBody}</p>
               <ul className="mr-catstory-list">
                 <li><span>✦</span> Solid, responsibly-sourced hardwoods</li>
                 <li><span>✦</span> Hand-finished by generational artisans</li>

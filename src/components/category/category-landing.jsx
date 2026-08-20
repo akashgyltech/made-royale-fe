@@ -54,7 +54,7 @@ const COPY = {
         features: DEFAULT_FEATURES,
     },
 };
-export default function CategoryLanding({ category, featuredProducts, totalInCategory, priceFrom, subCategoryCounts, otherCategories }) {
+export default function CategoryLanding({ category, featuredProducts, totalInCategory, priceFrom, subCategoryCounts, otherCategories, otherCategoryCounts = {} }) {
     const fallback = COPY[category.slug] ?? {
         intro: category.tagline,
         story: { title: category.name, body: category.tagline },
@@ -138,7 +138,7 @@ export default function CategoryLanding({ category, featuredProducts, totalInCat
         <div className="container container-1400">
           <div className="mr-catstory-inner">
             <div className="mr-catstory-media">
-              <SmartImage src={category.banner} alt={`${category.name} by Shizenta`} glyph={category.icon} label="Shizenta" ratio="4 / 3" rounded={12}/>
+              <SmartImage src={category.storyImage} alt={`${category.name} by Shizenta`} glyph={category.icon} label="Shizenta" ratio="1 / 1" rounded={12}/>
               <span className="mr-catstory-badge">Est. Craftsmanship</span>
             </div>
             <div className="mr-catstory-content">
@@ -174,14 +174,20 @@ export default function CategoryLanding({ category, featuredProducts, totalInCat
       {otherCategories.length > 0 && (<section className="mr-catother">
           <div className="container container-1400">
             <SectionHeader subtitle="Keep Exploring" title="Discover Other Categories"/>
-            <div className="mr-catother-grid">
-              {otherCategories.map((c) => (<Link key={c.id} href={`/category/${c.slug}`} className="mr-cat-card">
-                  <div className="mr-cat-card-media">
-                    <SmartImage src={c.image} alt={c.name} glyph={c.icon} label={c.tagline} ratio="1 / 1"/>
-                    <div className="mr-cat-card-overlay"><span className="mr-cat-card-shop">Explore <Arrow /></span></div>
-                  </div>
-                  <div className="mr-cat-card-title">{c.name}</div>
-                </Link>))}
+            <div className="mr-collections-grid">
+              {otherCategories.map((c) => {
+                const count = otherCategoryCounts[c.slug] ?? 0;
+                return (<Link key={c.id} href={`/category/${c.slug}`} className={`mr-collection-card${c.image ? " has-image" : ""}`}>
+                    {c.image && (<span className="mr-collection-media" aria-hidden="true">
+                        <img src={c.image} alt="" loading="lazy"/>
+                      </span>)}
+                    <div className="mr-collection-body">
+                      <h3 className="mr-collection-name">{c.name}</h3>
+                      <p className="mr-collection-tag">{c.tagline}</p>
+                      <span className="mr-collection-link">Explore{count > 0 ? ` ${count} pieces` : ""} <Arrow /></span>
+                    </div>
+                  </Link>);
+            })}
             </div>
           </div>
         </section>)}

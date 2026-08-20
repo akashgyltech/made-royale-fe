@@ -1,22 +1,3 @@
-const COLLECTION_SLUGS = {
-    maharaja: 'Maharaja',
-    vintage: 'Vintage',
-    'contemporary-royale': 'Contemporary Royale',
-    heritage: 'Heritage',
-};
-const TAG_PREFIX = { collection: 'collection:', room: 'room:' };
-export function deriveCollection(tags) {
-    const tag = tags.find((t) => t.startsWith(TAG_PREFIX.collection));
-    if (!tag)
-        return undefined;
-    return COLLECTION_SLUGS[tag.slice(TAG_PREFIX.collection.length)];
-}
-export function deriveRoomSlugs(tags) {
-    return tags.filter((t) => t.startsWith(TAG_PREFIX.room)).map((t) => t.slice(TAG_PREFIX.room.length));
-}
-function publicTags(tags) {
-    return tags.filter((t) => !t.startsWith(TAG_PREFIX.collection) && !t.startsWith(TAG_PREFIX.room));
-}
 function categoryRef(ref) {
     if (!ref)
         return { id: '', name: 'Uncategorized', slug: '' };
@@ -75,7 +56,6 @@ export function adaptProduct(bp) {
         categoryName: category.name,
         subcategorySlug: subcategory.slug,
         subcategoryName: subcategory.name,
-        collection: deriveCollection(bp.tags),
         price: bp.price,
         comparePrice: bp.comparePrice ?? bp.price,
         image: primary?.url || '',
@@ -90,7 +70,7 @@ export function adaptProduct(bp) {
         stock: bp.stock,
         rating: bp.ratings.average,
         reviewCount: bp.ratings.count,
-        tags: publicTags(bp.tags),
+        tags: bp.tags || [],
         badge: deriveBadge(bp),
         isFeatured: bp.isFeatured,
         customizations: bp.customizations,
@@ -110,6 +90,9 @@ export function adaptCategory(bc) {
         icon: '✦',
         image: bc.image,
         banner: bc.banner || bc.image,
+        storyImage: bc.storyImage || bc.image,
+        showInShop: !!bc.showInShop,
+        showInRoom: !!bc.showInRoom,
         seo: bc.seo,
         subcategories: (bc.subcategories || []).map(adaptSubCategory),
     };
