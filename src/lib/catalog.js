@@ -47,27 +47,32 @@ export async function getRoomCategories() {
     }
 }
 export async function getProducts(filter = {}) {
-    let categoryId;
-    let subcategoryId;
-    if (filter.categorySlug) {
-        const cat = await getCategoryBySlug(filter.categorySlug);
-        categoryId = cat?.id;
+    try {
+        let categoryId;
+        let subcategoryId;
+        if (filter.categorySlug) {
+            const cat = await getCategoryBySlug(filter.categorySlug);
+            categoryId = cat?.id;
+        }
+        if (filter.subcategorySlug) {
+            const sub = await getCategoryBySlug(filter.subcategorySlug);
+            subcategoryId = sub?.id;
+        }
+        const page = await productApi.getProducts({
+            category: categoryId,
+            subcategory: subcategoryId,
+            search: filter.search,
+            minPrice: filter.minPrice,
+            maxPrice: filter.maxPrice,
+            sortBy: filter.sort ? sortByToQuery[filter.sort] : undefined,
+            page: filter.page,
+            limit: filter.limit || 24,
+        });
+        return { items: page.results.map(adaptProduct), total: page.totalResults, totalPages: page.totalPages, page: page.page };
     }
-    if (filter.subcategorySlug) {
-        const sub = await getCategoryBySlug(filter.subcategorySlug);
-        subcategoryId = sub?.id;
+    catch {
+        return { items: [], total: 0, totalPages: 0, page: filter.page || 1 };
     }
-    const page = await productApi.getProducts({
-        category: categoryId,
-        subcategory: subcategoryId,
-        search: filter.search,
-        minPrice: filter.minPrice,
-        maxPrice: filter.maxPrice,
-        sortBy: filter.sort ? sortByToQuery[filter.sort] : undefined,
-        page: filter.page,
-        limit: filter.limit || 24,
-    });
-    return { items: page.results.map(adaptProduct), total: page.totalResults, totalPages: page.totalPages, page: page.page };
 }
 export async function getProductBySlug(slug) {
     try {
