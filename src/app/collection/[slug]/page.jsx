@@ -4,10 +4,11 @@ import CollectionMain from "@/page-content/collection/collection-main";
 import { getCategoryBySlug, getShopCollections, getCollectionProducts } from "@/lib/catalog";
 import { buildPageMetadata } from "@/lib/seo-cms";
 
-export async function generateStaticParams() {
-    const collections = await getShopCollections();
-    return collections.map((c) => ({ slug: c.slug }));
-}
+// See shop-details/[slug]/page.jsx: every backend fetch here uses cache: 'no-store',
+// so pre-rendering a fixed slug list conflicts with that at runtime for anything
+// added after the last deploy. Force dynamic rendering instead.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const collection = await getCategoryBySlug(slug);

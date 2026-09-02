@@ -4,15 +4,11 @@ import CategoryMain from "@/page-content/category/category-main";
 import { getCategories, getCategoryBySlug, getProducts } from "@/lib/catalog";
 import { buildPageMetadata } from "@/lib/seo-cms";
 
-export async function generateStaticParams() {
-    try {
-        const categories = await getCategories();
-        return categories.map((c) => ({ slug: c.slug }));
-    }
-    catch {
-        return [];
-    }
-}
+// See shop-details/[slug]/page.jsx: every backend fetch here uses cache: 'no-store',
+// so pre-rendering a fixed slug list conflicts with that at runtime for anything
+// added after the last deploy. Force dynamic rendering instead.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const category = await getCategoryBySlug(slug);

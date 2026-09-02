@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import RoomMain from "@/page-content/room/room-main";
 import { getCategoryBySlug, getRoomCategories, getRoomProducts } from "@/lib/catalog";
 
-export async function generateStaticParams() {
-    const rooms = await getRoomCategories();
-    return rooms.map((r) => ({ slug: r.slug }));
-}
+// See shop-details/[slug]/page.jsx: every backend fetch here uses cache: 'no-store',
+// so pre-rendering a fixed slug list conflicts with that at runtime for anything
+// added after the last deploy. Force dynamic rendering instead.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const room = await getCategoryBySlug(slug);

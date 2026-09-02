@@ -1,19 +1,18 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import ShopDetailsMain from "@/page-content/shop/shop-details-main";
-import { getProductBySlug, getProducts, getRelatedProducts } from "@/lib/catalog";
+import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
 import { reviewApi } from "@/lib/store-api";
 import { buildPageMetadata } from "@/lib/seo-cms";
 
-export async function generateStaticParams() {
-    try {
-        const { items } = await getProducts({ limit: 100 });
-        return items.map((p) => ({ slug: p.slug }));
-    }
-    catch {
-        return [];
-    }
-}
+// Every backend call in this app fetches with cache: 'no-store' (see src/lib/api.js),
+// so this route is inherently dynamic. Pre-rendering a fixed slug list here at build
+// time conflicts with that at runtime for any product added after the last deploy
+// (Next.js error: "Page changed from static to dynamic at runtime") — new products
+// would 404/error on the shop page until the next build. Force dynamic rendering
+// instead so every product, old or new, renders on-demand from live data.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const product = await getProductBySlug(slug);
