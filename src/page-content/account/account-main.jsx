@@ -8,7 +8,7 @@ const AccountMain = () => {
     return (<Wrapper>
       <HeaderSix />
       <main>
-        <LuxBreadcrumb subtitle="Your Shizenta Circle" title="My Account" crumbs={[{ label: "Home", href: "/" }, { label: "Account" }]}/>
+        <LuxBreadcrumb subtitle="Your Shizenta Circle" title="My Account" crumbs={[{ label: "Home", href: "/" }, { label: "Account" }]} image="/images/shizenta-account-bg.webp"/>
         <AccountDashboard />
       </main>
       <FooterSix />

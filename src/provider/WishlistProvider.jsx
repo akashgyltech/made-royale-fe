@@ -5,22 +5,28 @@ import { useAuth } from './AuthProvider';
 import { profileApi } from '@/lib/store-api';
 import { adaptProduct } from '@/lib/adapters';
 const WishlistContext = createContext({
-    ids: [], products: [], count: 0, has: () => false, toggle: () => { }, remove: () => { }, clear: () => { },
+    ids: [], products: [], count: 0, loading: false, has: () => false, toggle: () => { }, remove: () => { }, clear: () => { },
 });
 export function WishlistProvider({ children }) {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const { toast } = useToast();
     const { isLoggedIn, openAuthModal } = useAuth();
     const refresh = useCallback(async () => {
         if (!isLoggedIn) {
             setProducts([]);
+            setLoading(false);
             return;
         }
+        setLoading(true);
         try {
             const list = await profileApi.getWishlist();
             setProducts(list.map(adaptProduct));
         }
         catch { /* ignore */ }
+        finally {
+            setLoading(false);
+        }
     }, [isLoggedIn]);
     useEffect(() => { void refresh(); }, [refresh]);
     const ids = products.map((p) => p.id);
@@ -59,6 +65,6 @@ export function WishlistProvider({ children }) {
             toast(e instanceof Error ? e.message : 'Something went wrong', 'error');
         }
     }, [ids, isLoggedIn, toast]);
-    return <WishlistContext.Provider value={{ ids, products, count: ids.length, has, toggle, remove, clear: () => void clear() }}>{children}</WishlistContext.Provider>;
+    return <WishlistContext.Provider value={{ ids, products, count: ids.length, loading, has, toggle, remove, clear: () => void clear() }}>{children}</WishlistContext.Provider>;
 }
 export function useWishlist() { return useContext(WishlistContext); }

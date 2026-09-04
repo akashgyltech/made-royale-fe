@@ -42,7 +42,7 @@ const TrackOrderMain = () => {
     return (<Wrapper>
       <HeaderSix />
       <main>
-        <LuxBreadcrumb subtitle="Order Tracking" title="Track Your Order" crumbs={[{ label: "Home", href: "/" }, { label: "Track Order" }]}/>
+        <LuxBreadcrumb subtitle="Order Tracking" title="Track Your Order" crumbs={[{ label: "Home", href: "/" }, { label: "Track Order" }]} image="/images/shizenta-account-bg.webp"/>
         <section className="mr-track">
           <div className="container container-1300">
             {isInitializing ? (<div className="mr-oc-loading">Loading…</div>) : !isLoggedIn ? (<div className="mr-shop-empty">
@@ -64,10 +64,10 @@ const TrackOrderMain = () => {
                 {order && (<div className="mr-track-result">
                     <div className="mr-track-head">
                       <div><span className="mr-track-label">Order</span><h3>{order.orderNumber}</h3><p>{order.createdAt ? `Placed on ${new Date(order.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}` : ""}</p></div>
-                      <div className="mr-track-eta"><span>Estimated Delivery</span><strong>{order.shipment.estimatedDelivery ? new Date(order.shipment.estimatedDelivery).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "To be confirmed"}</strong></div>
+                      <div className="mr-track-eta"><span>Estimated Delivery</span><strong>{order.shipment?.estimatedDelivery ? new Date(order.shipment.estimatedDelivery).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "To be confirmed"}</strong></div>
                     </div>
                     <OrderTimeline status={order.status}/>
-                    {order.shipment.trackingNumber && (<div className="mr-checkout-info">
+                    {order.shipment?.trackingNumber && (<div className="mr-checkout-info">
                         <span>🚚</span>
                         <span>
                           {order.shipment.carrier ? `${order.shipment.carrier} — ` : ""}Tracking #{order.shipment.trackingNumber}

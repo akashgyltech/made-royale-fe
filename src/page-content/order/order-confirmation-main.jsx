@@ -5,13 +5,16 @@ import Wrapper from "@/layouts/wrapper";
 import FooterSix from "@/layouts/footers/footer-six";
 import HeaderSix from "@/layouts/headers/header-six";
 import SmartImage from "@/components/ui/smart-image";
+import OrderTimeline from "@/components/order/order-timeline";
 import { formatINR } from "@/data/catalog";
 import { useAuth } from "@/provider/AuthProvider";
 import { useCart } from "@/provider/CartProvider";
 import { useToast } from "@/provider/ToastProvider";
 import { orderApi, paymentApi } from "@/lib/store-api";
 import { openRazorpayCheckout } from "@/lib/razorpay";
-import { STATUS_LABELS } from "@/lib/order-status";
+import { downloadInvoicePdf } from "@/lib/invoice-pdf";
+import { STATUS_LABELS, isTerminalException, exceptionNote } from "@/lib/order-status";
+
 const PAYMENT_METHOD_LABEL = {
     cod: "Cash on Delivery",
     razorpay: "Razorpay (Online Payment)",
@@ -24,6 +27,19 @@ const PAYMENT_STATUS_LABEL = {
     refunded: "Refunded",
     partial_refund: "Partially Refunded",
 };
+const NEXT_STEPS = {
+    success: [
+        { glyph: "✉️", text: "A confirmation email is on its way to your inbox." },
+        { glyph: "🎩", text: "Our concierge will reach out within 24 hours to schedule delivery." },
+        { glyph: "🚚", text: "Sit back — white-glove delivery & installation is on us." },
+    ],
+    pending: [
+        { glyph: "💳", text: "Complete your payment to confirm this order." },
+        { glyph: "✉️", text: "We'll email you the moment payment is received." },
+        { glyph: "🎩", text: "Then our concierge takes over to schedule delivery." },
+    ],
+};
+
 const OrderConfirmationMain = ({ orderNumber }) => {
     const { isLoggedIn, isInitializing, openAuthModal, user } = useAuth();
     const { clearCart } = useCart();
@@ -31,6 +47,8 @@ const OrderConfirmationMain = ({ orderNumber }) => {
     const [order, setOrder] = useState(undefined);
     const [error, setError] = useState(null);
     const [retrying, setRetrying] = useState(false);
+    const [copied, setCopied] = useState(false);
+
     const load = useCallback(async () => {
         setOrder(undefined);
         setError(null);
@@ -43,11 +61,25 @@ const OrderConfirmationMain = ({ orderNumber }) => {
             setError(err instanceof Error ? err.message : "Could not load this order");
         }
     }, [orderNumber]);
+
     useEffect(() => {
         if (isInitializing || !isLoggedIn)
             return;
         void load();
     }, [isInitializing, isLoggedIn, load]);
+
+    const copyOrderNumber = async () => {
+        try {
+            await navigator.clipboard.writeText(orderNumber);
+            setCopied(true);
+            toast("Order number copied", "success");
+            setTimeout(() => setCopied(false), 1800);
+        }
+        catch {
+            toast("Could not copy — please select it manually", "error");
+        }
+    };
+
     const retryPayment = async () => {
         if (!order)
             return;
@@ -91,11 +123,19 @@ const OrderConfirmationMain = ({ orderNumber }) => {
             toast(err instanceof Error ? err.message : "Could not start payment", "error");
         }
     };
-    const canRetryPayment = !!order && order.payment.method === "razorpay" && (order.payment.status === "pending" || order.payment.status === "failed") && order.status !== "cancelled";
+
+    const isException = order ? isTerminalException(order.status) : false;
+    const isPaidOrCod = order ? (order.payment.status === "paid" || order.payment.method === "cod") : false;
+    const canRetryPayment = !!order && order.payment.method === "razorpay" && (order.payment.status === "pending" || order.payment.status === "failed") && !isException;
+    const isPendingHero = canRetryPayment && !isPaidOrCod;
+    const heroState = isException ? "exception" : isPendingHero ? "pending" : "success";
+    const eta = order?.shipment?.estimatedDelivery
+        ? new Date(order.shipment.estimatedDelivery).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })
+        : null;
+
     return (<Wrapper>
       <HeaderSix />
-      <main className="mr-page-pt">
-        <section className="mr-oc">
+             <section className="mr-oc">
           <div className="container container-1300">
             {isInitializing ? (<div className="mr-oc-loading">Loading…</div>) : !isLoggedIn ? (<div className="mr-shop-empty">
                 <div className="mr-shop-empty-glyph">🔐</div>
@@ -103,25 +143,54 @@ const OrderConfirmationMain = ({ orderNumber }) => {
                 <p>Order details are only visible to the customer who placed the order.</p>
                 <button className="mr-btn-solid" onClick={() => openAuthModal("login")}>Sign In</button>
               </div>) : order === undefined ? (<div className="mr-oc-loading">Loading your order…</div>) : !order ? (<div className="mr-shop-empty"><div className="mr-shop-empty-glyph">❖</div><h3>Order not found</h3><p>{error || `We couldn’t find order ${orderNumber}.`}</p><Link href="/account?tab=orders" className="mr-btn-solid">View my orders</Link></div>) : (<>
-                <div className="mr-oc-hero">
-                  <div className="mr-oc-check"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                  <span className="mr-oc-sub">Thank you for your patronage</span>
-                  <h1 className="mr-oc-title">{order.payment.status === "paid" || order.payment.method === "cod" ? "Your Order is Confirmed" : "Your Order is Placed"}</h1>
-                  <p className="mr-oc-desc">A confirmation has been sent to your email. Our concierge will reach out to schedule your white-glove delivery.</p>
+                <div className={`mr-oc-hero mr-oc-fade is-${heroState}`}>
+                  <div className="mr-oc-check">
+                    {heroState === "success" && <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>}
+                    {heroState === "pending" && <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>}
+                    {heroState === "exception" && <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>}
+                  </div>
+                  <span className="mr-oc-sub">
+                    {heroState === "success" ? "Thank you for your patronage" : heroState === "pending" ? "Action needed" : "Order update"}
+                  </span>
+                  <h1 className="mr-oc-title">
+                    {heroState === "success" ? "Your Order is Confirmed" : heroState === "pending" ? "Complete Your Payment" : STATUS_LABELS[order.status]}
+                  </h1>
+                  <p className="mr-oc-desc">
+                    {heroState === "success"
+                        ? "A confirmation has been sent to your email. Our concierge will reach out to schedule your white-glove delivery."
+                        : heroState === "pending"
+                            ? "Your order is reserved, but we haven't received payment yet. Complete payment to confirm it — your items are held for you in the meantime."
+                            : exceptionNote(order.status)}
+                  </p>
+
+                  <button type="button" className={`mr-oc-ordernum ${copied ? "is-copied" : ""}`} onClick={() => void copyOrderNumber()} title="Copy order number">
+                    <span>Order Number</span>
+                    <strong>{order.orderNumber}</strong>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      {copied ? <path d="M20 6L9 17l-5-5"/> : <><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></>}
+                    </svg>
+                  </button>
+
                   <div className="mr-oc-meta">
-                    <div><span>Order Number</span><strong>{order.orderNumber}</strong></div>
                     <div><span>Status</span><strong>{STATUS_LABELS[order.status]}</strong></div>
                     <div><span>Payment</span><strong>{PAYMENT_METHOD_LABEL[order.payment.method]} · {PAYMENT_STATUS_LABEL[order.payment.status]}</strong></div>
+                    {eta && <div><span>Estimated Delivery</span><strong>{eta}</strong></div>}
                   </div>
+
                   <div className="mr-oc-actions">
-                    {canRetryPayment && <button className="mr-btn-gold" onClick={() => void retryPayment()} disabled={retrying}>{retrying ? "Processing…" : "Complete Payment"}</button>}
-                    <Link href={`/track-order?order=${order.orderNumber}`} className="mr-btn-solid">Track Order</Link>
-                    <Link href={`/invoice/${order.orderNumber}`} className="mr-btn-outline">View Invoice</Link>
+                    {canRetryPayment && <button className="mr-btn-gold mr-oc-cta" onClick={() => void retryPayment()} disabled={retrying}>{retrying ? "Processing…" : "Complete Payment"}</button>}
+                    {!isPendingHero && !isException && <button className="mr-btn-gold" onClick={() => downloadInvoicePdf(order)}>Download Invoice</button>}
+                    <Link href={`/track-order?order=${order.orderNumber}`} className={isPendingHero || isException ? "mr-btn-solid" : "mr-btn-outline"}>Track Order</Link>
                     <Link href="/shop" className="mr-btn-outline">Continue Shopping</Link>
                   </div>
                 </div>
 
-                <div className="mr-oc-grid">
+                {!isException && (<div className="mr-oc-panel mr-oc-fade mr-oc-delay-1">
+                    <h3>Order Journey</h3>
+                    <OrderTimeline status={order.status}/>
+                  </div>)}
+
+                <div className="mr-oc-grid mr-oc-fade mr-oc-delay-2">
                   <div className="mr-oc-panel">
                     <h3>Order Details</h3>
                     <div className="mr-oc-items">
@@ -140,20 +209,29 @@ const OrderConfirmationMain = ({ orderNumber }) => {
                           <div className="mr-cart-summary-row"><span>SGST</span><span>{formatINR(order.pricing.sgst)}</span></div>
                         </>)}
                     </div>
-                    <div className="mr-cart-summary-total"><span>Total Paid</span><span>{formatINR(order.pricing.grandTotal)}</span></div>
+                    <div className="mr-cart-summary-total"><span>{isPaidOrCod ? "Total Paid" : "Order Total"}</span><span>{formatINR(order.pricing.grandTotal)}</span></div>
                   </div>
 
-                  <div className="mr-oc-panel">
-                    <h3>Delivery Address</h3>
-                    <p className="mr-oc-address"><strong>{order.shippingAddress.name}</strong> • {order.shippingAddress.phone}<br />{order.shippingAddress.line1}{order.shippingAddress.line2 ? `, ${order.shippingAddress.line2}` : ""}<br />{order.shippingAddress.city}, {order.shippingAddress.state} — {order.shippingAddress.pincode}</p>
-                    {order.gstDetails.buyerGstin && <p className="mr-oc-gst">GST Invoice: {order.gstDetails.buyerBusinessName} ({order.gstDetails.buyerGstin})</p>}
-                    <div className="mr-oc-assure"><div><span>🛡️</span> Assured warranty on every piece</div><div><span>🚚</span> Free white-glove delivery & installation</div><div><span>↩️</span> 7-day easy returns</div></div>
+                  <div className="mr-oc-side">
+                    <div className="mr-oc-panel">
+                      <h3>Delivery Address</h3>
+                      <p className="mr-oc-address"><strong>{order.shippingAddress.name}</strong> • {order.shippingAddress.phone}<br />{order.shippingAddress.line1}{order.shippingAddress.line2 ? `, ${order.shippingAddress.line2}` : ""}<br />{order.shippingAddress.city}, {order.shippingAddress.state} — {order.shippingAddress.pincode}</p>
+                      {order.gstDetails.buyerGstin && <p className="mr-oc-gst">GST Invoice: {order.gstDetails.buyerBusinessName} ({order.gstDetails.buyerGstin})</p>}
+                      <div className="mr-oc-assure"><div><span>🛡️</span> Assured warranty on every piece</div><div><span>🚚</span> Free white-glove delivery & installation</div><div><span>↩️</span> 7-day easy returns</div></div>
+                    </div>
+
+                    {!isException && (<div className="mr-oc-panel mr-oc-next">
+                        <h3>What Happens Next</h3>
+                        <ul>
+                          {NEXT_STEPS[heroState === "pending" ? "pending" : "success"].map((step, i) => (<li key={i}><span className="mr-oc-next-glyph">{step.glyph}</span><span>{step.text}</span></li>))}
+                        </ul>
+                        <Link href="/contact" className="mr-btn-text">Need help? Contact us →</Link>
+                      </div>)}
                   </div>
                 </div>
               </>)}
           </div>
         </section>
-      </main>
       <FooterSix />
     </Wrapper>);
 };

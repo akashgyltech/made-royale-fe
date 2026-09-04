@@ -6,6 +6,7 @@ import HeaderSix from "@/layouts/headers/header-six";
 import FooterSix from "@/layouts/footers/footer-six";
 import { useAuth } from "@/provider/AuthProvider";
 import { orderApi } from "@/lib/store-api";
+import { downloadInvoicePdf } from "@/lib/invoice-pdf";
 import { formatINR } from "@/data/catalog";
 const PAYMENT_METHOD_LABEL = {
     cod: "Cash on Delivery",
@@ -46,7 +47,7 @@ const InvoiceMain = ({ orderNumber }) => {
               </div>) : (<>
                 <div className="mr-invoice-topbar">
                   <Link href="/account?tab=orders" className="mr-btn-text">← Back to Orders</Link>
-                  <button className="mr-btn-solid mr-btn-sm" onClick={() => window.print()}>Print / Download PDF</button>
+                  <button className="mr-btn-solid mr-btn-sm" onClick={() => downloadInvoicePdf(order)}>Download PDF</button>
                 </div>
                 <InvoiceSheet order={order}/>
               </>)}
@@ -59,10 +60,12 @@ const InvoiceMain = ({ orderNumber }) => {
 function InvoiceSheet({ order }) {
     const date = new Date(order.gstDetails.invoiceDate || order.createdAt || Date.now()).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
     const shipToDiffers = !sameAddress(order.billingAddress, order.shippingAddress);
+    const seller = order.invoiceSnapshot?.seller;
+    const sellerAddr = seller?.address;
     return (<div className="mr-invoice-sheet">
       <div className="mr-invoice-head">
         <div className="mr-invoice-brand">
-          <span className="mr-logo mr-invoice-logo">Made<span> Royale</span></span>
+          <span className="mr-logo mr-invoice-logo">{seller?.tradeName || "Shizenta"}</span>
           <p>Nature-Inspired Luxury Furniture</p>
         </div>
         <div className="mr-invoice-meta">
@@ -76,8 +79,13 @@ function InvoiceSheet({ order }) {
       <div className="mr-invoice-parties">
         <div>
           <span className="mr-invoice-label">From</span>
-          <strong>Shizenta Furnishings Pvt. Ltd.</strong>
-          <p>4th Floor, Design Arcade, Andheri East<br />Mumbai, Maharashtra 400069<br />care@shizenta.com</p>
+          <strong>{seller?.legalName || "Alphaomega International Company"}</strong>
+          <p>
+            {sellerAddr?.line1 || "4th Floor, Design Arcade, Andheri East"}<br />
+            {sellerAddr ? `${sellerAddr.city}, ${sellerAddr.state} ${sellerAddr.pincode}` : "Mumbai, Maharashtra 400069"}<br />
+            {seller?.email || "care@shizenta.com"}
+          </p>
+          {seller?.gstin && <p className="mr-invoice-gstin">GSTIN: {seller.gstin}</p>}
         </div>
         <div>
           <span className="mr-invoice-label">Bill To</span>
@@ -138,11 +146,11 @@ function InvoiceSheet({ order }) {
         </div>
         <div>
           <span className="mr-invoice-label">Estimated Delivery</span>
-          <p>{order.shipment.estimatedDelivery ? new Date(order.shipment.estimatedDelivery).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "To be confirmed"}</p>
+          <p>{order.shipment?.estimatedDelivery ? new Date(order.shipment.estimatedDelivery).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "To be confirmed"}</p>
         </div>
       </div>
 
-      <p className="mr-invoice-note">Prices are inclusive of all applicable taxes. This is a computer-generated invoice and does not require a signature. Thank you for choosing Shizenta.</p>
+      <p className="mr-invoice-note">{order.invoiceSnapshot?.footerNote || "Prices are inclusive of all applicable taxes. This is a computer-generated invoice and does not require a signature. Thank you for choosing Shizenta."}</p>
     </div>);
 }
 export default InvoiceMain;

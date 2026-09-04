@@ -7,6 +7,7 @@ import { useWishlist } from '@/provider/WishlistProvider';
 import { useToast } from '@/provider/ToastProvider';
 import { formatINR } from '@/data/catalog';
 import { orderApi, profileApi } from '@/lib/store-api';
+import { downloadInvoicePdf } from '@/lib/invoice-pdf';
 import { STATUS_LABELS } from '@/lib/order-status';
 import { INDIAN_STATES } from '@/lib/indian-states';
 import ShopItem from '@/components/shop/shop-item';
@@ -118,7 +119,7 @@ function OrderRow({ order }) {
       <div className="mr-order-row-foot">
         <div className="mr-order-row-actions">
           <Link href={`/track-order?order=${order.orderNumber}`} className="mr-btn-outline mr-btn-sm">Track Order</Link>
-          <Link href={`/invoice/${order.orderNumber}`} className="mr-btn-outline mr-btn-sm">Invoice</Link>
+          <button type="button" className="mr-btn-outline mr-btn-sm" onClick={() => downloadInvoicePdf(order)}>Invoice</button>
         </div>
         <Link href={`/order-confirmation/${order.orderNumber}`} className="mr-btn-text">View Details →</Link>
       </div>

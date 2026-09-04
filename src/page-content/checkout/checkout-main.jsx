@@ -8,7 +8,7 @@ const CheckoutMain = () => {
     return (<Wrapper>
       <HeaderSix />
       <main>
-        <LuxBreadcrumb subtitle="Secure Checkout" title="Checkout" crumbs={[{ label: "Home", href: "/" }, { label: "Cart", href: "/cart" }, { label: "Checkout" }]}/>
+        <LuxBreadcrumb subtitle="Secure Checkout" title="Checkout" crumbs={[{ label: "Home", href: "/" }, { label: "Cart", href: "/cart" }, { label: "Checkout" }]} image="/images/shizenta-account-bg.webp"/>
         <CheckoutFlow />
       </main>
       <FooterSix />

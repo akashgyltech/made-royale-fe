@@ -26,6 +26,7 @@ export default function HeaderSix({ transparent = false }) {
     const router = useRouter();
     const profileRef = useRef(null);
     const bannerRef = useRef(null);
+    const headerBarRef = useRef(null);
     const { user, isLoggedIn, openAuthModal, logout } = useAuth();
     const { count: cartCount, openDrawer } = useCart();
     const { count: wishCount } = useWishlist();
@@ -40,6 +41,19 @@ export default function HeaderSix({ transparent = false }) {
         ro.observe(el);
         return () => ro.disconnect();
     }, []);
+    useEffect(() => {
+        const barEl = headerBarRef.current;
+        if (!barEl)
+            return;
+        const writeOffset = () => {
+            const total = bannerHeight + barEl.offsetHeight;
+            document.documentElement.style.setProperty('--mr-fixed-offset', `${total}px`);
+        };
+        writeOffset();
+        const ro = new ResizeObserver(writeOffset);
+        ro.observe(barEl);
+        return () => ro.disconnect();
+    }, [bannerHeight]);
     useEffect(() => {
         const onClick = (e) => { if (profileRef.current && !profileRef.current.contains(e.target))
             setProfileOpen(false); };
@@ -66,26 +80,13 @@ export default function HeaderSix({ transparent = false }) {
     const submitSearch = () => { const q = term.trim(); router.push(q ? `/shop?q=${encodeURIComponent(q)}` : '/shop'); };
     const initials = user?.name ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() : 'SZ';
     return (<>
-      <div ref={bannerRef} role="alert" style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1000,
-            background: '#b8860b',
-            color: '#111',
-            textAlign: 'center',
-            fontSize: '13px',
-            lineHeight: 1.5,
-            padding: '8px 16px',
-            fontWeight: 500,
-        }}>
+      <div ref={bannerRef} role="alert" className="mr-announce-banner">
         This website is currently under development and not yet fully launched. Any payment
         made at this stage is non-refundable, and the company is not liable to deliver any
         product ordered during this period.
       </div>
       <header className="tp-header-height" ref={headerRef}>
-        <div className={`tp-inner-header-2-area tp-shop-mob-space ${innerClass}`} style={{ top: bannerHeight }}>
+        <div ref={headerBarRef} className={`tp-inner-header-2-area tp-shop-mob-space ${innerClass}`} style={{ top: bannerHeight }}>
           <div className="container container-1800">
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-4 col-md-4 col-4">

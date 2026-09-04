@@ -6,7 +6,7 @@ import { adaptProduct } from '@/lib/adapters';
 const KEY = 'mr_cart';
 const CartContext = createContext({
     lines: [], resolved: [], count: 0, subtotal: 0, savings: 0, isLoading: false,
-    addToCart: () => { }, updateQty: () => { }, removeLine: () => { }, clearCart: () => { },
+    addToCart: () => { }, addManyToCart: () => { }, updateQty: () => { }, removeLine: () => { }, clearCart: () => { },
     isDrawerOpen: false, openDrawer: () => { }, closeDrawer: () => { },
 });
 const lineKey = (id, color) => `${id}|${color ?? ''}`;
@@ -60,6 +60,21 @@ export function CartProvider({ children }) {
         toast(cached ? `${cached.name} added to cart` : 'Item added to cart');
         setDrawerOpen(true);
     }, [lines, persist, productCache, toast]);
+    // Merge several items in one write so bulk actions (e.g. "Add all to cart" from the
+    // wishlist) produce a single toast and drawer-open instead of one per item.
+    const addManyToCart = useCallback((items) => {
+        let next = lines;
+        items.forEach(({ id, qty = 1, color }) => {
+            const k = lineKey(id, color);
+            const existing = next.find((l) => lineKey(l.productId, l.color) === k);
+            next = existing
+                ? next.map((l) => (lineKey(l.productId, l.color) === k ? { ...l, qty: l.qty + qty } : l))
+                : [...next, { productId: id, qty, color }];
+        });
+        persist(next);
+        toast(items.length === 1 ? 'Item added to cart' : `${items.length} items added to cart`);
+        setDrawerOpen(true);
+    }, [lines, persist, toast]);
     const updateQty = useCallback((key, qty) => { if (qty < 1)
         return; persist(lines.map((l) => (lineKey(l.productId, l.color) === key ? { ...l, qty } : l))); }, [lines, persist]);
     const removeLine = useCallback((key) => persist(lines.filter((l) => lineKey(l.productId, l.color) !== key)), [lines, persist]);
@@ -73,7 +88,7 @@ export function CartProvider({ children }) {
     const count = useMemo(() => lines.reduce((s, l) => s + l.qty, 0), [lines]);
     const subtotal = useMemo(() => resolved.reduce((s, l) => s + l.lineTotal, 0), [resolved]);
     const savings = useMemo(() => resolved.reduce((s, l) => s + (l.product.comparePrice - l.product.price) * l.qty, 0), [resolved]);
-    return (<CartContext.Provider value={{ lines, resolved, count, subtotal, savings, isLoading, addToCart, updateQty, removeLine, clearCart, isDrawerOpen, openDrawer: () => setDrawerOpen(true), closeDrawer: () => setDrawerOpen(false) }}>
+    return (<CartContext.Provider value={{ lines, resolved, count, subtotal, savings, isLoading, addToCart, addManyToCart, updateQty, removeLine, clearCart, isDrawerOpen, openDrawer: () => setDrawerOpen(true), closeDrawer: () => setDrawerOpen(false) }}>
       {children}
     </CartContext.Provider>);
 }

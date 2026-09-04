@@ -4,14 +4,11 @@ import useScrollSmooth from "@/hooks/use-scroll-smooth";
 import { ScrollSmoother, ScrollTrigger, SplitText } from "@/plugins";
 import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother, SplitText);
-// internal imports
 import Wrapper from "@/layouts/wrapper";
 import HeaderSix from "@/layouts/headers/header-six";
 import HeroBannerSix from "@/components/hero-banner/hero-banner-six";
 import ShopCategory from "@/components/category/shop-category";
 import ShopProducts from "@/components/shop/shop-products";
-// images
-import BrandFour from "@/components/brand/brand-four";
 import FooterSix from "@/layouts/footers/footer-six";
 import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
 import AssuranceStrip from "@/components/home/assurance-strip";
@@ -77,13 +74,8 @@ const HomeSixMain = ({ featuredProducts, categories, collections, collectionCoun
 
             <HomeFaq faqs={faqs}/>
 
-            <BrandFour />
-
           </main>
-
-          {/* footer area */}
           <FooterSix />
-          {/* footer area */}
         </div>
       </div>
     </Wrapper>);

@@ -211,6 +211,22 @@ export default function CheckoutFlow() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     const back = () => { setStep((s) => Math.max(0, s - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+    // Payment never went through — this order was never actually confirmed, so don't send the
+    // customer to the confirmation page for it. Cancel the unpaid order, save the items they were
+    // buying back to the wishlist so nothing is lost, and let them pick up from there.
+    async function handleUnpaidOrder(order, message) {
+        setPlacing(false);
+        try {
+            await orderApi.cancelOrder(order.id, 'Payment not completed');
+        }
+        catch { /* order may already be in a terminal state — not worth blocking on */ }
+        try {
+            await Promise.all(itemsForApi.map((it) => profileApi.addToWishlist(it.productId)));
+        }
+        catch { /* best-effort save to wishlist */ }
+        toast(message, 'info');
+        router.push('/wishlist');
+    }
     async function payWithRazorpay(order) {
         try {
             const rp = await paymentApi.createRazorpayOrder(order.id);
@@ -242,22 +258,16 @@ export default function CheckoutFlow() {
                 },
                 modal: {
                     ondismiss: () => {
-                        setPlacing(false);
-                        toast('Payment was not completed. Your order is saved — you can pay again from your order details.', 'info');
-                        router.push(`/order-confirmation/${order.orderNumber}`);
+                        void handleUnpaidOrder(order, 'Order not fulfilled — payment was not completed. We\'ve saved your items to your wishlist.');
                     },
                 },
             });
             rzp.on('payment.failed', () => {
-                setPlacing(false);
-                toast('Payment failed. Your order is saved — you can retry payment from your order details.', 'error');
-                router.push(`/order-confirmation/${order.orderNumber}`);
+                void handleUnpaidOrder(order, 'Order not fulfilled — payment failed. We\'ve saved your items to your wishlist.');
             });
         }
         catch (err) {
-            setPlacing(false);
-            toast(err instanceof Error ? err.message : 'Could not start payment. Your order is saved — you can retry from your order details.', 'error');
-            router.push(`/order-confirmation/${order.orderNumber}`);
+            void handleUnpaidOrder(order, err instanceof Error ? `Order not fulfilled — ${err.message}. We've saved your items to your wishlist.` : 'Order not fulfilled — could not start payment. We\'ve saved your items to your wishlist.');
         }
     }
     const placeOrder = async () => {
