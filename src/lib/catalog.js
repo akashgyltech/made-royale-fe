@@ -13,7 +13,16 @@ const sortByToQuery = {
 export async function getCategories() {
     try {
         const cats = await productApi.getCategories(null);
-        return cats.map(adaptCategory);
+        return cats.map(adaptCategory).filter((c) => !c.showInRoom);
+    }
+    catch {
+        return [];
+    }
+}
+export async function getAllCategories() {
+    try {
+        const cats = await productApi.getCategories();
+        return cats.map(adaptCategory).filter((c) => !c.showInRoom);
     }
     catch {
         return [];
@@ -50,6 +59,7 @@ export async function getProducts(filter = {}) {
     try {
         let categoryId;
         let subcategoryId;
+        let roomId;
         if (filter.categorySlug) {
             const cat = await getCategoryBySlug(filter.categorySlug);
             categoryId = cat?.id;
@@ -58,9 +68,14 @@ export async function getProducts(filter = {}) {
             const sub = await getCategoryBySlug(filter.subcategorySlug);
             subcategoryId = sub?.id;
         }
+        if (filter.roomSlug) {
+            const room = await getCategoryBySlug(filter.roomSlug);
+            roomId = room?.id;
+        }
         const page = await productApi.getProducts({
             category: categoryId,
             subcategory: subcategoryId,
+            room: roomId,
             search: filter.search,
             minPrice: filter.minPrice,
             maxPrice: filter.maxPrice,
@@ -104,5 +119,5 @@ export async function getCollectionProducts(collectionSlug, limit = 100) {
     return getProducts({ categorySlug: collectionSlug, limit }).then((r) => r.items);
 }
 export async function getRoomProducts(roomSlug, limit = 100) {
-    return getProducts({ categorySlug: roomSlug, limit }).then((r) => r.items);
+    return getProducts({ roomSlug, limit }).then((r) => r.items);
 }

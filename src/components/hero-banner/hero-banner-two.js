@@ -11,14 +11,14 @@ const HeroBannerTwo = ({ imageSrc, imageAlt, title, subtitle, buttonText, button
               <div className="tp-hero-2-wrapper d-flex align-items-center p-relative">
                 <div className="tp-hero-2-bg tp-gsap-bg tp-hero-bg-single" style={{ overflow: 'hidden' }}>
                   <img width={"100%"} height={"auto"} src={imageSrc} alt={imageAlt}/>
-                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 1 }}/>
+                  <div className="mr-hero2-overlay"/>
                 </div>
-                <div className="tp-hero-2-content-wrap p-relative">
-                  <div className="tp-hero-2-title-box">
-                    <h2 className="tp-hero-2-title text-1 z-index-5">
+                <div className="tp-hero-2-content-wrap p-relative mr-hero2-content-wrap">
+                  <div className="tp-hero-2-title-box mr-hero2-glass">
+                    <h2 className="tp-hero-2-title text-1 z-index-5 mr-hero2-title">
                       {title}
                     </h2>
-                    <p>
+                    <p className="mr-hero2-subtitle">
                       {subtitle}
                     </p>
                     <Link className="tp-btn-white" href={buttonLink}>

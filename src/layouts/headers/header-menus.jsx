@@ -1,4 +1,3 @@
-import banner1 from "../../../public/assets/img/menu/shop-menu/banner-1.jpg";
 import menu_data from "@/data/menu-data";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,22 +64,22 @@ const HeaderMenus = ({ menu: menuProp }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-4">
+                  {menu.pages_mega_menu.banner && (<div className="col-xl-4">
                     <div className="tp-megamenu-shop-style">
-                      <div className="tp-shop-banner-left p-relative">
-                        <div className="tp-shop-banner-thumb">
-                          <Image style={{ width: "100%", height: "auto" }} src={banner1} alt="image"/>
-                        </div>
+                      <Link href={menu.pages_mega_menu.banner.link} className="tp-shop-banner-left p-relative">
+                        {menu.pages_mega_menu.banner.image && (<div className="tp-shop-banner-thumb">
+                          <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src={menu.pages_mega_menu.banner.image} alt={menu.pages_mega_menu.banner.title}/>
+                        </div>)}
                         <div className="tp-shop-banner-content">
-                          <h4 className="tp-shop-banner-title">Sale</h4>
-                          <span>20% Off all Shoes</span>
-                          <Link className="tp-shop-btn" href="/shop">
+                          <h4 className="tp-shop-banner-title">{menu.pages_mega_menu.banner.title}</h4>
+                          <span>{menu.pages_mega_menu.banner.subtitle}</span>
+                          <span className="tp-shop-btn">
                             Shop Now
-                          </Link>
+                          </span>
                         </div>
-                      </div>
+                      </Link>
                     </div>
-                  </div>
+                  </div>)}
                 </div>
               </div>
             </div>) : menu.portfolio_mega_menus ? (<div className="tp-submenu submenu tp-mega-menu">

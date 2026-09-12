@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 export default function LuxBreadcrumb({ title, subtitle, crumbs, image }) {
     return (<section className="mr-breadcrumb">
       {image && (<>
-          <img src={image} alt="" className="mr-breadcrumb-bg"/>
+          <Image src={image} alt="" fill sizes="100vw" priority className="mr-breadcrumb-bg"/>
           <div className="mr-breadcrumb-overlay" aria-hidden="true"/>
         </>)}
       <div className="mr-breadcrumb-pattern" aria-hidden="true"/>

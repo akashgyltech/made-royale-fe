@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import HeaderMenus from './header-menus';
-import { Search, User, Wishlist, Zero } from '@/components/svg';
+import { Menu, Search, User, Wishlist, Zero } from '@/components/svg';
 import CartOffcanvas from '@/components/offcanvas/cart-offcanvas';
 import MobileOffcanvas from '@/components/offcanvas/mobile-offcanvas';
 import useStickyHeader from '@/hooks/use-sticky-header';
@@ -103,6 +103,8 @@ export default function HeaderSix({ transparent = false }) {
               </div>
               <div className="col-xl-5 col-lg-8 col-md-8 col-8">
                 <div className="tp-inner-header-2-right d-flex align-items-center justify-content-end">
+                  <button className="mr-icon-btn d-xl-none" onClick={() => setOpenOffcanvas(true)} aria-label="Open menu"><span><Menu /></span></button>
+
                   <div className="tp-inner-header-2-search p-relative d-none d-lg-block">
                     <input type="text" placeholder="Search luxury furniture" value={term} onChange={(e) => setTerm(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter')
         submitSearch(); }}/>

@@ -2,6 +2,19 @@
 // replacing the hardcoded demo submenus in src/data/menu-data.js. "Quick Links" stays
 // hand-authored here since it's real site structure, not admin-managed catalog data.
 export function buildLiveMegaMenus({ categories = [], rooms = [], collections = [] }) {
+    const shopBanner = categories[0] && {
+        image: categories[0].banner || categories[0].image,
+        title: categories[0].name,
+        subtitle: categories[0].tagline,
+        link: `/category/${categories[0].slug}`,
+    };
+    const collectionsSource = collections[0] || categories[1] || categories[0];
+    const collectionsBanner = collectionsSource && {
+        image: collectionsSource.banner || collectionsSource.image,
+        title: collectionsSource.name,
+        subtitle: collectionsSource.tagline,
+        link: collections[0] ? `/collection/${collectionsSource.slug}` : `/category/${collectionsSource.slug}`,
+    };
     return {
         shop: {
             first: {
@@ -15,6 +28,7 @@ export function buildLiveMegaMenus({ categories = [], rooms = [], collections = 
                     { title: 'View All Furniture', link: '/shop' },
                 ],
             },
+            banner: shopBanner,
         },
         collections: {
             first: {
@@ -31,6 +45,7 @@ export function buildLiveMegaMenus({ categories = [], rooms = [], collections = 
                     { title: 'My Account', link: '/account' },
                 ],
             },
+            banner: collectionsBanner,
         },
     };
 }

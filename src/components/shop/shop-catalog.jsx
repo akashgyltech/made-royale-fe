@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { formatINR } from '@/data/catalog';
 import ShopItem from '@/components/shop/shop-item';
 import Pagination from '@/components/ui/pagination';
+import PAYMENT_METHODS from '@/data/payment-methods-data';
 const SORT_OPTIONS = [
     { value: 'featured', label: 'Featured' },
     { value: 'price-asc', label: 'Price: Low to High' },
@@ -18,7 +19,7 @@ const PRICE_STEPS = [
     { label: '₹1,00,000 – ₹2,00,000', min: 100000, max: 200000 },
     { label: 'Above ₹2,00,000', min: 200000, max: 9999999 },
 ];
-const COLLECTIONS = ['Maharaja', 'Vintage', 'Contemporary Royale', 'Heritage'];
+const COLLECTIONS = ['Vintage', 'Contemporary Royale', 'Heritage'];
 export default function ShopCatalog({ categories, products, total, totalPages, page, priceFrom, activeCategoryName }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -99,6 +100,13 @@ export default function ShopCatalog({ categories, products, total, totalPages, p
             </div>
 
             <div className="mr-filter-note"><span>Prices from</span><strong>{formatINR(priceFrom)}</strong></div>
+
+            <div className="mr-pdp-pay mr-shop-sidebar-pay">
+              <span className="mr-pdp-pay-label">We Accept</span>
+              <div className="mr-pdp-pay-icons">
+                {PAYMENT_METHODS.map((m) => (<img key={m.label} src={m.icon} alt={m.label} title={m.label} className="mr-pdp-pay-icon"/>))}
+              </div>
+            </div>
           </aside>
           {showFilters && <div className="mr-shop-sidebar-backdrop d-lg-none" onClick={() => setShowFilters(false)}/>}
 

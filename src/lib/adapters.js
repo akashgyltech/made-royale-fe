@@ -82,6 +82,7 @@ export function adaptSubCategory(bc) {
 export function adaptCategory(bc) {
     return {
         id: bc.id,
+        parent: bc.parent && typeof bc.parent === 'object' ? bc.parent.id : (bc.parent || null),
         name: bc.name,
         slug: bc.slug,
         tagline: bc.tagline || bc.description || '',

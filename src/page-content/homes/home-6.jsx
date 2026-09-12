@@ -12,14 +12,15 @@ import ShopProducts from "@/components/shop/shop-products";
 import FooterSix from "@/layouts/footers/footer-six";
 import HeroBannerTwo from "@/components/hero-banner/hero-banner-two";
 import AssuranceStrip from "@/components/home/assurance-strip";
-import CollectionsShowcase from "@/components/home/collections-showcase";
+import PaymentMethods from "@/components/home/payment-methods";
 import RoomShowcase from "@/components/home/room-showcase";
+import CollectionsShowcase from "@/components/home/collections-showcase";
+import MaterialSpotlight from "@/components/home/material-spotlight";
 import Testimonials from "@/components/home/testimonials";
 import HomeFaq from "@/components/home/home-faq";
 import { useEffect } from "react";
 import { panelOneAnimation } from "@/utils/panel-animation";
-import PortfolioSliderHomeTen from "@/components/portfolio/slider/portfolio-slider-home-ten";
-const HomeSixMain = ({ featuredProducts, categories, collections, collectionCounts, rooms, roomCounts, categoryCounts, faqs }) => {
+const HomeSixMain = ({ featuredProducts, categories, categoryCounts, rooms, roomCounts, collections, collectionCounts, triptychProducts, quadriptychProducts, teakPlanks, teakPlanksProducts, faqs }) => {
     useScrollSmooth();
     useEffect(() => {
         document.body.classList.add("tp-smooth-scroll");
@@ -41,14 +42,12 @@ const HomeSixMain = ({ featuredProducts, categories, collections, collectionCoun
                     });
                 }
             });
-            // bounceAnimation();
-            // aboutAnim();
             panelOneAnimation();
         }, 100);
         return () => clearTimeout(timer);
     });
     return (<Wrapper>
-    
+
       <HeaderSix transparent/>
 
       <div id="smooth-wrapper">
@@ -56,23 +55,29 @@ const HomeSixMain = ({ featuredProducts, categories, collections, collectionCoun
           <main>
             <HeroBannerSix />
 
-            <AssuranceStrip />
-
             <ShopCategory categories={categories} counts={categoryCounts}/>
+
+            <ShopProducts products={featuredProducts} sectionId="trending" subtitle="Curated Collection" title="Trending Masterpieces" viewAllHref="/shop" viewAllLabel="View All Products"/>
+
+            <ShopProducts products={triptychProducts} sectionId="triptych" subtitle="Three Panels, One Story" title="The Triptych Edit" viewAllHref="/category/three-panel-mosaic-art" viewAllLabel="Shop Triptych Collection" emptyMessage="The Triptych Collection is being restocked — check back soon."/>
 
             <RoomShowcase rooms={rooms} counts={roomCounts}/>
 
-            <HeroBannerTwo imageSrc={"/assets/img/inner-shop/home/hero-bg-14.webp"} imageAlt={"Hero-banner-12"} buttonLink={"/shop"} buttonText={"Explore Now"} subtitle={"Experience the perfect blend of elegance, comfort, and craftsmanship. Our carefully curated furniture collections are designed to transform your home into a space that reflects your style while providing lasting quality and everyday comfort."} title={"Luxury Meets Comfort"}/>
+            <HeroBannerTwo imageSrc={"https://ik.imagekit.io/shizenta/shizenta/categories/1788521412005-y6kcr9dficq.png"} imageAlt={"Live edge wood slabs showcasing natural timber grain"} buttonLink={"/shop"} buttonText={"Explore Now"} subtitle={"From hand-selected Madhya Pradesh teak to live-edge slabs that keep their natural silhouette, every piece we craft lets real timber — not uniform manufacturing — define its character. Discover mosaic wall art, live-edge wood and handcrafted pieces built to last generations."} title={"Where Nature Meets Craftsmanship"}/>
 
-            <ShopProducts products={featuredProducts}/>
+            <ShopProducts products={quadriptychProducts} sectionId="quadriptych" subtitle="Four Panels, One Expansive Story" title="The Quadriptych Edit" viewAllHref="/category/four-panel-mosaic-art" viewAllLabel="Shop Quadriptych Collection" emptyMessage="The Quadriptych Collection is being restocked — check back soon."/>
 
             <CollectionsShowcase collections={collections} counts={collectionCounts}/>
 
-            <PortfolioSliderHomeTen />
+            {teakPlanks && (<MaterialSpotlight sectionId="teak" image={teakPlanks.banner || teakPlanks.image} title={teakPlanks.story?.title || teakPlanks.name} subtitle="Cut-size teak planks from Madhya Pradesh — natural grain and tiger-line character, precision-prepared for your craft." href={`/category/${teakPlanks.slug}`} buttonText={`Explore ${teakPlanks.name}`} products={teakPlanksProducts}/>)}
 
             <Testimonials />
 
             <HomeFaq faqs={faqs}/>
+
+            <AssuranceStrip />
+
+            <PaymentMethods />
 
           </main>
           <FooterSix />

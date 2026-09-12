@@ -40,7 +40,6 @@ export const mobile_menu_data = [
     {
         id: 7, title: 'Collections', link: '/shop',
         dropdown_menus: [
-            { title: 'Maharaja Collection', link: '/collection/maharaja' },
             { title: 'Vintage Collection', link: '/collection/vintage' },
             { title: 'Contemporary Royale', link: '/collection/contemporary-royale' },
             { title: 'Heritage Collection', link: '/collection/heritage' },

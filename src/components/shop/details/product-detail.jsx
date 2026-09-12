@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatINR, emiPerMonth, careFor, boxContentsFor, bankOffers } from '@/data/catalog';
+import PAYMENT_METHODS from '@/data/payment-methods-data';
 import { reviewApi } from '@/lib/store-api';
 import { ApiError } from '@/lib/api';
 import { useCart } from '@/provider/CartProvider';
@@ -184,6 +185,13 @@ export default function ProductDetail({ product, initialReviews, related }) {
               {product.warranty && <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="shield" size={20}/></span><div><strong>Warranty</strong><small>{product.warranty}</small></div></div>}
               {product.assembly && <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="truck" size={20}/></span><div><strong>Delivery</strong><small>{product.assembly}</small></div></div>}
               <div className="mr-pdp-feature"><span className="mr-pdp-feature-ic"><Icon name="returns" size={20}/></span><div><strong>Returns</strong><small>7-day easy returns</small></div></div>
+            </div>
+
+            <div className="mr-pdp-pay">
+              <span className="mr-pdp-pay-label">We Accept</span>
+              <div className="mr-pdp-pay-icons">
+                {PAYMENT_METHODS.map((m) => (<img key={m.label} src={m.icon} alt={m.label} title={m.label} className="mr-pdp-pay-icon"/>))}
+              </div>
             </div>
 
             <div className="mr-pdp-trust">
